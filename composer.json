@@ -1,23 +1,32 @@
 {
-    "name": "symfony/framework-standard-edition",
-    "license": "MIT",
+    "name": "stevan/uvszinhaz",
+    "license": "proprietary",
     "type": "project",
-    "description": "The \"Symfony Standard Edition\" distribution",
     "autoload": {
         "psr-4": {
             "AppBundle\\": "src/AppBundle"
         },
-        "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
+        "classmap": [
+            "app/AppKernel.php",
+            "app/AppCache.php"
+        ]
     },
     "autoload-dev": {
-        "psr-4": { "Tests\\": "tests/" },
-        "files": [ "vendor/symfony/symfony/src/Symfony/Component/VarDumper/Resources/functions/dump.php" ]
+        "psr-4": {
+            "Tests\\": "tests/"
+        },
+        "files": [
+            "vendor/symfony/symfony/src/Symfony/Component/VarDumper/Resources/functions/dump.php"
+        ]
     },
     "require": {
         "php": ">=5.5.9",
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/orm": "^2.5",
+        "friendsofsymfony/user-bundle": "~2.0",
+        "hwi/oauth-bundle": "^0.5.3",
         "incenteev/composer-parameter-handler": "^2.0",
+        "javiereguiluz/easyadmin-bundle": "^1.16",
         "sensio/distribution-bundle": "^5.0.19",
         "sensio/framework-extra-bundle": "^3.0.2",
         "symfony/monolog-bundle": "^3.1.0",
@@ -47,9 +56,6 @@
         ]
     },
     "config": {
-        "platform": {
-            "php": "5.5.9"
-        },
         "sort-packages": true
     },
     "extra": {
@@ -62,8 +68,6 @@
         "incenteev-parameters": {
             "file": "app/config/parameters.yml"
         },
-        "branch-alias": {
-            "dev-master": "3.3-dev"
-        }
+        "branch-alias": null
     }
 }

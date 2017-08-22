@@ -67,3 +67,39 @@ swiftmailer:
     username: '%mailer_user%'
     password: '%mailer_password%'
     spool: { type: memory }
+
+# EasyAdmin Configuration
+easy_admin:
+    site_name: 'Novosadsko pozorište'
+    design:
+        menu:
+            - { entity: 'User', icon: 'user' }
+    entities:
+        User:
+            class: AppBundle\Entity\User
+            label: 'Korisnici'
+            list:
+                title: 'Korisnici'
+                help: 'Lista registrovanih korisnika'
+                fields:
+                    - id
+                    - { property: 'username', label: 'Korisničko ime' }
+                    - { property: 'email', label: 'E-mail' }
+                    - { property: 'lastLogin', label: 'Poslednje prijavljivanje' }
+                actions:
+                    - { name: 'show', icon: 'eye', label: '' }
+                    - { name: 'edit', icon: 'pencil', label: '' }
+                    - { name: 'delete', icon: 'remove', label: '' }
+                    - { name: 'search', label: 'Traži' }
+                    - { name: 'new', label: 'Dodaj' }
+    show:
+        title: 'show.%%entity_label%%'
+
+# FOS Configuration
+fos_user:
+    db_driver: orm # other valid values are 'mongodb' and 'couchdb'
+    firewall_name: main
+    user_class: AppBundle\Entity\User
+    from_email:
+        address: "%mailer_user%"
+        sender_name: "%mailer_user%"
