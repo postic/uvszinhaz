@@ -19,9 +19,38 @@ class User extends BaseUser
      */
     protected $id;
 
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $facebookID;
+
     public function __construct()
     {
         parent::__construct();
         // your own logic
+    }
+
+    /**
+     * Set facebookID
+     *
+     * @param string $facebookID
+     *
+     * @return User
+     */
+    public function setFacebookID($facebookID)
+    {
+        $this->facebookID = $facebookID;
+
+        return $this;
+    }
+
+    /**
+     * Get facebookID
+     *
+     * @return string
+     */
+    public function getFacebookID()
+    {
+        return $this->facebookID;
     }
 }

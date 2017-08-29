@@ -10,7 +10,7 @@ parameters:
 
 framework:
     #esi: ~
-    #translator: { fallbacks: ['%locale%'] }
+    translator: { fallbacks: ['%locale%'] }
     secret: '%secret%'
     router:
         resource: '%kernel.project_dir%/app/config/routing.yml'
@@ -35,8 +35,11 @@ framework:
 
 # Twig Configuration
 twig:
-    debug: '%kernel.debug%'
-    strict_variables: '%kernel.debug%'
+    debug:            "%kernel.debug%"
+    strict_variables: "%kernel.debug%"
+    cache:            false
+    globals:
+        admin_skin: "%admin_skin%"
 
 # Doctrine Configuration
 doctrine:
@@ -103,3 +106,28 @@ fos_user:
     from_email:
         address: "%mailer_user%"
         sender_name: "%mailer_user%"
+
+# HWI Configuration
+hwi_oauth:
+    connect:
+        confirmation: true
+        registration_form: fos_user.registration.form.factory
+    fosub:
+        username_iterations: 30
+        properties:
+            facebook: facebookID
+    firewall_names: [main]
+    resource_owners:
+        # Facebook access
+        facebook:
+            type:           facebook
+            client_id:      1078423945621083
+            client_secret:  b325b231e1a1ed4f62bf90c7deb49469
+            scope:          "email"
+            options:
+                display: popup # dialog is optimized for popup window
+                auth_type: rerequest # Re-asking for Declined Permissions
+
+avanzu_admin_theme:
+    #bower_bin: C:\Users\{username}\AppData\Roaming\npm\bower.cmd # that's the default value
+    #bower_bin: usr/local/bin/bower #for linux system
