@@ -48,3 +48,9 @@ services:
         class: AppBundle\EventListener\SidebarListener
         tags:
             - { name: kernel.event_listener, event:theme.sidebar_setup_menu, method:onSetupMenu }
+
+    app.fos_user.oauth_provider:
+        class: AppBundle\Entity\FOSUBUserProvider
+        arguments:
+            - '@fos_user.user_manager'
+            - [{facebook: facebook_id}]

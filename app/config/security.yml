@@ -20,22 +20,28 @@ security:
                 provider: fos_userbundle
                 csrf_token_generator: security.csrf.token_manager
                 # if you are using Symfony < 2.8, use the following config instead:
-                # csrf_provider: form.csrf_provider
-
-            oauth:
-                resource_owners:
-                    facebook:   "/connect/check-facebook"
-                login_path:     /connect
-                failure_path:   /connect
-
-                oauth_user_provider:
-                    service: hwi_oauth.user.provider.fosub_bridge
-
+                # csrf_provider: form.csrf_provider    
             logout:       true
             anonymous:    true
+
+
+            oauth:
+                # Declare the OAuth Callback URLs for every resource owner
+                # They will be added in the routing.yml file too later
+                resource_owners:
+                    facebook: "/connect/check-facebook"
+                ## Provide the original login path of your application (fosuserroute)
+                ## and the failure route when the authentication fails.
+                login_path:     /login
+                failure_path:   /login
+                
+                oauth_user_provider:
+                    service: app.fos_user.oauth_provider
+
+
 
     access_control:
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/, role: ROLE_ADMIN }
+        #- { path: ^/, role: ROLE_ADMIN }

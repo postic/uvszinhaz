@@ -16,7 +16,6 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new FOS\UserBundle\FOSUserBundle(),
-            new JavierEguiluz\Bundle\EasyAdminBundle\EasyAdminBundle(),
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
             new Avanzu\AdminThemeBundle\AvanzuAdminThemeBundle(),
             new AppBundle\AppBundle(),

@@ -71,33 +71,6 @@ swiftmailer:
     password: '%mailer_password%'
     spool: { type: memory }
 
-# EasyAdmin Configuration
-easy_admin:
-    site_name: 'Novosadsko pozorište'
-    design:
-        menu:
-            - { entity: 'User', icon: 'user' }
-    entities:
-        User:
-            class: AppBundle\Entity\User
-            label: 'Korisnici'
-            list:
-                title: 'Korisnici'
-                help: 'Lista registrovanih korisnika'
-                fields:
-                    - id
-                    - { property: 'username', label: 'Korisničko ime' }
-                    - { property: 'email', label: 'E-mail' }
-                    - { property: 'lastLogin', label: 'Poslednje prijavljivanje' }
-                actions:
-                    - { name: 'show', icon: 'eye', label: '' }
-                    - { name: 'edit', icon: 'pencil', label: '' }
-                    - { name: 'delete', icon: 'remove', label: '' }
-                    - { name: 'search', label: 'Traži' }
-                    - { name: 'new', label: 'Dodaj' }
-    show:
-        title: 'show.%%entity_label%%'
-
 # FOS Configuration
 fos_user:
     db_driver: orm # other valid values are 'mongodb' and 'couchdb'
@@ -109,24 +82,24 @@ fos_user:
 
 # HWI Configuration
 hwi_oauth:
-    connect:
-        confirmation: true
-        registration_form: fos_user.registration.form.factory
+    # Define which firewalls will be used for oauth
+    # Usually, its only the main, but you can add it if you have a custom one
+    firewall_names: ["main"]
     fosub:
         username_iterations: 30
+        # Define in which columns of the fos_user table will be stored
+        # the access token of every resource_owner
         properties:
-            facebook: facebookID
-    firewall_names: [main]
+            facebook: facebook_id
+    # Define the resource_owners that your user can use to login into your app
+    # Note that the client_id and client_secret and key values are symfony parameters
+    # stored too in the config.yml from the previous step !
     resource_owners:
-        # Facebook access
         facebook:
             type:           facebook
-            client_id:      1078423945621083
-            client_secret:  b325b231e1a1ed4f62bf90c7deb49469
-            scope:          "email"
-            options:
-                display: popup # dialog is optimized for popup window
-                auth_type: rerequest # Re-asking for Declined Permissions
+            client_id:      "%facebook_client_id%"
+            client_secret:  "%facebook_secret%"
+            infos_url:      "https://graph.facebook.com/me?fields=id,name,email"
 
 avanzu_admin_theme:
     #bower_bin: C:\Users\{username}\AppData\Roaming\npm\bower.cmd # that's the default value

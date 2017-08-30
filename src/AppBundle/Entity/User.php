@@ -24,6 +24,11 @@ class User extends BaseUser
      */
     protected $facebookID;
 
+    /**
+     * @ORM\Column(name="facebook_access_token", type="string", length=255, nullable=true) 
+     */
+    protected $facebook_access_token;
+
     public function __construct()
     {
         parent::__construct();
@@ -52,5 +57,29 @@ class User extends BaseUser
     public function getFacebookID()
     {
         return $this->facebookID;
+    }
+
+    /**
+     * Set facebookAccessToken
+     *
+     * @param string $facebookAccessToken
+     *
+     * @return User
+     */
+    public function setFacebookAccessToken($facebookAccessToken)
+    {
+        $this->facebook_access_token = $facebookAccessToken;
+
+        return $this;
+    }
+
+    /**
+     * Get facebookAccessToken
+     *
+     * @return string
+     */
+    public function getFacebookAccessToken()
+    {
+        return $this->facebook_access_token;
     }
 }
