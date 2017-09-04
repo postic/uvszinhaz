@@ -19,14 +19,10 @@ class User extends BaseUser
      */
     protected $id;
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
-    protected $facebookID;
+    /** @ORM\Column(name="facebook_id", type="string", length=255, nullable=true) */
+    protected $facebook_id;
 
-    /**
-     * @ORM\Column(name="facebook_access_token", type="string", length=255, nullable=true) 
-     */
+    /** @ORM\Column(name="facebook_access_token", type="string", length=255, nullable=true) */
     protected $facebook_access_token;
 
     public function __construct()
@@ -34,29 +30,30 @@ class User extends BaseUser
         parent::__construct();
         // your own logic
     }
+    
 
     /**
-     * Set facebookID
+     * Set facebookId
      *
-     * @param string $facebookID
+     * @param string $facebookId
      *
      * @return User
      */
-    public function setFacebookID($facebookID)
+    public function setFacebookId($facebookId)
     {
-        $this->facebookID = $facebookID;
+        $this->facebook_id = $facebookId;
 
         return $this;
     }
 
     /**
-     * Get facebookID
+     * Get facebookId
      *
      * @return string
      */
-    public function getFacebookID()
+    public function getFacebookId()
     {
-        return $this->facebookID;
+        return $this->facebook_id;
     }
 
     /**

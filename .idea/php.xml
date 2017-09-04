@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PhpStepFilterConfiguration">
+    <option name="skippedFunctions">
+      <list>
+        <option value="Monolog\Handler\AbstractHandler-&gt;__destruct" />
+        <option value="Symfony\Component\Cache\Adapter\PhpFilesAdapter-&gt;__destruct" />
+        <option value="Buzz\Client\Curl-&gt;__destruct" />
+        <option value="Symfony\Component\Cache\Adapter\FilesystemAdapter-&gt;__destruct" />
+      </list>
+    </option>
+  </component>
+</project>
