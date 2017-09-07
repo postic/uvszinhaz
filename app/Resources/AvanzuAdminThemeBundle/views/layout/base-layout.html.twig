@@ -14,9 +14,14 @@
 
     {# -------------------------------------------------------------------------------------------------- STYLESHEETS #}
     {% block stylesheets %}
-        <link rel="stylesheet" href="{{ asset('bundles/avanzuadmintheme/static/'~ app.environment ~'/styles/admin-lte-all.css') }}" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+        {% stylesheets
+        '@admin_lte_css'
+        filter='cssrewrite'
+        %}
+        <link href="{{ asset_url }}" rel="stylesheet" />
+        {% endstylesheets %}
     {% endblock %}
-
 
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 
@@ -113,7 +118,11 @@
 {# ------------------------------------------------------------------------------------------------------ JAVASCRIPTS #}
 {% block javascripts %}
 
-    <script src="{{ asset('bundles/avanzuadmintheme/static/'~app.environment~'/scripts/admin-lte-all.js') }}"></script>
+    {% javascripts
+    '@admin_lte_all'
+    %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 
 {% endblock %}
 

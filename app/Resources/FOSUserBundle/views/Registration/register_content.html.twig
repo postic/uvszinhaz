@@ -1,8 +1,39 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
-{{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register'}}) }}
-    {{ form_widget(form) }}
-    <div>
-        <input type="submit" value="{{ 'registration.submit'|trans }}" />
+<div class="login-box">
+    <div class="login-logo">
+        <b>UV</b>szinhaz
     </div>
-{{ form_end(form) }}
+    <div class="login-box-body">
+        <p class="login-box-msg">Register a new membership</p>
+        {{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register'}}) }}
+        <div class="form-group has-feedback {% if form.email.vars.valid==false %}has-error{% endif %}">
+            {{ form_widget(form.email, { 'attr': {'placeholder': 'form.email'} }) }}
+            {{ form_errors(form.email) }}
+            <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+        </div>
+        <div class="form-group has-feedback {% if form.username.vars.valid==false %}has-error{% endif %}">
+            {{ form_widget(form.username, { 'attr': {'placeholder': 'form.username'} }) }}
+            {{ form_errors(form.username) }}
+            <span class="glyphicon glyphicon-user form-control-feedback"></span>
+        </div>
+        <div class="form-group has-feedback {% if form.plainPassword.first.vars.valid==false %}has-error{% endif %}">
+            {{ form_widget(form.plainPassword.first, { 'attr': {'placeholder': 'form.password'} }) }}
+            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+        </div>
+        <div class="form-group has-feedback {% if form.plainPassword.first.vars.valid==false %}has-error{% endif %}">
+            {{ form_widget(form.plainPassword.second, { 'attr': {'placeholder': 'form.password_confirmation'} }) }}
+            {{ form_errors(form.plainPassword.first) }}
+            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+        </div>
+        {{ form_widget(form) }}
+        <input type="submit" class="btn btn-primary btn-block btn-flat" value="{{ 'registration.submit'|trans }}" />
+        {{ form_end(form) }}
+        <div class="social-auth-links text-center">
+            <p>- OR -</p>
+            <a href="../connect/facebook" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i>Login with Facebook</a>
+            <a href="../connect/facebook" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i>Login with Google</a>
+        </div><!-- /.social-auth-links -->
+        <a href="{{ path('fos_user_security_login') }}">I already have a membership</a>
+    </div>
+</div>

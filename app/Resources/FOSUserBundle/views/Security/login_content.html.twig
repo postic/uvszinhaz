@@ -1,15 +1,16 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
-{% if error %}
+<div class="login-box">
+    <div class="login-logo">
+        <b>UV</b>szinhaz
+    </div>
+
+    {% if error %}
     <div class="alert alert-danger alert-dismissible">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 {% endif %}
 
-
-<div class="login-box">
     <div class="login-box-body">
-
-        <p class="login-box-msg">{{ 'security.login.submit'|trans }}</p>
-
+        <p class="login-box-msg">Please sign in</p>
         <form action="{{ path("fos_user_security_check") }}" method="post">
             <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
             <div class="form-group has-feedback">
@@ -20,18 +21,24 @@
                 <input type="password" class="form-control" placeholder="{{ 'security.login.password'|trans }}" id="password" name="_password" required="required">
                 <span class="glyphicon glyphicon-lock form-control-feedback"></span>
             </div>
-            <input type="submit" id="_submit" name="_submit" class="btn btn-primary btn-block btn-flat" value="{{ 'security.login.submit'|trans }}">
-            <div class="checkbox">
-                <input type="checkbox" id="remember_me" name="_remember_me" value="on"> {{ 'security.login.remember_me'|trans }}
+            <div class="row">
+                <div class="col-xs-8">
+                    <div class="checkbox">
+                        <input type="checkbox" id="remember_me" name="_remember_me" value="on"> {{ 'security.login.remember_me'|trans }}
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <input type="submit" id="_submit" name="_submit" class="btn btn-primary btn-block btn-flat" value="{{ 'security.login.submit'|trans }}">
+                </div>
             </div>
-            
-            <a href="{{ path('fos_user_resetting_request') }}">I forgot my password</a>
         </form>
-
         <div class="social-auth-links text-center">
-            <a href="./register" class="btn btn-block btn-social btn-twitter btn-flat"><i class="fa fa-user"></i>Create new user</a>
+            <p>- OR -</p>
             <a href="./connect/facebook" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i>Login with Facebook</a>
             <a href="./connect/facebook" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i>Login with Google</a>
         </div><!-- /.social-auth-links -->
+        <a href="{{ path('fos_user_resetting_request') }}">I forgot my password</a>
+        <br/>
+        <a href="{{ path('fos_user_registration_register') }}">Register a new membership</a>
     </div>
 </div>

@@ -14,11 +14,11 @@ class DashboardController extends Controller
      */
     public function indexAction()
     {
-        return new RedirectResponse($this->generateUrl('admin_dashboard'));
+        return new RedirectResponse($this->generateUrl('users'));
     }
 
     /**
-     * @Route("/dashboard", name="admin_dashboard")
+     * @Route("/dashboard", name="dashboard")
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function dashboardAction()

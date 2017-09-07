@@ -19,6 +19,8 @@ class AppKernel extends Kernel
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
             new Avanzu\AdminThemeBundle\AvanzuAdminThemeBundle(),
             new AppBundle\AppBundle(),
+            new AdminBundle\AdminBundle(),
+            new Symfony\Bundle\AsseticBundle\AsseticBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

@@ -26,9 +26,12 @@ class SidebarListener
      */
     protected function getMenu(Request $request)
     {
+        $usr = $request->get('fos_user.user_manager');
+
         $earg      = array();
         $rootItems = array(
-            $users = new MenuItemModel('users', 'Users', 'homepage', $earg, 'fa fa-user'),
+            $users = new MenuItemModel('id-users', 'Users', 'users', $earg, 'fa fa-user'),
+            $dashboard = new MenuItemModel('id-dashboard', 'Dashboard', 'dashboard', $earg, 'fa fa-eye'),
         );
 
         return $this->activateByRoute($request->get('_route'), $rootItems);
