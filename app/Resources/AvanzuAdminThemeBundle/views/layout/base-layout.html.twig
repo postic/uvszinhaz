@@ -74,9 +74,9 @@
             <section class="sidebar">
                 {% block avanzu_sidebar %}
                     {% if app.user is not null and is_granted('IS_AUTHENTICATED_FULLY') %}
-                        {{ render(controller('AppBundle:Sidebar:userPanel')) }}
+                        {{ render(controller('SalexUserBundle:Sidebar:userPanel')) }}
                     {% endif %}
-                    {{ render(controller('AppBundle:Sidebar:menu', {'request':app.request})) }}
+                    {{ render(controller('SalexUserBundle:Sidebar:menu', {'request':app.request})) }}
                 {% endblock %}
             </section>
             <!-- /.sidebar -->

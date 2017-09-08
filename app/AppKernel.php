@@ -15,13 +15,22 @@ class AppKernel extends Kernel
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
+            new FOS\RestBundle\FOSRestBundle(),
             new FOS\UserBundle\FOSUserBundle(),
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
             new Avanzu\AdminThemeBundle\AvanzuAdminThemeBundle(),
-            new AppBundle\AppBundle(),
             new AdminBundle\AdminBundle(),
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
-            // new SalexUserBundle\SalexUserBundle(), //Salex user management bundle
+            new SalexUserBundle\SalexUserBundle(), //Salex user management bundle
+            new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(), //doctrine migration bundle
+            new Liip\ImagineBundle\LiipImagineBundle(), //image manipulation bundle
+            new JMS\SerializerBundle\JMSSerializerBundle(),
+            new Knp\Bundle\MenuBundle\KnpMenuBundle(), //KNP menu bundle
+            new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(), //Doctrine extension bundle
+            new Vich\UploaderBundle\VichUploaderBundle(), //file uploader bundle
+            new Ivory\CKEditorBundle\IvoryCKEditorBundle(), //CK Editor
+            new WhiteOctober\BreadcrumbsBundle\WhiteOctoberBreadcrumbsBundle(), //breadcrumbs
+
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

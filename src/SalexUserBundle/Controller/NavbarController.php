@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace SalexUserBundle\Controller;
 
 use Avanzu\AdminThemeBundle\Event\MessageListEvent;
 use Avanzu\AdminThemeBundle\Event\NotificationListEvent;

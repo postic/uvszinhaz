@@ -87,7 +87,7 @@ swiftmailer:
 fos_user:
     db_driver: orm # other valid values are 'mongodb' and 'couchdb'
     firewall_name: main
-    user_class: AppBundle\Entity\User
+    user_class: SalexUserBundle\Entity\User
     from_email:
         address: "%mailer_user%"
         sender_name: "%mailer_user%"
@@ -116,3 +116,6 @@ hwi_oauth:
 avanzu_admin_theme:
     #bower_bin: C:\Users\{username}\AppData\Roaming\npm\bower.cmd # that's the default value
     #bower_bin: usr/local/bin/bower #for linux system
+
+vich_uploader:
+    db_driver: orm # or mongodb or propel or phpcr

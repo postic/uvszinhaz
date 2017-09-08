@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace SalexUserBundle\Controller;
 
 use Avanzu\AdminThemeBundle\Event\ShowUserEvent;
 use Avanzu\AdminThemeBundle\Event\SidebarMenuEvent;
