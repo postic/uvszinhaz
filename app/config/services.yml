@@ -46,6 +46,7 @@ services:
 
     app_bundle.menu_listener:
         class: AppBundle\EventListener\SidebarListener
+        arguments: ['@service_container']
         tags:
             - { name: kernel.event_listener, event:theme.sidebar_setup_menu, method:onSetupMenu }
 
