@@ -1,0 +1,26 @@
+div.seatCharts-row {
+    height: 30px;
+}
+div.seatCharts-cell {
+    color: #182c4e;
+    height: 21px;
+    line-height: 21px;
+    width: 21px;
+}
+div.seatCharts-seat {
+    border-radius: 2px;
+    color: #ffffff;
+    font-size: 10px;
+}
+div.seatCharts-seat.available.first-class {
+    background-color: #b9dea0;
+}
+div.seatCharts-seat.available {
+    background-color: #3a78c3;
+}
+div.seatCharts-seat.selected {
+    background-color: #e6cac4;
+}
+ul.seatCharts-legendList {
+    padding: 0;
+}

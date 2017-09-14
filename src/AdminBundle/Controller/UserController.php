@@ -15,13 +15,12 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class UserController extends Controller
 {
     /**
-     * @Route("/users", name="users")
+     * @Route("/list/users", name="list_users")
      * @return RedirectResponse
      */
-    public function usersAction()
+    public function listAction()
     {
         $users2 = $this->get('fos_user.user_manager')->findUsers();
-        // $users = $this->getDoctrine()->getRepository("AppBundle:User")->findAll();
         return $this->render("AdminBundle:Default:users.html.twig", ['users'=>$users2]);
     }
 }

@@ -37,16 +37,18 @@ class SidebarListener
     {
         $is_admin = $this->container->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN');
 
-        $earg      = array();
+        $earg = array();
 
         if($is_admin){
             $rootItems = array(
-                $users = new MenuItemModel('id-users', 'Users', 'users', $earg, 'fa fa-user'),
-                $dashboard = new MenuItemModel('id-dashboard', 'Dashboard', 'dashboard', $earg, 'fa fa-eye'),
+                $users = new MenuItemModel('id-users', 'Users', 'list_users', $earg, 'fa fa-users'),
+                $reservations = new MenuItemModel('id-reservation', 'Reservations', 'list_reservations', $earg, 'fa fa-list'),
+
             );
         } else {
             $rootItems = array (
-                $dashboard = new MenuItemModel('id-dashboard', 'Dashboard', 'dashboard', $earg, 'fa fa-eye'),
+                $my_reservations = new MenuItemModel('id-my-reservations', 'Reservations', 'list_my_reservations', $earg, 'fa fa-list'),
+                $add_reservation = new MenuItemModel('id-add-reservations', 'Add reservation', 'add_reservation', $earg, 'fa fa-edit'),
             );
         }
 

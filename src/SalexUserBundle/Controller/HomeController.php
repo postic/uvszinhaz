@@ -6,7 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-class DashboardController extends Controller
+class HomeController extends Controller
 {
     /**
      * @Route("/", name="homepage")
@@ -14,7 +14,13 @@ class DashboardController extends Controller
      */
     public function indexAction()
     {
-        return new RedirectResponse($this->generateUrl('users'));
+        $is_admin = $this->container->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN');
+        if($is_admin) {
+            return new RedirectResponse($this->generateUrl('list_users'));
+        }
+        else {
+            return new RedirectResponse($this->generateUrl('add_reservation'));
+        }
     }
 
     /**

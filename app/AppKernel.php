@@ -30,6 +30,7 @@ class AppKernel extends Kernel
             new Vich\UploaderBundle\VichUploaderBundle(), //file uploader bundle
             new Ivory\CKEditorBundle\IvoryCKEditorBundle(), //CK Editor
             new WhiteOctober\BreadcrumbsBundle\WhiteOctoberBreadcrumbsBundle(), //breadcrumbs
+            new Sensio\Bundle\BuzzBundle\SensioBuzzBundle(),
 
         ];
 

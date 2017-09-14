@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c9b7572c0dd4334c36347b079746d010",
-    "content-hash": "1a0603c4a2c79452c2c36ecb6b690a0f",
+    "hash": "94619a2e583babf692d3d9bf26342273",
+    "content-hash": "c61d7c8c1403fd9b2b4335f7d0ff3f4c",
     "packages": [
         {
             "name": "avanzu/admin-theme-bundle",
@@ -3128,6 +3128,54 @@
             "time": "2017-01-02 13:31:39"
         },
         {
+            "name": "sensio/buzz-bundle",
+            "version": "dev-master",
+            "target-dir": "Sensio/Bundle/BuzzBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sensiolabs/SensioBuzzBundle.git",
+                "reference": "ad7c722f755471b80f5c9c7dd703b2975f8a518b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sensiolabs/SensioBuzzBundle/zipball/ad7c722f755471b80f5c9c7dd703b2975f8a518b",
+                "reference": "ad7c722f755471b80f5c9c7dd703b2975f8a518b",
+                "shasum": ""
+            },
+            "require": {
+                "kriswallsmith/buzz": "> 0.6",
+                "php": ">=5.3.2"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Sensio\\Bundle\\BuzzBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marc Weistroff",
+                    "email": "marc.weistroff@sensio.com"
+                }
+            ],
+            "description": "Bundle around the Buzz HTTP client",
+            "homepage": "https://github.com/sensio/SensioBuzzBundle",
+            "keywords": [
+                "buzz",
+                "http client"
+            ],
+            "time": "2016-03-15 10:06:41"
+        },
+        {
             "name": "sensio/distribution-bundle",
             "version": "v5.0.21",
             "source": {
@@ -4595,7 +4643,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "sensio/buzz-bundle": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

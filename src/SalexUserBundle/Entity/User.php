@@ -18,7 +18,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @ORM\HasLifecycleCallbacks
  * @Vich\Uploadable
  */
-class User extends BaseUser implements ThemeUser
+class User extends BaseUser
 {
     /**
      * @var int
@@ -66,6 +66,21 @@ class User extends BaseUser implements ThemeUser
      * @var string
      */
     private $profilePicture;
+
+    /**
+     * @var DateTime $created
+     *
+     * @ORM\Column(name="created_at", type="datetime", options={"default": 0})
+     */
+    protected $createdAt;
+    
+    /**
+     * @var DateTime $updated
+     *
+     * @ORM\Column(name="updated_at", type="datetime", options={"default": 0}, nullable=false)
+     */
+    protected $updatedAt;
+
 
     public function __construct()
     {
@@ -224,7 +239,6 @@ class User extends BaseUser implements ThemeUser
 
     /**
      * Gets triggered only on insert
-
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -234,12 +248,59 @@ class User extends BaseUser implements ThemeUser
 
     /**
      * Gets triggered every time on update
-
      * @ORM\PreUpdate
      */
     public function onPreUpdate()
     {
         $this->updateAt = new Carbon();
+    }
+
+    /**
+     * Set createdAt
+     *
+     * @param \DateTime $createdAt
+     *
+     * @return User
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set updateAt
+     *
+     * @param \DateTime $updateAt
+     *
+     * @return User
+     */
+    public function setUpdateAt($updateAt)
+    {
+        $this->updateAt = $updateAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updateAt
+     *
+     * @return \DateTime
+     */
+    public function getUpdateAt()
+    {
+        return $this->updateAt;
     }
 
     /* Following functions are implemented for ThemeUser Interface  */
