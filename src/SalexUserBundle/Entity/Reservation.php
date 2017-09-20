@@ -24,6 +24,12 @@ class Reservation
     }
 
     /**
+     * @ORM\OneToMany(targetEntity="Seat", mappedBy="seat")
+     */
+    protected $seats;
+
+
+    /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer")

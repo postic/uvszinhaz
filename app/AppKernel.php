@@ -19,7 +19,6 @@ class AppKernel extends Kernel
             new FOS\UserBundle\FOSUserBundle(),
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
             new Avanzu\AdminThemeBundle\AvanzuAdminThemeBundle(),
-            new AdminBundle\AdminBundle(),
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new SalexUserBundle\SalexUserBundle(), //Salex user management bundle
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(), //doctrine migration bundle
@@ -30,8 +29,10 @@ class AppKernel extends Kernel
             new Vich\UploaderBundle\VichUploaderBundle(), //file uploader bundle
             new Ivory\CKEditorBundle\IvoryCKEditorBundle(), //CK Editor
             new WhiteOctober\BreadcrumbsBundle\WhiteOctoberBreadcrumbsBundle(), //breadcrumbs
+            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new Sensio\Bundle\BuzzBundle\SensioBuzzBundle(),
-
+            new Lexik\Bundle\FormFilterBundle\LexikFormFilterBundle(),
+            new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

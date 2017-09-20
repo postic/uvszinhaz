@@ -3,7 +3,7 @@
 {% block page_subtitle %}Lorem ipsum dolor sit amet{% endblock %}
 
 {% block page_content %}
-    <div class="box">
+    <div class="box box-info">
         <div class="box-body">
             <table id="users" class="table table-bordered table-striped">
                 <thead>
@@ -15,7 +15,7 @@
                 </tr>
                 </thead>
                 <tbody>
-            {% for user in users %}
+            {% for user in pagination %}
                 <tr>
                     <td>
                         {{ user.id }}
@@ -33,18 +33,20 @@
             {% endfor %}
                 </tbody>
             </table>
+            <div class="navigation">
+                {{ knp_pagination_render(pagination) }}
+            </div>
         </div>
     </div>
 {% endblock %}
 
 {% block javascripts %}
-
     {% javascripts
     '@admin_lte_all'
     %}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
-
+    <!--
     <script type="text/javascript">
         $(function () {
             $('#users').DataTable({
@@ -57,7 +59,7 @@
             })
         })
     </script>
-
+    -->
 {% endblock %}
 
 {% block avanzu_admin_footer %}

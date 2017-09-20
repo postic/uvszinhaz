@@ -18,12 +18,15 @@
 
     <div class="row">
         <div class="col-md-6">
-            <div class="box">
+            <div class="box box-info">
                 <div class="box-header with-border">
                     <h3 class="box-title">Reservation Data</h3>
                 </div>
                 <div class="box-body">
                     <div class="form-horizontal">
+
+                        <input id="reservation_id" type="hidden" value="{{ item.id }}" />
+
                         <div class="form-group">
                             <label for="inputName" class="col-sm-3 control-label">ID</label>
                             <div class="col-sm-9">
@@ -51,7 +54,28 @@
                         <div class="form-group">
                             <label for="inputName" class="col-sm-3 control-label">Type</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" placeholder="{{ item.type }}" readonly>
+                                {% if item.type == 1 %}
+                                    {% set type_retval = 'Pojedinačno' %}
+                                {% endif %}
+                                {% if item.type == 2 %}
+                                    {% set type_retval = 'Grupe' %}
+                                {% endif %}
+                                {% if item.type == 3 %}
+                                    {% set type_retval = 'Studenti/đaci' %}
+                                {% endif %}
+                                {% if item.type == 4 %}
+                                    {% set type_retval = 'Penzionerska' %}
+                                {% endif %}
+                                <input type="text" class="form-control" placeholder="{{ type_retval }}" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputName" class="col-sm-3 control-label">Status</label>
+                            <div class="col-sm-9">
+                                {% if item.statusId == 1 %}
+                                    {% set status_retval = 'New' %}
+                                {% endif %}
+                                <input type="text" class="form-control" placeholder="{{ status_retval }}" readonly>
                             </div>
                         </div>
                         <div class="form-group">
@@ -63,11 +87,61 @@
                     </div>
                 </div>
             </div>
-            <div class="box">
+
+            <!-- Lista sedista za odabranu rezervaciju -->
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Your Seats</h3>
+                </div>
+                <div class="box-body">
+                    <table id="seats" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Seat</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for seat in seats %}
+                            <tr>
+                                <td>
+                                    {{ seat.id }}
+                                </td>
+                                <td>
+                                    Red: {{ seat.seatRow }} / Sedište: {{ seat.seatNumber }}
+                                </td>
+                                <td>
+                                    <a href data-toggle="modal" data-target="#modal-danger" data-entity-id="{{ seat.id }}" class="delete-btn-seat btn btn-xs btn-danger pull-right"><i class="fa fa-trash-o"></i>&nbsp;Remove</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mapa sedista -->
+        <div class="col-md-6">
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Seats</h3>
+                </div>
+                <div class="box-body">
+                    <div id="seat-map">
+                        <div class="front-indicator"></div>
+                    </div>
+                </div>
+                <div class="box-footer">
+                    <div id="legend"></div>
+                </div>
+            </div>
+
+            <div class="box box-info">
                 <div class="box-header with-border">
                     <h3 class="box-title">Selected Seats (<span id="counter">0</span>):</h3>
                     <div class="pull-right">
-                        Total: <b>$<span id="total">0</span></b>
+                        Total: <b><span id="total">0</span> RSD</b>
                     </div>
                 </div>
                 <div class="box-body">
@@ -81,23 +155,46 @@
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="col-md-6">
-            <div class="box">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Seats</h3>
+    <div class="modal modal-danger fade" id="modal-danger">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Confirmation</h4>
                 </div>
-                <div class="box-body">
-                    <div id="seat-map">
-                        <div class="front-indicator"></div>
-                    </div>
+                <div class="modal-body">
+                    <p>Are you sure to delete this data ?</p>
                 </div>
-                <div class="box-footer">
-                    <div id="legend"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-outline remove-seat" data-entity-id="">Delete</button>
                 </div>
             </div>
+            <!-- /.modal-content -->
         </div>
+        <!-- /.modal-dialog -->
     </div>
+    <!-- /.modal -->
+
+    <div class="modal modal-info fade" id="modal-info">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Loading&hellip;</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Učitavanje podataka&hellip;</p>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
 {% endblock %}
 
 

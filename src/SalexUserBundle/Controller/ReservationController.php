@@ -3,7 +3,10 @@
 namespace SalexUserBundle\Controller;
 
 use SalexUserBundle\Entity\Reservation;
+use SalexUserBundle\Entity\Seat;
+use SalexUserBundle\Filter\ItemFilterType;
 use SalexUserBundle\Form\ReservationType;
+use SalexUserBundle\Utility\PageUtility;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -16,16 +19,53 @@ class ReservationController extends Controller
      * @Route("/list/reservations/{id}", name="list_reservations"), requirements={"id": "\d+"}
      * @return RedirectResponse
      */
-    public function listAction($id = 0)
+    public function listAction(Request $request, $id = 0)
     {
-        $repository = $this->getDoctrine()->getRepository(Reservation::class);
         if($id === 0) {
-            $items = $repository->findAll();
-            return $this->render("SalexUserBundle:Reservation:list-all-reservations.html.twig", ['items'=>$items]);
+            $filterBuilder = $this->get('doctrine.orm.entity_manager')
+                ->getRepository(Reservation::class)
+                ->createQueryBuilder('r');
+            $form = $this->get('form.factory')->create('SalexUserBundle\Filter\ItemFilterType');
+            if ($request->query->has($form->getName())) {
+                $form->submit($request->query->get($form->getName()));
+                $this->get('lexik_form_filter.query_builder_updater')->addFilterConditions($form, $filterBuilder);
+            }
+            $query = $filterBuilder->getQuery();
+            $paginator  = $this->get('knp_paginator');
+            $pagination = $paginator->paginate(
+                $query,
+                $request->query->getInt('page', 1),
+                5
+            );
+            $pagination->setTemplate('KnpPaginatorBundle:Pagination:foundation_v5_pagination.html.twig');
+            return $this->render("SalexUserBundle:Reservation:list-all-reservations.html.twig", array(
+                'pagination' => $pagination,
+                'form' => $form->createView(),
+            ));
         }
         else {
-            $items = $repository->findBy([ "userId"=>$id ]);
-            return $this->render("SalexUserBundle:Reservation:list-user-reservations.html.twig", ['items'=>$items]);
+            $filterBuilder = $this->get('doctrine.orm.entity_manager')
+                ->getRepository(Reservation::class)
+                ->createQueryBuilder('r');
+            $filterBuilder->andWhere('r.userId='.$id);
+            $form = $this->get('form.factory')->create('SalexUserBundle\Filter\ItemFilterType');
+            if ($request->query->has($form->getName())) {
+                $form->submit($request->query->get($form->getName()));
+                $this->get('lexik_form_filter.query_builder_updater')->addFilterConditions($form, $filterBuilder);
+            }
+            $query = $filterBuilder->getQuery();
+            $paginator  = $this->get('knp_paginator');
+            $pagination = $paginator->paginate(
+                $query,
+                $request->query->getInt('page', 1),
+                5
+            );
+            $pagination->setTemplate('KnpPaginatorBundle:Pagination:foundation_v5_pagination.html.twig');
+            return $this->render("SalexUserBundle:Reservation:list-user-reservations.html.twig", array(
+                'pagination' => $pagination,
+                'form' => $form->createView(),
+            ));
+
         }
 
     }
@@ -34,14 +74,31 @@ class ReservationController extends Controller
      * @Route("/list/my/reservations", name="list_my_reservations")
      * @return RedirectResponse
      */
-    public function listMyReservationsAction()
+    public function listMyReservationsAction(Request $request)
     {
         $user = $this->getUser();
         $user_id = $user->getId();
-        $repository = $this->getDoctrine()->getRepository(Reservation::class);
-        $items = $repository->findBy([ "userId"=>$user_id ]);
-        return $this->render("SalexUserBundle:Reservation:list-my-reservations.html.twig", ['items'=>$items]);
-
+        $filterBuilder = $this->get('doctrine.orm.entity_manager')
+            ->getRepository(Reservation::class)
+            ->createQueryBuilder('r');
+        $filterBuilder->andWhere('r.userId='.$user_id);
+        $form = $this->get('form.factory')->create('SalexUserBundle\Filter\ItemFilterType');
+        if ($request->query->has($form->getName())) {
+            $form->submit($request->query->get($form->getName()));
+            $this->get('lexik_form_filter.query_builder_updater')->addFilterConditions($form, $filterBuilder);
+        }
+        $query = $filterBuilder->getQuery();
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            5
+        );
+        $pagination->setTemplate('KnpPaginatorBundle:Pagination:foundation_v5_pagination.html.twig');
+        return $this->render("SalexUserBundle:Reservation:list-my-reservations.html.twig", array(
+            'pagination' => $pagination,
+            'form' => $form->createView(),
+        ));
     }
 
 
@@ -67,7 +124,7 @@ class ReservationController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($reservation);
             $em->flush();
-            return $this->redirectToRoute('list_reservations');
+            return $this->redirectToRoute('list_my_reservations');
         }
 
         return $this->render('SalexUserBundle:Reservation:add-reservation.html.twig', array(
@@ -76,20 +133,26 @@ class ReservationController extends Controller
     }
 
     /**
-     * @Route("/show/reservation/{id}", name="show_reservation", requirements={"id": "\d+"})
+     * @Route("/show/reservation/{id}", name="show_reservation", options={"expose"=true}, requirements={"id": "\d+"})
      * @return RedirectResponse
      */
     public function showAction($id)
     {
+        // get reservation
         $em = $this->getDoctrine()->getManager();
         $item = $em->getRepository(Reservation::class)->findOneBy(array('id' => $id));
+
+        // get seats
+        $seats = $em->getRepository(Seat::class)->findBy(array('reservationId' => $id));
+
         return $this->render('SalexUserBundle:Reservation:show-reservation.html.twig', array(
             'item' => $item,
+            'seats' => $seats,
         ));
     }
 
     /**
-     * @Route("/delete/reservation/{id}", name="delete_reservation", requirements={"id": "\d+"})
+     * @Route("/delete/reservation/{id}", name="delete_reservation", options={"expose"=true}, requirements={"id": "\d+"})
      * @return RedirectResponse
      */
     public function deleteAction($id)
@@ -98,7 +161,7 @@ class ReservationController extends Controller
         $item = $em->getRepository(Reservation::class)->findOneBy(array('id' => $id));
         $em->remove($item);
         $em->flush();
-        return new RedirectResponse($this->generateUrl('list_reservations'));
+        return new RedirectResponse($this->generateUrl('list_my_reservations'));
     }
 
 }

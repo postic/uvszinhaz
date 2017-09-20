@@ -24,3 +24,7 @@ div.seatCharts-seat.selected {
 ul.seatCharts-legendList {
     padding: 0;
 }
+ul.seatCharts-legendList li.seatCharts-legendItem {
+    display: inline-block;
+    margin-right: 15px;
+}

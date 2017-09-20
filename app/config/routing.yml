@@ -1,7 +1,3 @@
-admin:
-    resource: "@AdminBundle/Controller/"
-    type:     annotation
-
 app:
     resource: '@SalexUserBundle/Controller/'
     type: annotation
@@ -29,3 +25,6 @@ avanzu_admin:
 
 avanzu_admin_profile:
     path: /profile
+
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
