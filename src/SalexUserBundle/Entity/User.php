@@ -4,6 +4,7 @@ namespace SalexUserBundle\Entity;
 
 use Avanzu\AdminThemeBundle\Model\UserInterface as ThemeUser;
 use Carbon\Carbon;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
 use Symfony\Component\HttpFoundation\File\File;
@@ -34,6 +35,17 @@ class User extends BaseUser
 
     /** @ORM\Column(name="facebook_access_token", type="string", length=255, nullable=true) */
     protected $facebook_access_token;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Reservation", mappedBy="user")
+     */
+    private $reservations;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->reservations = new ArrayCollection();
+    }
 
     /**
      * @var string
@@ -81,14 +93,6 @@ class User extends BaseUser
      */
     protected $updatedAt;
 
-
-    public function __construct()
-    {
-        parent::__construct();
-        // your own logic
-    }
-    
-    
     /**
      * Get id
      *
@@ -376,5 +380,63 @@ class User extends BaseUser
     public function getFacebookAccessToken()
     {
         return $this->facebook_access_token;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     *
+     * @return User
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * Add reservation
+     *
+     * @param \SalexUserBundle\Entity\Reservation $reservation
+     *
+     * @return User
+     */
+    public function addReservation(\SalexUserBundle\Entity\Reservation $reservation)
+    {
+        $this->reservations[] = $reservation;
+
+        return $this;
+    }
+
+    /**
+     * Remove reservation
+     *
+     * @param \SalexUserBundle\Entity\Reservation $reservation
+     */
+    public function removeReservation(\SalexUserBundle\Entity\Reservation $reservation)
+    {
+        $this->reservations->removeElement($reservation);
+    }
+
+    /**
+     * Get reservations
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getReservations()
+    {
+        return $this->reservations;
     }
 }

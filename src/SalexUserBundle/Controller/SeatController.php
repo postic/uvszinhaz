@@ -22,8 +22,12 @@ class SeatController extends Controller
         $a_resp = json_decode($resp);
         foreach($a_resp->seats as $item){
 
+            // get reservation
+            $em = $this->getDoctrine()->getManager();
+            $reservation = $em->getRepository(Reservation::class)->findOneBy(array('id' => $a_resp->id));
+
             $seat = new Seat();
-            $seat->setReservationId($a_resp->id);
+            $seat->setReservation($reservation);
             $seat->setSeat($item);
             $em = $this->getDoctrine()->getManager();
             $em->persist($seat);
@@ -40,9 +44,16 @@ class SeatController extends Controller
      */
     public function listAction(Request $request, $id = 0)
     {
-        $seats = $this->getDoctrine()
-            ->getRepository(Seat::class)
-            ->findBy(array('reservationId' => $id));
+       $seats = $this->getDoctrine()
+            ->getEntityManager()
+            ->createQueryBuilder()
+            ->select('s')
+            ->from('SalexUserBundle:Seat', 's')
+            ->innerJoin('s.reservation', 'r')
+            ->where('r.performanceId = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getResult();
 
         $a_resp = array();
         foreach($seats as $seat){
@@ -61,7 +72,7 @@ class SeatController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $item = $em->getRepository(Seat::class)->findOneBy(array('id' => $id));
-        $reservation_id = $item->getReservationId();
+        $reservation_id = $item->getReservation()->getId();
         $em->remove($item);
         $em->flush();
         return new RedirectResponse($this->generateUrl('show_reservation', array('id' => $reservation_id)));

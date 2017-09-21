@@ -28,6 +28,7 @@
                 <thead>
                 <tr>
                     <th>ID</th>
+                    <th>Username</th>
                     <th>Performance</th>
                     <th>Seats</th>
                     <th>Type</th>
@@ -41,6 +42,9 @@
                     <tr>
                         <td>
                             {{ item.id }}
+                        </td>
+                        <td>
+                            {{ item.user.username }}
                         </td>
                         <td>
                             {{ item.title }}
@@ -64,15 +68,16 @@
                         </td>
                         <td>
                             {% if item.statusId == 1 %}
-                                <span class="label label-primary">New</span>
+                                <span class="badge bg-light-blue">New</span>
                             {% endif %}
                         </td>
                         <td>
                             {{ item.createdAt|date('d.m.Y. H:i:s') }}
                         </td>
-                        <td>
-                            <a href="{{ path('show_reservation', { 'id': item.id }) }}"><i class="fa fa-eye"></i></a>
-                            <a href="{{ path('show_reservation', { 'id': item.id }) }}"><i class="fa fa-print"></i></a>
+                        <td class="pull-right">
+                            <a href="{{ path('show_reservation', { 'id': item.id }) }}"><i class="fa fa-pencil"></i></a>&nbsp;
+                            <a href="{{ path('show_reservation', { 'id': item.id }) }}"><i class="fa fa-print"></i></a>&nbsp;
+                            <a href data-toggle="modal" data-target="#modal-danger" data-entity-id="{{ item.id }}" class="delete-btn"><i class="fa fa-trash"></i></a>
                         </td>
                     </tr>
                 {% endfor %}

@@ -47,7 +47,7 @@ class ReservationController extends Controller
             $filterBuilder = $this->get('doctrine.orm.entity_manager')
                 ->getRepository(Reservation::class)
                 ->createQueryBuilder('r');
-            $filterBuilder->andWhere('r.userId='.$id);
+            $filterBuilder->andWhere('r.user='.$id);
             $form = $this->get('form.factory')->create('SalexUserBundle\Filter\ItemFilterType');
             if ($request->query->has($form->getName())) {
                 $form->submit($request->query->get($form->getName()));
@@ -81,7 +81,7 @@ class ReservationController extends Controller
         $filterBuilder = $this->get('doctrine.orm.entity_manager')
             ->getRepository(Reservation::class)
             ->createQueryBuilder('r');
-        $filterBuilder->andWhere('r.userId='.$user_id);
+        $filterBuilder->andWhere('r.user='.$user_id);
         $form = $this->get('form.factory')->create('SalexUserBundle\Filter\ItemFilterType');
         if ($request->query->has($form->getName())) {
             $form->submit($request->query->get($form->getName()));
@@ -112,7 +112,7 @@ class ReservationController extends Controller
 
         $reservation = new Reservation();
         $reservation->setCreatedAt(new \DateTime());
-        $reservation->setUserId($current_user->getId());
+        $reservation->setUser($current_user);
         $reservation->setStatusId(1);
 
         $form = $this->createForm(ReservationType::class, $reservation);
@@ -142,12 +142,8 @@ class ReservationController extends Controller
         $em = $this->getDoctrine()->getManager();
         $item = $em->getRepository(Reservation::class)->findOneBy(array('id' => $id));
 
-        // get seats
-        $seats = $em->getRepository(Seat::class)->findBy(array('reservationId' => $id));
-
         return $this->render('SalexUserBundle:Reservation:show-reservation.html.twig', array(
             'item' => $item,
-            'seats' => $seats,
         ));
     }
 

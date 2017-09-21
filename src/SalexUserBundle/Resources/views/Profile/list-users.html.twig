@@ -10,7 +10,10 @@
                 <tr>
                     <th>ID</th>
                     <th>Username</th>
+                    <th>First name</th>
+                    <th>Last name</th>
                     <th>E-mail</th>
+                    <th>Status</th>
                     <th></th>
                 </tr>
                 </thead>
@@ -24,7 +27,22 @@
                         {{ user.username }}
                     </td>
                     <td>
+                        {{ user.firstName }}
+                    </td>
+                    <td>
+                        {{ user.lastName }}
+                    </td>
+                    <td>
                         {{ user.email }}
+                    </td>
+                    <td>
+                        {% if user.enabled == true %}
+                            <span class="badge bg-green">Aktivan</span>
+                        {% endif %}
+
+                        {% if user.enabled == false %}
+                            <span class="badge bg-red">Neaktivan</span>
+                        {% endif %}
                     </td>
                     <td>
                         <a href="{{ path('list_reservations', { 'id': user.id }) }}" alt="Reservations" title="Reservations"><i class="fa fa-list"></i></a>

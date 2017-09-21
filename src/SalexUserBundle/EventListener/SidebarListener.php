@@ -43,7 +43,7 @@ class SidebarListener
             $rootItems = array(
                 $users = new MenuItemModel('id-users', 'Users', 'list_users', $earg, 'fa fa-users'),
                 $reservations = new MenuItemModel('id-reservation', 'Reservations', 'list_reservations', $earg, 'fa fa-list'),
-
+                $add_reservation = new MenuItemModel('id-add-reservations', 'Add reservation', 'add_reservation', $earg, 'fa fa-edit'),
             );
         } else {
             $rootItems = array (

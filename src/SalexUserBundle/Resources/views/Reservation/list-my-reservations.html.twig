@@ -29,6 +29,7 @@
                     <tr>
                         {# sorting of properties based on query components #}
                         <th>ID</th>
+                        <th>Username</th>
                         <th>Title</th>
                         <th>Seats</th>
                         <th>Type</th>
@@ -41,6 +42,9 @@
                     <tr>
                         <td>
                             {{ item.id }}
+                        </td>
+                        <td>
+                            {{ item.user.username }}
                         </td>
                         <td>
                             {{ item.title }}
@@ -64,14 +68,15 @@
                         </td>
                         <td>
                             {% if item.statusId == 1 %}
-                                <span class="label label-primary">New</span>
+                                <span class="badge bg-light-blue">New</span>
                             {% endif %}
                         </td>
                         <td>
                             {{ item.createdAt|date('d.m.Y. H:i:s') }}
                         </td>
-                        <td>
-                            <a href data-toggle="modal" data-target="#modal-danger" data-entity-id="{{ item.id }}" class="delete-btn btn btn-xs btn-danger pull-right"><i class="fa fa-trash-o"></i>&nbsp;Remove</a>
+                        <td  class="pull-right">
+                            <a href data-toggle="modal" data-target="#modal-danger" data-entity-id="{{ item.id }}" class="delete-btn"><i class="fa fa-trash"></i></a>&nbsp;
+                            <a href="{{ path('show_reservation', { 'id': item.id }) }}"><i class="fa fa-print"></i></a>
                         </td>
                     </tr>
                 {% endfor %}

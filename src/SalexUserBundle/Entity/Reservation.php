@@ -2,6 +2,7 @@
 
 namespace SalexUserBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use SalexUserBundle\Utility\Services;
 
@@ -24,10 +25,20 @@ class Reservation
     }
 
     /**
-     * @ORM\OneToMany(targetEntity="Seat", mappedBy="seat")
+     * @ORM\OneToMany(targetEntity="Seat", mappedBy="reservation")
      */
-    protected $seats;
+    private $seats;
 
+    public function __construct()
+    {
+        $this->seats = new ArrayCollection();
+    }
+
+    /**
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="reservations")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
+    private $user;
 
     /**
      * @var int
@@ -37,13 +48,6 @@ class Reservation
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="user_id", type="integer")
-     */
-    private $userId;
 
     /**
      * @var int
@@ -88,30 +92,6 @@ class Reservation
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set userId
-     *
-     * @param integer $userId
-     *
-     * @return Reservation
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    /**
-     * Get userId
-     *
-     * @return int
-     */
-    public function getUserId()
-    {
-        return $this->userId;
     }
 
     /**
@@ -243,5 +223,63 @@ class Reservation
         $performance_id = $this->getPerformanceId();
         $title = $this->getService()->getPerformance($performance_id);
         return $title;
+    }
+
+    /**
+     * Add seat
+     *
+     * @param \SalexUserBundle\Entity\Seat $seat
+     *
+     * @return Reservation
+     */
+    public function addSeat(\SalexUserBundle\Entity\Seat $seat)
+    {
+        $this->seats[] = $seat;
+
+        return $this;
+    }
+
+    /**
+     * Remove seat
+     *
+     * @param \SalexUserBundle\Entity\Seat $seat
+     */
+    public function removeSeat(\SalexUserBundle\Entity\Seat $seat)
+    {
+        $this->seats->removeElement($seat);
+    }
+
+    /**
+     * Get seats
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSeats()
+    {
+        return $this->seats;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \SalexUserBundle\Entity\User $user
+     *
+     * @return Reservation
+     */
+    public function setUser(\SalexUserBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \SalexUserBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Seat
 {
+
     /**
      * @var int
      *
@@ -22,11 +23,10 @@ class Seat
     private $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="reservation_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Reservation", inversedBy="seats")
+     * @ORM\JoinColumn(name="reservation_id", referencedColumnName="id")
      */
-    private $reservationId;
+    private $reservation;
 
     /**
      * @var string
@@ -34,8 +34,7 @@ class Seat
      * @ORM\Column(name="seat", type="string", length=255)
      */
     private $seat;
-
-
+    
     /**
      * Get id
      *
@@ -44,30 +43,6 @@ class Seat
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set reservationId
-     *
-     * @param integer $reservationId
-     *
-     * @return Seat
-     */
-    public function setReservationId($reservationId)
-    {
-        $this->reservationId = $reservationId;
-
-        return $this;
-    }
-
-    /**
-     * Get reservationId
-     *
-     * @return int
-     */
-    public function getReservationId()
-    {
-        return $this->reservationId;
     }
 
     /**
@@ -115,5 +90,28 @@ class Seat
         $item = explode('_', $this->seat);
         return $item[0];
     }
-}
 
+    /**
+     * Set reservation
+     *
+     * @param \SalexUserBundle\Entity\Reservation $reservation
+     *
+     * @return Seat
+     */
+    public function setReservation(\SalexUserBundle\Entity\Reservation $reservation = null)
+    {
+        $this->reservation = $reservation;
+
+        return $this;
+    }
+
+    /**
+     * Get reservation
+     *
+     * @return \SalexUserBundle\Entity\Reservation
+     */
+    public function getReservation()
+    {
+        return $this->reservation;
+    }
+}

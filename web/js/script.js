@@ -154,8 +154,7 @@ function get_seats(sc) {
 function load_seats(sc) {
 
     $('#modal-info').modal('show');
-
-    var entityId = $('#reservation_id').val();
+    var entityId = $('#performance_id').val(); // $('#reservation_id').val();
     var url = Routing.generate('list_seats', {'id': entityId});
     $.ajax({
         type: 'POST',
