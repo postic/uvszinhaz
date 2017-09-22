@@ -2,6 +2,7 @@
 
 namespace SalexUserBundle\Controller;
 
+use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use SalexUserBundle\Entity\Reservation;
 use SalexUserBundle\Entity\Seat;
 use SalexUserBundle\Filter\ItemFilterType;
@@ -11,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class ReservationController extends Controller
 {
@@ -158,6 +160,43 @@ class ReservationController extends Controller
         $em->remove($item);
         $em->flush();
         return new RedirectResponse($this->generateUrl('list_my_reservations'));
+    }
+
+    /**
+     * @Route("/print/reservation/{id}", name="print_reservation", options={"expose"=true}, requirements={"id": "\d+"})
+     * @return RedirectResponse
+     */
+    public function printAction($id)
+    {
+        $options = array(
+            'page-width' => '210mm',
+            'page-height' => '297mm',
+            'dpi' => 72,
+            'images' => true,
+            'orientation' => 'portrait',
+            'encoding' => 'utf-8',
+            #'header-right'=> 'Novosadsko pozorište, 2017',
+            'header-left'=> 'Novosadsko pozorište, 2017',
+            #'footer-right'=> 'Novosadsko pozorište, 2017',
+            'footer-left'=> 'Novosadsko pozorište, 2017'
+        );
+
+        $em = $this->getDoctrine()->getManager();
+        $item = $em->getRepository(Reservation::class)->findOneBy(array('id' => $id));
+
+        $html = $this->renderView('SalexUserBundle:Reservation:print-reservation.html.twig', array(
+            'item'  => $item
+        ));
+
+        return new Response(
+            $this->get('knp_snappy.pdf')->getOutputFromHtml($html, $options),
+            200,
+            array(
+                'Content-Type'          => 'application/pdf',
+                'Content-Disposition'   => 'inline; filename="reservation.pdf"'
+            )
+        );
+
     }
 
 }

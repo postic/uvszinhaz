@@ -1,0 +1,59 @@
+{% extends 'SalexUserBundle:Layout:pdf-layout.html.twig' %}
+
+{% block pdf_title %}{% endblock %}
+
+{% block pdf_content %}
+
+    <style></style>
+
+    <table style="width: 100%; padding-top: 30px;">
+        <tr>
+            <td style="width: 30%">
+                Ime i prezime
+            </td>
+            <td>
+                {{ item.user.username }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Naziv događaja
+            </td>
+            <td>
+                {{ item.title }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Datum događaja
+            </td>
+            <td>
+                {{ item.createdAt|date('d.m.Y. H:i:s') }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Datum rezervacije
+            </td>
+            <td>
+                {{ item.createdAt|date('d.m.Y. H:i:s') }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Rezervacija važi do
+            </td>
+            <td>
+                {{ item.createdAt|date('d.m.Y. H:i:s') }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Broj sedišta
+            </td>
+            <td>
+                {{ item.seatsNumber }}
+            </td>
+        </tr>
+    </table>
+{% endblock %}

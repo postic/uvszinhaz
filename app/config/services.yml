@@ -45,3 +45,8 @@ services:
     app.fos_user.oauth_provider:
         class: SalexUserBundle\Entity\FOSUBUserProvider
         arguments: ['@fos_user.user_manager',{facebook: facebook_id}]
+
+    knp_snappy.pdf:
+        class:  Knp\Snappy\Pdf
+        public: true
+        arguments: ['%kernel.root_dir%/../vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64']

@@ -76,7 +76,7 @@
                         </td>
                         <td  class="pull-right">
                             <a href data-toggle="modal" data-target="#modal-danger" data-entity-id="{{ item.id }}" class="delete-btn"><i class="fa fa-trash"></i></a>&nbsp;
-                            <a href="{{ path('show_reservation', { 'id': item.id }) }}"><i class="fa fa-print"></i></a>
+                            <a href="{{ path('print_reservation', { 'id': item.id }) }}" target="_blank"><i class="fa fa-print"></i></a>
                         </td>
                     </tr>
                 {% endfor %}
