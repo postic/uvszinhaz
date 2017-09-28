@@ -19,18 +19,26 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('username', null, array('label' => 'form.username', 'translation_domain' => 'FOSUserBundle'))
+            ->add('username', null, array(
+                'label' => 'form.username',
+                'disabled' => true,
+                'translation_domain' => 'FOSUserBundle'
+            ))
             ->add('email', EmailType::class, array('label' => 'form.email', 'translation_domain' => 'FOSUserBundle'))
             ->add('firstName')
             ->add('lastName')
             ->add('createdAt', DateType::class, array(
                 'widget' => 'single_text',
+                'disabled' => true,
             ))
-            ->add('profile_picture_file', VichImageType::class, array(
-                    'required'   => false,
-                    'label'      => 'Profile Picture'
-                )
-            )
+            ->add('imageFile', VichImageType::class, [
+                'required' => false,
+                'allow_delete' => true,
+                'download_label' => false,
+                'download_uri' => true,
+                'image_uri' => true,
+                'imagine_pattern' => 'profile_picture',
+            ]);
         ;
     }
 

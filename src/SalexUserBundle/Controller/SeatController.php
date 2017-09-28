@@ -25,6 +25,7 @@ class SeatController extends Controller
             // get reservation
             $em = $this->getDoctrine()->getManager();
             $reservation = $em->getRepository(Reservation::class)->findOneBy(array('id' => $a_resp->id));
+            $reservation->setStatusId(2);
 
             $seat = new Seat();
             $seat->setReservation($reservation);

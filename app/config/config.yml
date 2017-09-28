@@ -119,7 +119,7 @@ hwi_oauth:
             client_id:      "%facebook_client_id%"
             client_secret:  "%facebook_secret%"
             scope:          "email"
-            infos_url:      "https://graph.facebook.com/me?fields=id,name,email,first_name,last_name,picture.type(square)"
+            infos_url:      "https://graph.facebook.com/me?fields=id,name,email,first_name,last_name,picture.type(normal)"
             paths:
                 email:          email
                 firstname:      first_name
@@ -129,7 +129,6 @@ hwi_oauth:
 avanzu_admin_theme:
     #bower_bin: C:\Users\{username}\AppData\Roaming\npm\bower.cmd # that's the default value
     #bower_bin: usr/local/bin/bower #for linux system
-
 
 # LiipImagineBundle image filters
 liip_imagine:
@@ -144,11 +143,12 @@ liip_imagine:
             filters:
                 thumbnail: { size: [100, 100], mode: outbound }
 
+
 vich_uploader:
     db_driver: orm # or mongodb or propel or phpcr
     mappings:
         profile_image:
-            uri_prefix:         /images/profile
+            uri_prefix:         /web/images/profile
             upload_destination: '%kernel.root_dir%/../web/images/profile'
             namer: vich_uploader.namer_origname
             inject_on_load:     false

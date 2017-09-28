@@ -98,6 +98,58 @@
                 {% endblock %}
             </section>
 
+             <!-- Alert Boxes -->
+        {% if app.session.flashBag.has('success')
+        or app.session.flashBag.has('error')
+        or app.session.flashBag.has('notice')
+        %}
+            <section class="flash-messages content-header">
+                <div class="row">
+                    <div class="col-md-12">
+                        {% if app.session.flashBag.has('success') %}
+                            <div class="alert alert-success alert-dismissible">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <h4><i class="icon fa fa-check"></i> Success!</h4>
+                                {% for msg in app.session.flashBag.get('success') %}
+                                    {{ msg }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        {% if app.session.flashBag.has('error') %}
+                            <div class="alert alert-danger alert-dismissible">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <h4><i class="icon fa fa-ban"></i> Error!</h4>
+                                {% for msg in app.session.flashBag.get('error') %}
+                                    {{ msg }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        {% if app.session.flashBag.has('notice') %}
+                            <div class="alert alert-info alert-dismissible">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <h4><i class="icon fa fa-info"></i> Notice!</h4>
+                                {% for msg in app.session.flashBag.get('notice') %}
+                                    {{ msg }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        {% if app.session.flashBag.has('warning') %}
+                            <div class="alert alert-info alert-dismissible">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <h4><i class="icon fa fa-warning"></i> Warning!</h4>
+                                {% for msg in app.session.flashBag.get('warning') %}
+                                    {{ msg }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </section>
+        {% endif %}
+        
             <!-- Main content -->
             <section class="content">
                 {% block page_content %}{% endblock %}

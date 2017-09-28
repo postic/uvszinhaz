@@ -29,7 +29,7 @@
                     <tr>
                         {# sorting of properties based on query components #}
                         <th>ID</th>
-                        <th>Username</th>
+                        <th>User</th>
                         <th>Title</th>
                         <th>Seats</th>
                         <th>Type</th>
@@ -44,7 +44,7 @@
                             {{ item.id }}
                         </td>
                         <td>
-                            {{ item.user.username }}
+                            {{ item.user.name }}
                         </td>
                         <td>
                             {{ item.title }}
@@ -68,7 +68,10 @@
                         </td>
                         <td>
                             {% if item.statusId == 1 %}
-                                <span class="badge bg-light-blue">New</span>
+                                <span class="badge bg-light-blue">Zahtev</span>
+                            {% endif %}
+                            {% if item.statusId == 2 %}
+                                <span class="badge bg-green">Rezervisano</span>
                             {% endif %}
                         </td>
                         <td>

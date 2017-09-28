@@ -97,8 +97,6 @@ $(document).ready(function() {
         window.location.href = url;
     });
 
-
-
     // delete seat
     $('.delete-btn-seat').on('click', function () {
         var entityId = $(this).attr('data-entity-id');

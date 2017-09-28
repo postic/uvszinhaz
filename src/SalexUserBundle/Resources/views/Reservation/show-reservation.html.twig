@@ -74,9 +74,11 @@
                             <label for="inputName" class="col-sm-3 control-label">Status</label>
                             <div class="col-sm-9">
                                 {% if item.statusId == 1 %}
-                                    {% set status_retval = 'New' %}
+                                    <span class="badge bg-light-blue">Zahtev</span>
                                 {% endif %}
-                                <input type="text" class="form-control" placeholder="{{ status_retval }}" readonly>
+                                {% if item.statusId == 2 %}
+                                    <span class="badge bg-green">Rezervisano</span>
+                                {% endif %}
                             </div>
                         </div>
                         <div class="form-group">

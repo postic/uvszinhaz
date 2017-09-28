@@ -1,17 +1,23 @@
 <!-- User Account: style can be found in dropdown.less -->
 {% import "AvanzuAdminThemeBundle:layout:macros.html.twig" as macro %}
+
+{% set profile_picture_path = false %}
+{% if user.getImageName() is not empty %}
+    {% set profile_picture_path = 'images/profile/'~ user.getImageName() %}
+{% endif %}
+
 <li class="dropdown user user-menu">
     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-        {{ macro.avatar(null, user.username, 'user-image') }}
-        <span class="hidden-xs">{{ user.username }}</span>
+        {{ macro.avatar(profile_picture_path, user.name, 'user-image') }}
+        <span class="hidden-xs">{{ user.name }}</span>
     </a>
     <ul class="dropdown-menu">
         <!-- User image -->
         <li class="user-header">
-            {{ macro.avatar(null, user.username) }}
+            {{ macro.avatar(profile_picture_path, user.getName, 'profile-user-img img-responsive img-circle') }}
             <p>
-                {{user.username}}
-                <small>{{ 'Member since %date%'|trans({'%date%': user.lastLogin|date('m.Y') }, 'AvanzuAdminTheme') }}</small>
+                {{user.name}}
+                <small>{{ 'Member since %date%'|trans({'%date%': user.lastLogin|date('d.m.Y') }, 'AvanzuAdminTheme') }}</small>
             </p>
         </li>
         <!-- Menu Footer-->
