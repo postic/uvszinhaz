@@ -14,7 +14,11 @@
                     <li><!-- start message -->
                         <a href="{{ path('avanzu_admin_show_message', {'messageid': msg.identifier}) }}">
                             <div class="pull-left">
-                                {{ macro.avatar(msg.from.avatar, msg.from.username) }}
+                                {% set profile_picture_path = false %}
+                                {% if msg.from.getImageName() is not empty %}
+                                    {% set profile_picture_path = 'images/profile/'~ msg.from.getImageName() %}
+                                {% endif %}
+                                {{ macro.avatar(profile_picture_path, msg.from.username) }}
                             </div>
                             <h4>
                                 {{ msg.from.username }}
