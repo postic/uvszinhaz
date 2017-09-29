@@ -40,7 +40,6 @@ class MessageListener {
             new MessageModel($from, 'Created reservation', new \DateTime(), $from),
             new MessageModel($userManager->findUserBy(array('id'=>50)), 'Created reservation', new \DateTime(), $from),
             new MessageModel($userManager->findUserBy(array('id'=>51)), 'Created reservation', new \DateTime(), $from),
-            new MessageModel($userManager->findUserBy(array('id'=>51)), 'Created reservation', new \DateTime(), $from),
         );
         return $items;
     }
