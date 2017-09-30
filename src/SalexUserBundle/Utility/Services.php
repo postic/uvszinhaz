@@ -9,7 +9,7 @@
 
 namespace SalexUserBundle\Utility;
 
-use Buzz\Browser;
+use Buzz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class Services
@@ -23,10 +23,10 @@ class Services
     }
 
     public function getPerformances() {
-
         $retval = array();
-        $buzz = $this->container->get('buzz');
-        $response = $buzz->get('http://uvszinhaz.com/performances')->getContent();
+        $browser = new Buzz\Browser();
+        $browser->getClient()->setTimeout(100);
+        $response = $browser->get('http://uvszinhaz.com/performances')->getContent();
         $items = json_decode($response, true);
         foreach($items as $key=>$value){
             $retval[$value] = $key;
@@ -36,10 +36,10 @@ class Services
 
 
     public function getPerformance($id) {
-
         $retval = array();
-        $buzz = $this->container->get('buzz');
-        $response = $buzz->get('http://uvszinhaz.com/performance/'.$id)->getContent();
+        $browser = new Buzz\Browser();
+        $browser->getClient()->setTimeout(100);
+        $response = $browser->get('http://uvszinhaz.com/performance/'.$id)->getContent();
         $node = json_decode($response, true);
         return $node['title'];
     }
