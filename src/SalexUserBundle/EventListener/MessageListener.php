@@ -33,15 +33,16 @@ class MessageListener {
     protected function getMessages() {
 
         $userManager = $this->container->get('fos_user.user_manager');
-        $from = $userManager->findUserBy(array('id'=>6));
+        $from = $userManager->findUserBy(array('id'=>1));
 
         // retrieve your message models/entities here
         $items = array(
             new MessageModel($from, 'Created reservation', new \DateTime(), $from),
-            new MessageModel($userManager->findUserBy(array('id'=>50)), 'Created reservation', new \DateTime(), $from),
-            new MessageModel($userManager->findUserBy(array('id'=>51)), 'Created reservation', new \DateTime(), $from),
+            new MessageModel($userManager->findUserBy(array('id'=>1)), 'Created reservation', new \DateTime(), $from),
+            new MessageModel($userManager->findUserBy(array('id'=>1)), 'Created reservation', new \DateTime(), $from),
         );
         return $items;
+        
     }
 
 }
