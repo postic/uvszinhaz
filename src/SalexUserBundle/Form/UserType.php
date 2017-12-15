@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vich\UploaderBundle\Form\Type\VichImageType;
@@ -24,9 +25,13 @@ class UserType extends AbstractType
                 'disabled' => true,
                 'translation_domain' => 'FOSUserBundle'
             ))
-            ->add('email', EmailType::class, array('label' => 'form.email', 'translation_domain' => 'FOSUserBundle'))
+            ->add('email', EmailType::class, array(
+                'label' => 'form.email',
+                'translation_domain' => 'FOSUserBundle'
+            ))
             ->add('firstName')
             ->add('lastName')
+            ->add('phoneNumber')
             ->add('createdAt', DateType::class, array(
                 'widget' => 'single_text',
                 'disabled' => true,
@@ -39,7 +44,6 @@ class UserType extends AbstractType
                 'image_uri' => true,
                 'imagine_pattern' => 'profile_picture',
             ]);
-        ;
     }
 
     /**

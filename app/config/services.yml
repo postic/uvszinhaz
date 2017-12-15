@@ -30,7 +30,12 @@ services:
     app_bundle.form.registration:
        class: SalexUserBundle\Form\RegistrationFormType
        tags:
-           - { name: form.type, alias: app_user_registration }
+           - { name: form.type, alias: salex_user_registration }
+
+    app.profile.form.type:
+        class: SalexUserBundle\Form\ProfileFormType
+        tags:
+           - { name: form.type, alias: salex_user_profile }
 
     app_bundle.user_profile_listener:
         class: SalexUserBundle\EventListener\UserProfileListener

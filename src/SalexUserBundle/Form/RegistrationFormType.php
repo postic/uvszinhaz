@@ -35,7 +35,7 @@ class RegistrationFormType extends AbstractType
     public function getBlockPrefix()
 
     {
-        return 'app_user_registration';
+        return 'salex_user_registration';
     }
 
     public function getName()
