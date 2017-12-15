@@ -27,6 +27,10 @@ services:
     #         $someArgument: 'some_value'
 
 
+    app_bundle.form.registration:
+       class: SalexUserBundle\Form\RegistrationFormType
+       tags:
+           - { name: form.type, alias: app_user_registration }
 
     app_bundle.user_profile_listener:
         class: SalexUserBundle\EventListener\UserProfileListener

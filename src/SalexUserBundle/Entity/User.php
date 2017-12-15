@@ -63,6 +63,12 @@ class User extends BaseUser implements ThemeUser
     protected $lastName;
 
     /**
+     * @var string
+     * @ORM\Column(name="phone_number", type="string", length=255, nullable=true)
+     */
+    protected $phoneNumber;
+
+    /**
      * @var DateTime $created
      *
      * @ORM\Column(name="created_at", type="datetime", options={"default": 0}, nullable=true)
@@ -470,5 +476,29 @@ class User extends BaseUser implements ThemeUser
     public function getImageSize()
     {
         return $this->imageSize;
+    }
+
+    /**
+     * Set phoneNumber
+     *
+     * @param string $phoneNumber
+     *
+     * @return User
+     */
+    public function setPhoneNumber($phoneNumber)
+    {
+        $this->phoneNumber = $phoneNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get phoneNumber
+     *
+     * @return string
+     */
+    public function getPhoneNumber()
+    {
+        return $this->phoneNumber;
     }
 }

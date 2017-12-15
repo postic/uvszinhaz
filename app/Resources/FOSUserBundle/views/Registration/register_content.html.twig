@@ -17,6 +17,13 @@
             {{ form_errors(form.username) }}
             <span class="glyphicon glyphicon-user form-control-feedback"></span>
         </div>
+
+        <div class="form-group has-feedback {% if form.phone_number.vars.valid==false %}has-error{% endif %}">
+            {{ form_widget(form.phone_number) }}
+            {{ form_errors(form.phone_number) }}
+            <span class="glyphicon glyphicon-phone form-control-feedback"></span>
+        </div>
+
         <div class="form-group has-feedback {% if form.plainPassword.first.vars.valid==false %}has-error{% endif %}">
             {{ form_widget(form.plainPassword.first, { 'attr': {'placeholder': 'form.password'} }) }}
             <span class="glyphicon glyphicon-lock form-control-feedback"></span>

@@ -41,14 +41,15 @@ class SidebarListener
 
         if($is_admin){
             $rootItems = array(
-                $users = new MenuItemModel('id-users', 'Users', 'list_users', $earg, 'fa fa-users'),
-                $reservations = new MenuItemModel('id-reservation', 'Reservations', 'list_reservations', $earg, 'fa fa-list'),
-                $add_reservation = new MenuItemModel('id-add-reservations', 'Add reservation', 'add_reservation', $earg, 'fa fa-edit'),
+                $users = new MenuItemModel('id-users', 'Users', 'list_users', $earg, 'fa fa-circle-o'),
+                $reservations = new MenuItemModel('id-reservation', 'Reservations', null, $earg, 'fa fa-circle-o'),
+                $reservations->addChild(new MenuItemModel('id-reservation', 'List reservations', 'list_reservations', $earg, 'fa fa-circle-thin')),
+                $reservations->addChild(new MenuItemModel('id-add-reservations', 'Add reservation', 'add_reservation', $earg, 'fa fa-circle-thin')),
             );
         } else {
             $rootItems = array (
-                $my_reservations = new MenuItemModel('id-my-reservations', 'Reservations', 'list_my_reservations', $earg, 'fa fa-list'),
-                $add_reservation = new MenuItemModel('id-add-reservations', 'Add reservation', 'add_reservation', $earg, 'fa fa-edit'),
+                $my_reservations = new MenuItemModel('id-my-reservations', 'Reservations', 'list_my_reservations', $earg, 'fa fa-circle-o'),
+                $add_reservation = new MenuItemModel('id-add-reservations', 'Add reservation', 'add_reservation', $earg, 'fa fa-circle-o'),
             );
         }
 
