@@ -1,12 +1,11 @@
 {% extends 'AvanzuAdminThemeBundle:layout:base-layout.html.twig' %}
-{% block page_title %}Reservations{% endblock %}
-{% block page_subtitle %}Lorem ipsum dolor sit amet{% endblock %}
+{% block page_title %}Moje rezervacije{% endblock %}
+{% block page_subtitle %}Kratak opis vezan za formu{% endblock %}
 
 {% block page_content %}
 
     <div class="box box-success">
         <div class="box-header with-border">
-            <h3 class="box-title">Search</h3>
             <div class="box-tools pull-right">
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                 </button>
@@ -16,7 +15,7 @@
             <form method="get" action="{{ path('list_my_reservations') }}">
                 {{ form_rest(form) }}
                 <button class="btn-default btn" type="submit" name="submit-filter">
-                    <i class="fa fa-search"></i>&nbsp;Find
+                    <i class="fa fa-search"></i>&nbsp;Pretraga
                 </button>
             </form>
         </div>
@@ -28,21 +27,17 @@
                 <thead>
                     <tr>
                         {# sorting of properties based on query components #}
-                        <th>ID</th>
-                        <th>User</th>
-                        <th>Title</th>
-                        <th>Seats</th>
-                        <th>Type</th>
-                        <th>Status</th>
-                        <th>{{ knp_pagination_sortable(pagination, 'Created', 'r.createdAt') }}</th>
+                        <th>Korisnik</th>
+                        <th>Predstava</th>
+                        <th>Broj karata</th>
+                        <th>Tip karte</th>
+                        <th>Status rezervacije</th>
+                        <th>{{ knp_pagination_sortable(pagination, 'Datum kreiranja zahteva', 'r.createdAt') }}</th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for item in pagination %}
                     <tr>
-                        <td>
-                            {{ item.id }}
-                        </td>
                         <td>
                             {{ item.user.name }}
                         </td>
@@ -54,10 +49,10 @@
                         </td>
                         <td>
                             {% if item.type == 1 %}
-                                Pojedinačno
+                                Pojedinačna
                             {% endif %}
                             {% if item.type == 2 %}
-                                Grupe
+                                Grupna
                             {% endif %}
                             {% if item.type == 3 %}
                                 Studenti/đaci

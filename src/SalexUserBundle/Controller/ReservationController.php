@@ -6,7 +6,7 @@ use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use SalexUserBundle\Entity\Reservation;
 use SalexUserBundle\Entity\Seat;
 use SalexUserBundle\Filter\ItemFilterType;
-use SalexUserBundle\Form\ReservationType;
+use SalexUserBundle\Form\ReservationFormType;
 use SalexUserBundle\Utility\PageUtility;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -67,9 +67,7 @@ class ReservationController extends Controller
                 'pagination' => $pagination,
                 'form' => $form->createView(),
             ));
-
         }
-
     }
 
     /**
@@ -117,7 +115,7 @@ class ReservationController extends Controller
         $reservation->setUser($current_user);
         $reservation->setStatusId(1);
 
-        $form = $this->createForm(ReservationType::class, $reservation);
+        $form = $this->createForm(ReservationFormType::class, $reservation);
 
         $form->handleRequest($request);
 
@@ -126,6 +124,13 @@ class ReservationController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($reservation);
             $em->flush();
+
+            // Add message
+            $this->addFlash(
+                'success',
+                'Vaš zahtev je uspešno snimljen.'
+            );
+
             return $this->redirectToRoute('list_my_reservations');
         }
 

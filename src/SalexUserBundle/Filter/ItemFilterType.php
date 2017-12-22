@@ -26,9 +26,21 @@ class ItemFilterType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $choices = $this->service->getPerformances();
-        $builder->add('performanceId', Filters\ChoiceFilterType::class, array('choices' => $choices,'label' => false));
-        $builder->add('type', Filters\ChoiceFilterType::class, array('choices' => array('Pojedinačno' => 1, 'Grupe (najmanje 5 gledalaca)' => 2, 'Studenti/đaci' => 3, 'Penzionerska' => 4),'label' => false));
-        $builder->add('statusId', Filters\ChoiceFilterType::class, array('choices' => array('New' => 1),'label' => false));
+        $builder->add(
+            'performanceId',
+            Filters\ChoiceFilterType::class,
+            array('choices' => $choices, 'label' => false, 'placeholder' => 'Izaberite predstavu')
+        );
+        $builder->add(
+            'type',
+            Filters\ChoiceFilterType::class,
+            array('choices' => array('Pojedinačno' => 1, 'Grupe (najmanje 5 gledalaca)' => 2, 'Studenti/đaci' => 3, 'Penzionerska' => 4), 'label' => false, 'placeholder' => 'Izaberite tip karte')
+        );
+        $builder->add(
+            'statusId',
+            Filters\ChoiceFilterType::class,
+            array('choices' => array('Zahtev' => 1, 'Rezervisano' => 2, 'Otkazano' => 3), 'label' => false, 'placeholder' => 'Izaberite status')
+        );
     }
 
     public function getBlockPrefix()

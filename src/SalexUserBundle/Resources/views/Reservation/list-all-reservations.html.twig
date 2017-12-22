@@ -1,12 +1,11 @@
 {% extends 'AvanzuAdminThemeBundle:layout:base-layout.html.twig' %}
-{% block page_title %}Reservations{% endblock %}
-{% block page_subtitle %}Lorem ipsum dolor sit amet{% endblock %}
+{% block page_title %}Rezervacije{% endblock %}
+{% block page_subtitle %}Kratak opis vezan za formu{% endblock %}
 
 {% block page_content %}
 
     <div class="box box-success">
         <div class="box-header with-border">
-            <h3 class="box-title">Search</h3>
             <div class="box-tools pull-right">
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                 </button>
@@ -27,22 +26,18 @@
             <table id="items" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>User</th>
-                    <th>Performance</th>
-                    <th>Seats</th>
-                    <th>Type</th>
-                    <th>Status</th>
-                    <th>{{ knp_pagination_sortable(pagination, 'Created', 'r.createdAt') }}</th>
+                    <th>Korisnik</th>
+                    <th>Predstava</th>
+                    <th>Broj karata</th>
+                    <th>Tip rezervacije</th>
+                    <th>Status rezervacije</th>
+                    <th>{{ knp_pagination_sortable(pagination, 'Datum kreiranja zahteva', 'r.createdAt') }}</th>
                     <th>&nbsp;</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for item in pagination %}
                     <tr>
-                        <td>
-                            {{ item.id }}
-                        </td>
                         <td>
                             {{ item.user.name }}
                         </td>

@@ -1,12 +1,11 @@
 {% extends 'AvanzuAdminThemeBundle:layout:base-layout.html.twig' %}
-{% block page_title %}User reservations{% endblock %}
-{% block page_subtitle %}Lorem ipsum dolor sit amet{% endblock %}
+{% block page_title %}Rezervacije{% endblock %}
+{% block page_subtitle %}Kratak opis vezan za formu{% endblock %}
 
 {% block page_content %}
 
     <div class="box box-success">
         <div class="box-header with-border">
-            <h3 class="box-title">Search</h3>
             <div class="box-tools pull-right">
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                 </button>
@@ -16,36 +15,29 @@
             <form method="get" action="{{ path('list_reservations') }}">
                 {{ form_rest(form) }}
                 <button class="btn-default btn" type="submit" name="submit-filter">
-                    <i class="fa fa-search"></i>&nbsp;Find
+                    <i class="fa fa-search"></i>&nbsp;Pretraga
                 </button>
             </form>
         </div>
     </div>
 
     <div class="box box-info">
-        <div class="box-header with-border">
-            <h3 class="box-title">Reservations</h3>
-        </div>
         <div class="box-body">
             <table id="items" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>User</th>
-                    <th>Performance</th>
-                    <th>Seats</th>
-                    <th>Type</th>
-                    <th>Status</th>
-                    <th>Created</th>
+                    <th>Korisnik</th>
+                    <th>Predstava</th>
+                    <th>Broj karata</th>
+                    <th>Tip zahteva</th>
+                    <th>Status zahteva</th>
+                    <th>Datum kreiranja zahteva</th>
                     <th>&nbsp;</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for item in pagination %}
                     <tr>
-                        <td>
-                            {{ item.id }}
-                        </td>
                         <td>
                             {{ item.user.name }}
                         </td>
@@ -75,6 +67,9 @@
                             {% endif %}
                             {% if item.statusId == 2 %}
                                 <span class="badge bg-green">Rezervisano</span>
+                            {% endif %}
+                            {% if item.statusId == 3 %}
+                                <span class="badge bg-red">Otkazano</span>
                             {% endif %}
                         </td>
                         <td>

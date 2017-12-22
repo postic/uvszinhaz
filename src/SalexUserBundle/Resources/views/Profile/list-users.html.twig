@@ -1,6 +1,6 @@
 {% extends 'AvanzuAdminThemeBundle:layout:base-layout.html.twig' %}
-{% block page_title %}Users{% endblock %}
-{% block page_subtitle %}Lorem ipsum dolor sit amet{% endblock %}
+{% block page_title %}Korisnici{% endblock %}
+{% block page_subtitle %}Kratak opis vezan za formu{% endblock %}
 
 {% block page_content %}
     <div class="box box-info">
@@ -8,10 +8,9 @@
             <table id="users" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Username</th>
-                    <th>First name</th>
-                    <th>Last name</th>
+                    <th>Korisničko ime</th>
+                    <th>Ime</th>
+                    <th>Prezime</th>
                     <th>E-mail</th>
                     <th>Status</th>
                     <th></th>
@@ -20,9 +19,6 @@
                 <tbody>
             {% for user in pagination %}
                 <tr>
-                    <td>
-                        {{ user.id }}
-                    </td>
                     <td>
                         {{ user.username }}
                     </td>
@@ -45,7 +41,7 @@
                         {% endif %}
                     </td>
                     <td>
-                        <a href="{{ path('list_reservations', { 'id': user.id }) }}" alt="Reservations" title="Reservations"><i class="fa fa-list"></i></a>
+                        <a href="{{ path('list_reservations', { 'id': user.id }) }}" alt="Rezervacije" title="Rezervacije"><i class="fa fa-list"></i></a>
                     </td>
                 </tr>
             {% endfor %}
