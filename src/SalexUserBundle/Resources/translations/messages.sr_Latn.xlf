@@ -1,0 +1,175 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="sr" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="1">
+                <source>Reservations</source>
+                <target>Jegyrendelés</target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>Users</source>
+                <target>Felhasználók</target>
+            </trans-unit>
+            <trans-unit id="3">
+                <source>Username</source>
+                <target>Felhasználónév</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>First name</source>
+                <target>Keresztnév</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>Last name</source>
+                <target>Vezetéknév</target>
+            </trans-unit>
+            <trans-unit id="6">
+                <source>E-mail</source>
+                <target>E-mail</target>
+            </trans-unit>
+            <trans-unit id="7">
+                <source>Status</source>
+                <target>Állapot</target>
+            </trans-unit>
+            <trans-unit id="8">
+                <source>Active</source>
+                <target>Aktív</target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>Inactive</source>
+                <target>Tétlen</target>
+            </trans-unit>
+            <trans-unit id="10">
+                <source>Language</source>
+                <target>Nyelv</target>
+            </trans-unit>
+            <trans-unit id="11">
+                <source>Add reservations</source>
+                <target>Jegyfoglalás</target>
+            </trans-unit>
+            <trans-unit id="12">
+                <source>Novi Sad Theatre</source>
+                <target>Újvidéki Színház</target>
+            </trans-unit>
+            <trans-unit id="13">
+                <source>Add reservation</source>
+                <target>Add hozzá foglalást</target>
+            </trans-unit>
+            <trans-unit id="14">
+                <source>Performance</source>
+                <target>Válassza ki az előadást</target>
+            </trans-unit>
+            <trans-unit id="15">
+                <source>Individually</source>
+                <target>Teljes árú jegy</target>
+            </trans-unit>
+            <trans-unit id="16">
+                <source>Groups (at least 5 viewers)</source>
+                <target>Csoportjegy (5 főtől)</target>
+            </trans-unit>
+            <trans-unit id="17">
+                <source>Students/pupils</source>
+                <target>Egyetemista - és diákjegy</target>
+            </trans-unit>
+            <trans-unit id="18">
+                <source>Pensioner</source>
+                <target>Nyugdíjasjegy</target>
+            </trans-unit>
+            <trans-unit id="19">
+                <source>Type</source>
+                <target>Jegyek</target>
+            </trans-unit>
+            <trans-unit id="20">
+                <source>Seats</source>
+                <target>Ülések</target>
+            </trans-unit>
+            <trans-unit id="21">
+                <source>Create Reservation</source>
+                <target>Foglalja le</target>
+            </trans-unit>
+            <trans-unit id="22">
+                <source>Created</source>
+                <target>Alkotó</target>
+            </trans-unit>
+            <trans-unit id="23">
+                <source>User</source>
+                <target>Használó</target>
+            </trans-unit>
+            <trans-unit id="24">
+                <source>Name of the play</source>
+                <target>Az előadás címe</target>
+            </trans-unit>
+            <trans-unit id="25">
+                <source>Search</source>
+                <target>Keresés</target>
+            </trans-unit>
+            <trans-unit id="26">
+                <source>Find</source>
+                <target>Megtalálja</target>
+            </trans-unit>
+            <trans-unit id="27">
+                <source>A request</source>
+                <target>Kérelem</target>
+            </trans-unit>
+            <trans-unit id="28">
+                <source>Reserved</source>
+                <target>Fenntartott</target>
+            </trans-unit>
+            <trans-unit id="29">
+                <source>Reservation for the show</source>
+                <target>Jegyfoglalás</target>
+            </trans-unit>
+            <trans-unit id="30">
+                <source>You have successfully booked tickets for the show.</source>
+                <target>Jegyfoglalását rögzítettük.</target>
+            </trans-unit>
+            <trans-unit id="31">
+                <source>You have successfully booked</source>
+                <target>Sikeresen lefoglalt</target>
+            </trans-unit>
+            <trans-unit id="32">
+                <source>tickets for the show</source>
+                <target>jegyet a</target>
+            </trans-unit>
+            <trans-unit id="33">
+                <source>You can pick up the tickets at the box office of the Novi Sad Theater every working day - from 10am to 12pm and on the day of the performance from 17pm to 19pm</source>
+                <target>A jegyeket felveheti az Újvidéki Színház pénztárán munkanapokon 10-12 óra között, illetve az előadás napján 17-19 óra között</target>
+            </trans-unit>
+            <trans-unit id="34">
+                <source>Yours sincerely</source>
+                <target>Tisztelettel</target>
+            </trans-unit>
+            <trans-unit id="35">
+                <source>Your name</source>
+                <target>Név</target>
+            </trans-unit>
+            <trans-unit id="36">
+                <source>E-mail address</source>
+                <target>Email cím</target>
+            </trans-unit>
+            <trans-unit id="37">
+                <source>Phone</source>
+                <target>Telefon</target>
+            </trans-unit>
+            <trans-unit id="38">
+                <source>Edit reservation</source>
+                <target>Csere</target>
+            </trans-unit>
+            <trans-unit id="39">
+                <source>Reservation data</source>
+                <target>Foglalási adatok</target>
+            </trans-unit>
+            <trans-unit id="40">
+                <source>Number of seats</source>
+                <target>Ülések száma</target>
+            </trans-unit>
+            <trans-unit id="41">
+                <source>Zahtev</source>
+                <target>Jegyrendelés RS</target>
+            </trans-unit>
+            <trans-unit id="42">
+                            <source>Moje rezervacije</source>
+                            <target>Moje rezervacije RS</target>
+                        </trans-unit>
+        </body>
+    </file>
+</xliff>

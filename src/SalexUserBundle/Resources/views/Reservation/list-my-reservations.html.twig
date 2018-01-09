@@ -1,5 +1,5 @@
 {% extends 'AvanzuAdminThemeBundle:layout:base-layout.html.twig' %}
-{% block page_title %}Moje rezervacije{% endblock %}
+{% block page_title %}{{ 'Moje rezervacije' | trans }}{% endblock %}
 {% block page_subtitle %}Kratak opis vezan za formu{% endblock %}
 
 {% block page_content %}
@@ -33,6 +33,7 @@
                         <th>Tip karte</th>
                         <th>Status rezervacije</th>
                         <th>{{ knp_pagination_sortable(pagination, 'Datum kreiranja zahteva', 'r.createdAt') }}</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -68,13 +69,20 @@
                             {% if item.statusId == 2 %}
                                 <span class="badge bg-green">Rezervisano</span>
                             {% endif %}
+                            {% if item.statusId == 3 %}
+                                <span class="badge bg-red">Otkazano</span>
+                            {% endif %}
                         </td>
                         <td>
                             {{ item.createdAt|date('d.m.Y. H:i:s') }}
                         </td>
                         <td  class="pull-right">
+                            {% if item.statusId == 1 %}
                             <a href data-toggle="modal" data-target="#modal-danger" data-entity-id="{{ item.id }}" class="delete-btn"><i class="fa fa-trash"></i></a>&nbsp;
+                            {% endif %}
+                            {% if item.statusId == 2 %}
                             <a href="{{ path('print_reservation', { 'id': item.id }) }}" target="_blank"><i class="fa fa-print"></i></a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}

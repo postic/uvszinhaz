@@ -1,3 +1,10 @@
+li.dropdown.dropdown-language {
+    width: 60px;
+}
+li.dropdown.dropdown-language ul.dropdown-menu {
+    min-width: 60px !important;
+}
+
 div.seatCharts-row {
     height: 30px;
 }

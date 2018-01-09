@@ -1,0 +1,27 @@
+<li class="dropdown dropdown-language">
+
+    {% if app.session.get('_locale') == 'sr_Latn' or app.session.get('_locale') is null %}
+        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+            <span class="langname"> SR </span>
+            <i class="fa fa-angle-down"></i>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-default">
+            <li>
+                <a href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale' : 'hu'})) }}"> HU </a>
+            </li>
+        </ul>
+    {% endif %}
+
+    {% if app.session.get('_locale') == 'hu' %}
+        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+            <span class="langname"> HU </span>
+            <i class="fa fa-angle-down"></i>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-default">
+            <li>
+                <a href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale' : 'sr_Latn'})) }}"> RS </a>
+            </li>
+        </ul>
+    {% endif %}
+
+</li>
