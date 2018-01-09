@@ -27,6 +27,7 @@
                 <thead>
                 <tr>
                     <th>Korisnik</th>
+                    <th>Telefon</th>
                     <th>Predstava</th>
                     <th>Broj karata</th>
                     <th>Tip rezervacije</th>
@@ -39,7 +40,10 @@
                 {% for item in pagination %}
                     <tr>
                         <td>
-                            {{ item.user.name }}
+                            {{ item.firstName }} {{ item.lastName }}
+                        </td>
+                        <td>
+                            {{ item.phoneNumber }}
                         </td>
                         <td>
                             {{ item.title }}
@@ -68,14 +72,23 @@
                             {% if item.statusId == 2 %}
                                 <span class="badge bg-green">Rezervisano</span>
                             {% endif %}
+                            {% if item.statusId == 3 %}
+                                <span class="badge bg-red">Otkazano</span>
+                            {% endif %}
                         </td>
                         <td>
                             {{ item.createdAt|date('d.m.Y. H:i:s') }}
                         </td>
                         <td class="pull-right">
-                            <a href="{{ path('show_reservation', { 'id': item.id }) }}"><i class="fa fa-pencil"></i></a>&nbsp;
-                            <a href="{{ path('show_reservation', { 'id': item.id }) }}"><i class="fa fa-print"></i></a>&nbsp;
-                            <a href data-toggle="modal" data-target="#modal-danger" data-entity-id="{{ item.id }}" class="delete-btn"><i class="fa fa-trash"></i></a>
+                            {% if item.statusId == 1 %}
+                                <a href="{{ path('show_reservation', { 'id': item.id }) }}"><i class="fa fa-pencil"></i></a>
+                            {% endif %}
+                            {% if item.statusId == 2 %}
+                                <a href="{{ path('print_reservation', { 'id': item.id }) }}"><i class="fa fa-print"></i></a>&nbsp;
+                            {% endif %}
+                            {% if item.statusId == 1 %}
+                                <a href data-toggle="modal" data-target="#modal-danger" data-entity-id="{{ item.id }}" class="cancel-reservation-btn"><i class="fa fa-trash"></i></a>&nbsp;
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}
@@ -87,6 +100,34 @@
             </div>
         </div>
     </div>
+
+    <div class="modal modal-danger fade" id="modal-danger">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Confirmation</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure to delete this data ?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-outline cancel_reservation" data-entity-id="">Delete</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+{% endblock %}
+
+{% block javascripts_inline %}
+    <script type="text/javascript" src="{{ asset('js/jquery.seat-charts.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/script.js') }}"></script>
 {% endblock %}
 
 {% block avanzu_admin_footer %}
