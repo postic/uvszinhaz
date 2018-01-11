@@ -30,6 +30,7 @@ class SeatController extends Controller
             $seat = new Seat();
             $seat->setReservation($reservation);
             $seat->setSeat($item);
+            $seat->setType($a_resp->tip_karte);
             $em = $this->getDoctrine()->getManager();
             $em->persist($seat);
             $em->flush();

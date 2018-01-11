@@ -44,7 +44,7 @@ class SidebarListener
                 $users = new MenuItemModel('id-users', 'Korisnici', 'list_users', $earg, 'fa fa-circle-o'),
                 $reservations = new MenuItemModel('id-reservation', 'Rezervacije', null, $earg, 'fa fa-circle-o'),
                 $reservations->addChild(new MenuItemModel('id-reservation', 'Lista rezervacija', 'list_reservations', $earg, 'fa fa-circle-thin')),
-                $reservations->addChild(new MenuItemModel('id-add-reservations', 'Dodaj zahtev', 'add_reservation_phone', $earg, 'fa fa-circle-thin')),
+                $reservations->addChild(new MenuItemModel('id-add-reservations', 'Dodaj zahtev', 'add_reservation', array('_phone'=>1), 'fa fa-circle-thin')),
             );
         } else {
             $rootItems = array (

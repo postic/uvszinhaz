@@ -1,5 +1,5 @@
 {% extends 'AvanzuAdminThemeBundle:layout:base-layout.html.twig' %}
-{% block page_title %}Edit reservation{% endblock %}
+{% block page_title %}Zahtev{% endblock %}
 {% block page_subtitle %}Lorem ipsum dolor sit amet{% endblock %}
 
 {% block stylesheets %}
@@ -20,7 +20,7 @@
         <div class="col-md-6">
             <div class="box box-info">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Reservation Data</h3>
+                    <h3 class="box-title">Podaci</h3>
                 </div>
                 <div class="box-body">
                     <div class="form-horizontal">
@@ -29,47 +29,53 @@
                         <input id="performance_id" type="hidden" value="{{ item.performanceId }}" />
 
                         <div class="form-group">
-                            <label for="inputName" class="col-sm-3 control-label">ID</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" placeholder="{{ item.id }}" readonly>
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <label for="inputName" class="col-sm-3 control-label">User</label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" placeholder="{{ item.user.username }}" readonly>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="inputName" class="col-sm-3 control-label">Performance</label>
+                            <label for="inputName" class="col-sm-3 control-label">Predstava</label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" placeholder="{{ item.title }}" readonly>
                             </div>
                         </div>
+
+
+                        {% if item.brojPojedinacne %}
                         <div class="form-group">
-                            <label for="inputName" class="col-sm-3 control-label">Seats</label>
+                            <label for="inputName" class="col-sm-3 control-label">Pojedinačne</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" placeholder="{{ item.seatsNumber }}" readonly>
+                                <input type="text" class="form-control" placeholder="{{ item.brojPojedinacne }}" readonly>
                             </div>
                         </div>
+                        {% endif %}
+                        {% if item.brojGrupne %}
                         <div class="form-group">
-                            <label for="inputName" class="col-sm-3 control-label">Type</label>
+                            <label for="inputName" class="col-sm-3 control-label">Grupne</label>
                             <div class="col-sm-9">
-                                {% if item.type == 1 %}
-                                    {% set type_retval = 'Pojedinačno' %}
-                                {% endif %}
-                                {% if item.type == 2 %}
-                                    {% set type_retval = 'Grupe' %}
-                                {% endif %}
-                                {% if item.type == 3 %}
-                                    {% set type_retval = 'Studenti/đaci' %}
-                                {% endif %}
-                                {% if item.type == 4 %}
-                                    {% set type_retval = 'Penzionerska' %}
-                                {% endif %}
-                                <input type="text" class="form-control" placeholder="{{ type_retval }}" readonly>
+                                <input type="text" class="form-control" placeholder="{{ item.brojGrupne }}" readonly>
                             </div>
                         </div>
+                        {% endif %}
+                        {% if item.brojStudentske %}
+                        <div class="form-group">
+                            <label for="inputName" class="col-sm-3 control-label">Studentske</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" placeholder="{{ item.brojStudentske }}" readonly>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if item.brojPenzionerske %}
+                        <div class="form-group">
+                            <label for="inputName" class="col-sm-3 control-label">Penzionerske</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" placeholder="{{ item.brojPenzionerske }}" readonly>
+                            </div>
+                        </div>
+                        {% endif %}
+
+
                         <div class="form-group">
                             <label for="inputName" class="col-sm-3 control-label">Status</label>
                             <div class="col-sm-9">
@@ -94,7 +100,7 @@
             <!-- Lista sedista za odabranu rezervaciju -->
             <div class="box box-info">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Your Seats</h3>
+                    <h3 class="box-title">Rezervisana sedišta</h3>
                 </div>
                 <div class="box-body">
                     <table id="seats" class="table table-bordered table-striped">
@@ -129,33 +135,30 @@
         <div class="col-md-6">
             <div class="box box-info">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Seats</h3>
+                    <h3 class="box-title">Sedišta</h3>
+                    <div class="pull-right">
+                        Broj sedišta (<span id="counter">0</span>), Total: <b><span id="total">0</span> RSD</b>
+                    </div>
                 </div>
-                <div class="box-body">
-                    <div id="seat-map">
+                <div class="box-body row">
+                    <div id="seat-map" class="col-md-8">
                         <div class="front-indicator"></div>
+                    </div>
+                    <div class="col-md-4">
+                        <select id="tip_karte" class="form-control" required="required">
+                            <option value="">Izaberite tip karte</option>
+                            <option value="1">Pojedinačne</option>
+                            <option value="2">Grupne</option>
+                            <option value="3">Studentske</option>
+                            <option value="4">Penzionerske</option>
+                        </select>
+                        <button class="btn checkout-button btn-success">Snimi &raquo;</button>
+                        <ul id="selected-seats" class="list-unstyled">
+                        </ul>
                     </div>
                 </div>
                 <div class="box-footer">
                     <div id="legend"></div>
-                </div>
-            </div>
-
-            <div class="box box-info">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Selected Seats (<span id="counter">0</span>):</h3>
-                    <div class="pull-right">
-                        Total: <b><span id="total">0</span> RSD</b>
-                    </div>
-                </div>
-                <div class="box-body">
-                    <ul id="selected-seats" class="list-unstyled">
-                    </ul>
-                </div>
-                <div class="box-footer">
-                    <div class="pull-right">
-                        <button class="btn checkout-button btn-success">Checkout &raquo;</button>
-                    </div>
                 </div>
             </div>
         </div>

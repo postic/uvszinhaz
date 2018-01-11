@@ -44,7 +44,7 @@ $(document).ready(function() {
                     if (this.status() == 'available') {
                         //let's create a new <li> which we'll add to the cart items
                         // $('<li>'+this.data().category+' Seat # '+this.settings.label+': <b>$'+this.data().price+'</b> <a href="#" class="cancel-cart-item">[cancel]</a></li>')
-                        $('<li>'+this.data().category+': <b>'+this.data().price+'&nbsp;RSD</b> <a href="#" class="cancel-cart-item">[cancel]</a></li>')
+                        $('<li>'+this.data().category+': <b>'+this.data().price+'&nbsp;RSD</b> <a href="#" class="cancel-cart-item">[brisanje]</a></li>')
                             .attr('id', 'cart-item-'+this.settings.id)
                             .data('seatId', this.settings.id)
                             .appendTo($cart);
@@ -86,6 +86,7 @@ $(document).ready(function() {
         });
     }
 
+    // delete reservation
     $('.delete-btn').on('click', function () {
         var entityId = $(this).attr('data-entity-id');
         $('.remove_item').attr('data-entity-id', entityId);
@@ -96,6 +97,19 @@ $(document).ready(function() {
         var url = Routing.generate('delete_reservation', {'id': entityId});
         window.location.href = url;
     });
+
+    // cancel reservation
+    $('.cancel-reservation-btn').on('click', function () {
+        var entityId = $(this).attr('data-entity-id');
+        $('.cancel_reservation').attr('data-entity-id', entityId);
+    });
+
+    $('.cancel_reservation').click(function () {
+        var entityId = $(this).attr('data-entity-id');
+        var url = Routing.generate('cancel_reservation', {'id': entityId});
+        window.location.href = url;
+    });
+
 
     // delete seat
     $('.delete-btn-seat').on('click', function () {
@@ -114,10 +128,12 @@ $(document).ready(function() {
     // snimanje sedista u bazu
     $('.checkout-button').click(function () {
         var url = Routing.generate('add_seat');
-        var seats = get_seats(sc);
+        var $seats = get_seats(sc);
+        var $tip_karte = $('#tip_karte').val();
         var data = new Object();
         data.id = $('#reservation_id').val();
-        data.seats = seats;
+        data.seats = $seats;
+        data.tip_karte = $tip_karte;
         $.ajax({
             type: 'POST',
             data: JSON.stringify(data),
@@ -164,3 +180,31 @@ function load_seats(sc) {
         }
     })
 }
+
+
+
+// Reservation form
+$(document).ready(function() {
+
+    var $performance = $('#salexuserbundle_reservation_performanceId');
+    $performance.change(function() {
+
+        $('#salexuserbundle_reservation_brojGrupne').hide();
+        $('#salexuserbundle_reservation_brojStudentske').hide();
+        $('#salexuserbundle_reservation_brojPenzionerske').hide();
+        $('#salexuserbundle_reservation_brojPojedinacne').hide();
+
+        $performanceId = $performance.val();
+        if($performanceId == 6104) {
+            $('#salexuserbundle_reservation_brojGrupne').show();
+        }
+        else if ($performanceId == 6106) {
+            $('#salexuserbundle_reservation_brojGrupne').show();
+            $('#salexuserbundle_reservation_brojStudentske').show();
+            $('#salexuserbundle_reservation_brojPenzionerske').show();
+        } else {
+            $('#salexuserbundle_reservation_brojPojedinacne').show();
+        }
+    });
+
+});

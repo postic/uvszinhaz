@@ -59,14 +59,14 @@ class Reservation
     /**
      * @var int
      *
-     * @ORM\Column(name="seats_number", type="integer")
+     * @ORM\Column(name="seats_number", type="integer", nullable=true)
      */
     private $seats_number;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="type", type="integer")
+     * @ORM\Column(name="type", type="integer", nullable=true)
      */
     private $type;
 
@@ -104,6 +104,42 @@ class Reservation
      * @ORM\Column(name="phone_number", type="string", length=255, nullable=true)
      */
     protected $phoneNumber;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="by_phone", type="integer", options={"default": 0}, nullable=true)
+     */
+    protected $byPhone;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="broj_pojedinacne", type="integer", options={"default": 0}, nullable=true)
+     */
+    protected $brojPojedinacne;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="broj_grupne", type="integer", options={"default": 0}, nullable=true)
+     */
+    protected $brojGrupne;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="broj_studentske", type="integer", options={"default": 0}, nullable=true)
+     */
+    protected $brojStudentske;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="broj_penzionerske", type="integer", options={"default": 0}, nullable=true)
+     */
+    protected $brojPenzionerske;
+
 
     /**
      * Get id
@@ -374,5 +410,125 @@ class Reservation
     public function getPhoneNumber()
     {
         return $this->phoneNumber;
+    }
+
+    /**
+     * Set byPhone
+     *
+     * @param integer $byPhone
+     *
+     * @return Reservation
+     */
+    public function setByPhone($byPhone)
+    {
+        $this->byPhone = $byPhone;
+
+        return $this;
+    }
+
+    /**
+     * Get byPhone
+     *
+     * @return integer
+     */
+    public function getByPhone()
+    {
+        return $this->byPhone;
+    }
+
+    /**
+     * Set brojPojedinacne
+     *
+     * @param integer $brojPojedinacne
+     *
+     * @return Reservation
+     */
+    public function setBrojPojedinacne($brojPojedinacne)
+    {
+        $this->brojPojedinacne = $brojPojedinacne;
+
+        return $this;
+    }
+
+    /**
+     * Get brojPojedinacne
+     *
+     * @return integer
+     */
+    public function getBrojPojedinacne()
+    {
+        return $this->brojPojedinacne;
+    }
+
+    /**
+     * Set brojGrupne
+     *
+     * @param integer $brojGrupne
+     *
+     * @return Reservation
+     */
+    public function setBrojGrupne($brojGrupne)
+    {
+        $this->brojGrupne = $brojGrupne;
+
+        return $this;
+    }
+
+    /**
+     * Get brojGrupne
+     *
+     * @return integer
+     */
+    public function getBrojGrupne()
+    {
+        return $this->brojGrupne;
+    }
+
+    /**
+     * Set brojStudentske
+     *
+     * @param integer $brojStudentske
+     *
+     * @return Reservation
+     */
+    public function setBrojStudentske($brojStudentske)
+    {
+        $this->brojStudentske = $brojStudentske;
+
+        return $this;
+    }
+
+    /**
+     * Get brojStudentske
+     *
+     * @return integer
+     */
+    public function getBrojStudentske()
+    {
+        return $this->brojStudentske;
+    }
+
+    /**
+     * Set brojPenzionerske
+     *
+     * @param integer $brojPenzionerske
+     *
+     * @return Reservation
+     */
+    public function setBrojPenzionerske($brojPenzionerske)
+    {
+        $this->brojPenzionerske = $brojPenzionerske;
+
+        return $this;
+    }
+
+    /**
+     * Get brojPenzionerske
+     *
+     * @return integer
+     */
+    public function getBrojPenzionerske()
+    {
+        return $this->brojPenzionerske;
     }
 }

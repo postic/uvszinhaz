@@ -26,11 +26,11 @@
             <table id="items" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                    <th>Korisnik</th>
+                    <th>Ime</th>
+                    <th>Prezime</th>
                     <th>Telefon</th>
                     <th>Predstava</th>
                     <th>Broj karata</th>
-                    <th>Tip rezervacije</th>
                     <th>Status rezervacije</th>
                     <th>{{ knp_pagination_sortable(pagination, 'Datum kreiranja zahteva', 'r.createdAt') }}</th>
                     <th>&nbsp;</th>
@@ -40,7 +40,10 @@
                 {% for item in pagination %}
                     <tr>
                         <td>
-                            {{ item.firstName }} {{ item.lastName }}
+                            {{ item.firstName }}
+                        </td>
+                        <td>
+                            {{ item.lastName }}
                         </td>
                         <td>
                             {{ item.phoneNumber }}
@@ -49,20 +52,20 @@
                             {{ item.title }}
                         </td>
                         <td>
-                            {{ item.seatsNumber }}
-                        </td>
-                        <td>
-                            {% if item.type == 1 %}
-                                Pojedinačno
+                            {% if item.brojPojedinacne %}
+                                <div>Pojedinačne: {{ item.brojPojedinacne }}</div>
                             {% endif %}
-                            {% if item.type == 2 %}
-                                Grupe
+
+                            {% if item.brojGrupne %}
+                                <div>Grupne: {{ item.brojGrupne }}</div>
                             {% endif %}
-                            {% if item.type == 3 %}
-                                Studenti/đaci
+
+                            {% if item.brojStudentske %}
+                                <div>Studentske: {{ item.brojStudentske }}</div>
                             {% endif %}
-                            {% if item.type == 4 %}
-                                Penzionerska
+
+                            {% if item.brojPenzionerske %}
+                                <div>Penzionerske: {{ item.brojPenzionerske }}</div>
                             {% endif %}
                         </td>
                         <td>

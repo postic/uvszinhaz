@@ -37,7 +37,7 @@ class ReservationController extends Controller
             $pagination = $paginator->paginate(
                 $query,
                 $request->query->getInt('page', 1),
-                5
+                10
             );
             $pagination->setTemplate('KnpPaginatorBundle:Pagination:foundation_v5_pagination.html.twig');
             return $this->render("SalexUserBundle:Reservation:list-all-reservations.html.twig", array(
@@ -114,6 +114,15 @@ class ReservationController extends Controller
         $reservation->setCreatedAt(new \DateTime());
         $reservation->setUser($current_user);
         $reservation->setStatusId(1);
+        $reservation->setByPhone((int)$request->get('_phone'));
+
+        /*
+         * Ukoliko zahtev stize preko sajta, popuniti polja first_name i last_name
+         */
+        if(!$request->get('_phone')) {
+            $reservation->setFirstName($current_user->getFirstName());
+            $reservation->setLastName($current_user->getLastName());
+        }
 
         $form = $this->createForm(ReservationFormType::class, $reservation);
 
@@ -135,7 +144,7 @@ class ReservationController extends Controller
         }
 
         return $this->render('SalexUserBundle:Reservation:add-reservation.html.twig', array(
-            'form' => $form->createView(),
+            'form' => $form->createView()
         ));
     }
 
@@ -165,6 +174,20 @@ class ReservationController extends Controller
         $em->remove($item);
         $em->flush();
         return new RedirectResponse($this->generateUrl('list_my_reservations'));
+    }
+
+    /**
+     * @Route("/cancel/reservation/{id}", name="cancel_reservation", options={"expose"=true}, requirements={"id": "\d+"})
+     * @return RedirectResponse
+     */
+    public function cancelAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $item = $em->getRepository(Reservation::class)->findOneBy(array('id' => $id));
+        $item->setStatusId(3);
+        $em->persist($item);
+        $em->flush();
+        return new RedirectResponse($this->generateUrl('list_reservations'));
     }
 
     /**

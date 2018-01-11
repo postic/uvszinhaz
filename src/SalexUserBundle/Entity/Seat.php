@@ -34,7 +34,14 @@ class Seat
      * @ORM\Column(name="seat", type="string", length=255)
      */
     private $seat;
-    
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="type", type="integer", options={"default": 0}, nullable=true)
+     */
+    private $type;
+
     /**
      * Get id
      *
@@ -113,5 +120,29 @@ class Seat
     public function getReservation()
     {
         return $this->reservation;
+    }
+
+    /**
+     * Set type
+     *
+     * @param integer $type
+     *
+     * @return Seat
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return integer
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 }

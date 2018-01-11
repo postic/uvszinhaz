@@ -1,3 +1,5 @@
+/* Language switcher
+------------------------------------------------- */
 li.dropdown.dropdown-language {
     width: 60px;
 }
@@ -5,6 +7,8 @@ li.dropdown.dropdown-language ul.dropdown-menu {
     min-width: 60px !important;
 }
 
+/* Seats
+------------------------------------------------- */
 div.seatCharts-row {
     height: 30px;
 }
@@ -36,6 +40,19 @@ ul.seatCharts-legendList li.seatCharts-legendItem {
     margin-right: 15px;
 }
 
+button.checkout-button {
+    margin: 10px 0;
+    width: 100%;
+}
+
+/* Add reservation form
+------------------------------------------------- */
+#salexuserbundle_reservation_brojPojedinacne,
+#salexuserbundle_reservation_brojGrupne,
+#salexuserbundle_reservation_brojStudentske,
+#salexuserbundle_reservation_brojPenzionerske {
+    display: none;
+}
 
 h1.pdf {
     color: #00a7d0;
