@@ -83,15 +83,11 @@
                             {{ item.createdAt|date('d.m.Y. H:i:s') }}
                         </td>
                         <td class="pull-right">
-                            {% if item.statusId == 1 %}
-                                <a href="{{ path('show_reservation', { 'id': item.id }) }}"><i class="fa fa-pencil"></i></a>
-                            {% endif %}
+                            <a href="{{ path('show_reservation', { 'id': item.id }) }}"><i class="fa fa-pencil"></i></a>
                             {% if item.statusId == 2 %}
                                 <a href="{{ path('print_reservation', { 'id': item.id }) }}"><i class="fa fa-print"></i></a>&nbsp;
                             {% endif %}
-                            {% if item.statusId == 1 %}
-                                <a href data-toggle="modal" data-target="#modal-danger" data-entity-id="{{ item.id }}" class="cancel-reservation-btn"><i class="fa fa-trash"></i></a>&nbsp;
-                            {% endif %}
+                            <a href data-toggle="modal" data-target="#modal-danger" data-entity-id="{{ item.id }}" class="cancel-reservation-btn"><i class="fa fa-trash"></i></a>&nbsp;
                         </td>
                     </tr>
                 {% endfor %}

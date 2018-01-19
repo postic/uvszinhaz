@@ -279,7 +279,7 @@ class Reservation
     public function getTitle(){
         $performance_id = $this->getPerformanceId();
         $title = $this->getService()->getPerformance($performance_id);
-        return $title;
+        return $title[0]['title'];
     }
 
     /**
@@ -530,5 +530,28 @@ class Reservation
     public function getBrojPenzionerske()
     {
         return $this->brojPenzionerske;
+    }
+
+    /**
+     * Get types
+     *
+     * @return array
+     */
+    public function getReservationTypes()
+    {
+        $a_types = array();
+        if( $this->getBrojPojedinacne() ) {
+            $a_types[1] = 'Pojedinacne';
+        }
+        if( $this->getBrojGrupne() ) {
+            $a_types[2] = 'Grupne';
+        }
+        if( $this->getBrojStudentske() ) {
+            $a_types[3] = 'Studentske';
+        }
+        if( $this->getBrojPenzionerske() ) {
+            $a_types[4] = 'Penzionerske';
+        }
+        return $a_types;
     }
 }

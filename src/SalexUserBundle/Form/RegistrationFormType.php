@@ -21,7 +21,7 @@ class RegistrationFormType extends AbstractType
         $builder->add('phone_number', TextType::class, array(
             'label' => false,
             'attr' => array(
-                'placeholder' => 'Phone number',
+                'placeholder' => 'Broj telefona',
             )
         ));
     }

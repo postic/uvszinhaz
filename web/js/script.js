@@ -194,17 +194,32 @@ $(document).ready(function() {
         $('#salexuserbundle_reservation_brojPenzionerske').hide();
         $('#salexuserbundle_reservation_brojPojedinacne').hide();
 
-        $performanceId = $performance.val();
-        if($performanceId == 6104) {
-            $('#salexuserbundle_reservation_brojGrupne').show();
-        }
-        else if ($performanceId == 6106) {
-            $('#salexuserbundle_reservation_brojGrupne').show();
-            $('#salexuserbundle_reservation_brojStudentske').show();
-            $('#salexuserbundle_reservation_brojPenzionerske').show();
-        } else {
-            $('#salexuserbundle_reservation_brojPojedinacne').show();
-        }
+        var $performanceId = $performance.val();
+        var url = Routing.generate('get_performance', {'id': $performanceId});
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: url,
+            success: function (data) {
+                var $cene = data[0].cena;
+                for( var $i in $cene ) {
+                    switch($i) {
+                        case '1':
+                            $('#salexuserbundle_reservation_brojPojedinacne').show();
+                            break;
+                        case '2':
+                            $('#salexuserbundle_reservation_brojGrupne').show();
+                            break;
+                        case '3':
+                            $('#salexuserbundle_reservation_brojStudentske').show();
+                            break;
+                        case '4':
+                            $('#salexuserbundle_reservation_brojPenzionerske').show();
+                            break;
+                    }
+                }
+            }
+        })
     });
 
 });

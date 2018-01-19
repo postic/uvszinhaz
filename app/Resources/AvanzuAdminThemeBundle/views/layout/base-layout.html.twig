@@ -59,8 +59,8 @@
                     <div class="navbar-custom-menu">
                         <ul class="nav navbar-nav">
                             {% block avanzu_navbar %}
-                                {{ render(controller('AvanzuAdminThemeBundle:Navbar:messages')) }}
-                                {{ render(controller('AvanzuAdminThemeBundle:Navbar:notifications')) }}
+                                {# {{ render(controller('AvanzuAdminThemeBundle:Navbar:messages')) }} #}
+                                {# {{ render(controller('AvanzuAdminThemeBundle:Navbar:notifications')) }} #}
                                 {{ render(controller('AvanzuAdminThemeBundle:Navbar:tasks')) }}
                                 {{ render(controller('AvanzuAdminThemeBundle:Navbar:user')) }}
                             {% endblock %}
@@ -99,11 +99,11 @@
                 {% endblock %}
             </section>
 
-             <!-- Alert Boxes -->
-        {% if app.session.flashBag.has('success')
-        or app.session.flashBag.has('error')
-        or app.session.flashBag.has('notice')
-        %}
+            <!-- Alert Boxes -->
+            {% if app.session.flashBag.has('success')
+            or app.session.flashBag.has('error')
+            or app.session.flashBag.has('notice')
+            %}
             <section class="flash-messages content-header">
                 <div class="row">
                     <div class="col-md-12">
@@ -184,6 +184,10 @@
 
 {# ----------------------------------------------------------------------------------------------- JAVASCRIPTS_INLINE #}
 {% block javascripts_inline %}
+
+    <script type="text/javascript" src="{{ asset('js/script.js') }}"></script>
+
 {% endblock %}
+
 </body>
 </html>

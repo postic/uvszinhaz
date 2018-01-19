@@ -27,10 +27,8 @@
                 <thead>
                     <tr>
                         {# sorting of properties based on query components #}
-                        <th>Korisnik</th>
                         <th>Predstava</th>
                         <th>Broj karata</th>
-                        <th>Tip karte</th>
                         <th>Status rezervacije</th>
                         <th>{{ knp_pagination_sortable(pagination, 'Datum kreiranja zahteva', 'r.createdAt') }}</th>
                         <th></th>
@@ -40,26 +38,23 @@
                 {% for item in pagination %}
                     <tr>
                         <td>
-                            {{ item.user.name }}
-                        </td>
-                        <td>
                             {{ item.title }}
                         </td>
                         <td>
-                            {{ item.seatsNumber }}
-                        </td>
-                        <td>
-                            {% if item.type == 1 %}
-                                Pojedinačna
+                            {% if item.brojPojedinacne %}
+                                <div>Pojedinačne: {{ item.brojPojedinacne }}</div>
                             {% endif %}
-                            {% if item.type == 2 %}
-                                Grupna
+
+                            {% if item.brojGrupne %}
+                                <div>Grupne: {{ item.brojGrupne }}</div>
                             {% endif %}
-                            {% if item.type == 3 %}
-                                Studenti/đaci
+
+                            {% if item.brojStudentske %}
+                                <div>Studentske: {{ item.brojStudentske }}</div>
                             {% endif %}
-                            {% if item.type == 4 %}
-                                Penzionerska
+
+                            {% if item.brojPenzionerske %}
+                                <div>Penzionerske: {{ item.brojPenzionerske }}</div>
                             {% endif %}
                         </td>
                         <td>

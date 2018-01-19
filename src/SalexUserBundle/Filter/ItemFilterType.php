@@ -32,11 +32,6 @@ class ItemFilterType extends AbstractType
             array('choices' => $choices, 'label' => false, 'placeholder' => 'Izaberite predstavu')
         );
         $builder->add(
-            'type',
-            Filters\ChoiceFilterType::class,
-            array('choices' => array('Pojedinačno' => 1, 'Grupe (najmanje 5 gledalaca)' => 2, 'Studenti/đaci' => 3, 'Penzionerska' => 4), 'label' => false, 'placeholder' => 'Izaberite tip karte')
-        );
-        $builder->add(
             'statusId',
             Filters\ChoiceFilterType::class,
             array('choices' => array('Zahtev' => 1, 'Rezervisano' => 2, 'Otkazano' => 3), 'label' => false, 'placeholder' => 'Izaberite status')

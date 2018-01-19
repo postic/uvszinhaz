@@ -18,6 +18,18 @@ class ReservationController extends Controller
 {
 
     /**
+     * @Route("/get/performance/{id}", name="get_performance", options={"expose"=true}, requirements={"id": "\d+"})
+     * @return RedirectResponse
+     */
+    public function getPerformanceAction(Request $request, $id = 0)
+    {
+        $performance = $this->get('salex_user.uvszinhaz_listener')->getPerformance($id);
+        $resp = json_encode($performance);
+        return new Response($resp);
+    }
+
+
+    /**
      * @Route("/list/reservations/{id}", name="list_reservations"), requirements={"id": "\d+"}
      * @return RedirectResponse
      */
@@ -140,7 +152,11 @@ class ReservationController extends Controller
                 'Vaš zahtev je uspešno snimljen.'
             );
 
-            return $this->redirectToRoute('list_my_reservations');
+            if($reservation->getByPhone()) {
+                return $this->redirectToRoute('list_reservations');
+            } else {
+                return $this->redirectToRoute('list_my_reservations');
+            }
         }
 
         return $this->render('SalexUserBundle:Reservation:add-reservation.html.twig', array(
@@ -224,7 +240,5 @@ class ReservationController extends Controller
                 'Content-Disposition'   => 'inline; filename="reservation.pdf"'
             )
         );
-
     }
-
 }
