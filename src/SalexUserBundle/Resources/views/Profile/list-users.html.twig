@@ -12,6 +12,7 @@
                     <th>Ime</th>
                     <th>Prezime</th>
                     <th>E-mail</th>
+                    <th>Broj telefoa</th>
                     <th>Status</th>
                     <th></th>
                 </tr>
@@ -30,6 +31,9 @@
                     </td>
                     <td>
                         {{ user.email }}
+                    </td>
+                    <td>
+                        {{ user.phoneNumber }}
                     </td>
                     <td>
                         {% if user.enabled == true %}

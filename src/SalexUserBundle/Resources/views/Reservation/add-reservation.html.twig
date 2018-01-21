@@ -1,20 +1,20 @@
 {% extends 'AvanzuAdminThemeBundle:layout:base-layout.html.twig' %}
 {% block page_title %}{{ 'Zahtev' | trans }}{% endblock %}
-{% block page_subtitle %}Kratak opis vezan za formu{% endblock %}
+{% block page_subtitle %}{% endblock %}
 
 {% block page_content %}
 <div class="box">
-    <!--
-    <div class="box-header with-border">
-        <h3 class="box-title">Add reservation</h3>
-    </div>
-    -->
     <div class="box-body">
         {{ form_start(form) }}
         {{ form_widget(form) }}
         {{ form_end(form) }}
     </div>
 </div>
+{% endblock %}
+
+{% block javascripts_inline %}
+    <script type="text/javascript" src="{{ asset('js/jquery.seat-charts.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/script.js') }}"></script>
 {% endblock %}
 
 {% block avanzu_admin_footer %}{% endblock %}
