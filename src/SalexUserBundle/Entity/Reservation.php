@@ -283,6 +283,37 @@ class Reservation
     }
 
     /**
+     * Get performance price
+     *
+     * @return string
+     */
+    public function getPrice(){
+        $performance_id = $this->getPerformanceId();
+        $price = $this->getService()->getPerformance($performance_id);
+        return $price[0]['cena'];
+    }
+
+    /**
+     * Get reservation sum
+     *
+     * @return string
+     */
+    public function getSum(){
+        $performance_id = $this->getPerformanceId();
+        $price = $this->getService()->getPerformance($performance_id);
+        $sum = 0;
+        if($this->getBrojPojedinacne())
+            $sum = $sum + $price[0]['cena'][1] * $this->getBrojPojedinacne();
+        if($this->getBrojGrupne())
+            $sum = $sum + $price[0]['cena'][2] * $this->getBrojGrupne();
+        if($this->getBrojStudentske())
+            $sum = $sum + $price[0]['cena'][3] * $this->getBrojStudentske();
+        if($this->getBrojPenzionerske())
+            $sum = $sum + $price[0]['cena'][4] * $this->getBrojPenzionerske();
+        return $sum;
+    }
+
+    /**
      * Add seat
      *
      * @param \SalexUserBundle\Entity\Seat $seat

@@ -12,6 +12,7 @@
                         {# sorting of properties based on query components #}
                         <th>Predstava</th>
                         <th>Broj karata</th>
+                        <th>Ukupna cena</th>
                         <th>Status zahteva</th>
                         <th>{{ knp_pagination_sortable(pagination, 'Datum kreiranja zahteva', 'r.createdAt') }}</th>
                         <th></th>
@@ -25,20 +26,23 @@
                         </td>
                         <td>
                             {% if item.brojPojedinacne %}
-                                <div>Pojedinačne: {{ item.brojPojedinacne }}</div>
+                                <div>Pojedinačne: {{ item.brojPojedinacne }} x {{ item.price[1]|number_format(2, ',', '.') }}</div>
                             {% endif %}
 
                             {% if item.brojGrupne %}
-                                <div>Grupne: {{ item.brojGrupne }}</div>
+                                <div>Grupne: {{ item.brojGrupne }} x {{ item.price[2]|number_format(2, ',', '.') }}</div>
                             {% endif %}
 
                             {% if item.brojStudentske %}
-                                <div>Studentske: {{ item.brojStudentske }}</div>
+                                <div>Studentske: {{ item.brojStudentske }} x {{ item.price[3]|number_format(2, ',', '.') }}</div>
                             {% endif %}
 
                             {% if item.brojPenzionerske %}
-                                <div>Penzionerske: {{ item.brojPenzionerske }}</div>
+                                <div>Penzionerske: {{ item.brojPenzionerske }} x {{ item.price[4]|number_format(2, ',', '.') }}</div>
                             {% endif %}
+                        </td>
+                        <td>
+                            {{ item.sum|number_format(2, ',', '.') }}
                         </td>
                         <td>
                             {% if item.statusId == 1 %}

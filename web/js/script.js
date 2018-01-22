@@ -187,12 +187,16 @@ function load_seats(sc) {
 $(document).ready(function() {
 
     var $performance = $('#salexuserbundle_reservation_performanceId');
+
     $performance.change(function() {
 
+        $('.help').hide();
         $('#salexuserbundle_reservation_brojGrupne').hide();
         $('#salexuserbundle_reservation_brojStudentske').hide();
         $('#salexuserbundle_reservation_brojPenzionerske').hide();
         $('#salexuserbundle_reservation_brojPojedinacne').hide();
+
+        $('#modal').modal('show');
 
         var $performanceId = $performance.val();
         var url = Routing.generate('get_performance', {'id': $performanceId});
@@ -206,18 +210,23 @@ $(document).ready(function() {
                     switch($i) {
                         case '1':
                             $('#salexuserbundle_reservation_brojPojedinacne').show();
+                            $('#salexuserbundle_reservation_brojPojedinacne').after( "<span class='help'>Cena jedne karte: "+ parseFloat($cene[$i]).toFixed(2).replace(".", ",") +"</span>" );
                             break;
                         case '2':
                             $('#salexuserbundle_reservation_brojGrupne').show();
+                            $('#salexuserbundle_reservation_brojGrupne').after( "<span class='help'>Cena jedne karte: "+ parseFloat($cene[$i]).toFixed(2).replace(".", ",") +"</span>" );
                             break;
                         case '3':
                             $('#salexuserbundle_reservation_brojStudentske').show();
+                            $('#salexuserbundle_reservation_brojStudentske').after( "<span class='help'>Cena jedne karte: "+ parseFloat($cene[$i]).toFixed(2).replace(".", ",") +"</span>" );
                             break;
                         case '4':
                             $('#salexuserbundle_reservation_brojPenzionerske').show();
+                            $('#salexuserbundle_reservation_brojPenzionerske').after( "<span class='help'>Cena jedne karte: "+ parseFloat($cene[$i]).toFixed(2).replace(".", ",") +"</span>" );
                             break;
                     }
                 }
+                $('#modal').modal('hide');
             }
         })
     });

@@ -94,6 +94,8 @@ class ReservationController extends Controller
             ->getRepository(Reservation::class)
             ->createQueryBuilder('r');
         $filterBuilder->andWhere('r.user='.$user_id);
+        $filterBuilder->orderBy('r.createdAt', 'desc');
+
         $form = $this->get('form.factory')->create('SalexUserBundle\Filter\ItemFilterType');
         if ($request->query->has($form->getName())) {
             $form->submit($request->query->get($form->getName()));

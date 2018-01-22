@@ -54,44 +54,56 @@ class ReservationFormType extends AbstractType
 
                 $form->add(
                     'brojPojedinacne',
-                    ChoiceType::class,
+                    IntegerType::class,
                     array(
-                        'choices' => array(1,2,3,4,5,6,7,8,9,10),
                         'label' => false,
-                        'placeholder' => 'Izaberite broj pojedinačnih karata',
+                        'attr' => array(
+                            'placeholder' => 'Broj pojedinačnih karata',
+                            'min' => 1,
+                            'max' => 10
+                        ),
                         'required' => false
                     )
                 );
 
                 $form->add(
                     'brojGrupne',
-                    ChoiceType::class,
+                    IntegerType::class,
                     array(
-                        'choices' => array(1,2,3,4,5,6,7,8,9,10),
                         'label' => false,
-                        'placeholder' => 'Izaberite broj grupnih karata',
+                        'attr' => array(
+                            'placeholder' => 'Broj grupnih karata',
+                            'min' => 1,
+                            'max' => 10
+                        ),
                         'required' => false
                     )
                 );
 
                 $form->add(
                     'brojStudentske',
-                    ChoiceType::class,
+                    IntegerType::class,
                     array(
-                        'choices' => array(1,2,3,4,5,6,7,8,9,10),
                         'label' => false,
-                        'placeholder' => 'Izaberite broj studentskih karata',
+                        'attr' => array(
+                            'placeholder' => 'Broj studentskih karata',
+                            'min' => 1,
+                            'max' => 10
+                        ),
                         'required' => false
                     )
                 );
 
                 $form->add(
                     'brojPenzionerske',
-                    ChoiceType::class,
+                    IntegerType::class,
                     array(
-                        'choices' => array(1,2,3,4,5,6,7,8,9,10),
                         'label' => false,
-                        'placeholder' => 'Izaberite broj penzionerskih karata',
+                        'attr' => array(
+                            'placeholder' => 'Broj penzionerskih karata',
+                            'min' => 1,
+                            'max' => 10
+                        ),
                         'required' => false
                     )
                 );
@@ -147,7 +159,7 @@ class ReservationFormType extends AbstractType
 
                 $form->add(
                     'performanceId',
-                    ChoiceType::class,
+                    TextType::class,
                     array(
                         'choices' => $choices,
                         'label' => false,
@@ -157,44 +169,56 @@ class ReservationFormType extends AbstractType
                 );
                 $form->add(
                     'brojPojedinacne',
-                    ChoiceType::class,
+                    IntegerType::class,
                     array(
-                        'choices' => array(1,2,3,4,5,6,7,8,9,10),
                         'label' => false,
-                        'placeholder' => 'Izaberite broj pojedinačnih karata',
+                        'attr' => array(
+                            'placeholder' => 'Broj pojedinačnih karata',
+                            'min' => 1,
+                            'max' => 10
+                        ),
                         'required' => false
                     )
                 );
 
                 $form->add(
                     'brojGrupne',
-                    ChoiceType::class,
+                    IntegerType::class,
                     array(
-                        'choices' => array(1,2,3,4,5,6,7,8,9,10),
                         'label' => false,
-                        'placeholder' => 'Izaberite broj grupnih karata',
+                        'attr' => array(
+                            'placeholder' => 'Broj grupnih karata',
+                            'min' => 1,
+                            'max' => 10
+                        ),
                         'required' => false
                     )
                 );
 
                 $form->add(
                     'brojStudentske',
-                    ChoiceType::class,
+                    IntegerType::class,
                     array(
-                        'choices' => array(1,2,3,4,5,6,7,8,9,10),
                         'label' => false,
-                        'placeholder' => 'Izaberite broj studentskih karata',
+                        'attr' => array(
+                            'placeholder' => 'Broj studentskih karata',
+                            'min' => 1,
+                            'max' => 10
+                        ),
                         'required' => false
                     )
                 );
 
                 $form->add(
                     'brojPenzionerske',
-                    ChoiceType::class,
+                    IntegerType::class,
                     array(
-                        'choices' => array(1,2,3,4,5,6,7,8,9,10),
                         'label' => false,
-                        'placeholder' => 'Izaberite broj penzionerskih karata',
+                        'attr' => array(
+                            'placeholder' => 'Broj penzionerskih karata',
+                            'min' => 1,
+                            'max' => 10
+                        ),
                         'required' => false
                     )
                 );

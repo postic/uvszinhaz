@@ -53,6 +53,11 @@ button.checkout-button {
 #salexuserbundle_reservation_brojPenzionerske {
     display: none;
 }
+.help {
+    color: #DD4B39;
+    font-style: italic;
+    padding-left: 10px;
+}
 
 h1.pdf {
     color: #00a7d0;
