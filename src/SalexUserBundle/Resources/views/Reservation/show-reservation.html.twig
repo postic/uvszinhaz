@@ -18,7 +18,7 @@
 
     <div class="row">
         <div class="col-md-6">
-            <div class="box box-info">
+            <div class="box">
                 <div class="box-header with-border">
                     <h3 class="box-title">Podaci</h3>
                 </div>
@@ -27,6 +27,7 @@
 
                         <input id="reservation_id" type="hidden" value="{{ item.id }}" />
                         <input id="performance_id" type="hidden" value="{{ item.performanceId }}" />
+                        <input id="scena" type="hidden" value="{{ item.scena }}" />
 
                         <div class="form-group">
                             <label for="inputName" class="col-sm-3 control-label">Korisnik</label>
@@ -40,8 +41,6 @@
                                 <input type="text" class="form-control" placeholder="{{ item.title }}" readonly>
                             </div>
                         </div>
-
-
                         {% if item.brojPojedinacne %}
                         <div class="form-group">
                             <label for="inputName" class="col-sm-3 control-label">Pojedinačne</label>
@@ -74,8 +73,6 @@
                             </div>
                         </div>
                         {% endif %}
-
-
                         <div class="form-group">
                             <label for="inputName" class="col-sm-3 control-label">Status</label>
                             <div class="col-sm-9">
@@ -98,7 +95,7 @@
             </div>
 
             <!-- Lista sedista za odabranu rezervaciju -->
-            <div class="box box-info">
+            <div class="box">
                 <div class="box-header with-border">
                     <h3 class="box-title">Rezervisana sedišta</h3>
                 </div>
@@ -145,12 +142,14 @@
 
         <!-- Mapa sedista -->
         <div class="col-md-6">
-            <div class="box box-info">
+            <div class="box">
                 <div class="box-header with-border">
                     <h3 class="box-title">Sedišta</h3>
+                    <!--
                     <div class="pull-right">
                         Broj sedišta (<span id="counter">0</span>), Total: <b><span id="total">0</span> RSD</b>
                     </div>
+                    -->
                 </div>
                 <div class="box-body row">
                     <div id="seat-map" class="col-md-8">
@@ -162,9 +161,11 @@
                             <option value="{{ key }}">{{ value }}</option>
                             {% endfor %}
                         </select>
-                        <button class="btn checkout-button btn-success">Snimi &raquo;</button>
-                        <ul id="selected-seats" class="list-unstyled">
-                        </ul>
+                        <button id="checkout-button" class="btn btn-success"><i class="fa fa-fw fa-save"></i>&nbsp;Snimi odabrana sedišta</button>
+                        <!--
+                        <ul id="selected-seats" class="list-unstyled"></ul>
+                        -->
+                        <button id="close-reservation-button" class="btn btn-danger" data-toggle="modal" data-target="#modal-close-reservation" data-entity-id="{{ app.request.attributes.get("id") }}"><i class="fa fa-fw fa-lock"></i>&nbsp;Zatvori rezervaciju</button>
                     </div>
                 </div>
                 <div class="box-footer">
@@ -180,14 +181,14 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Confirmation</h4>
+                    <h4 class="modal-title">?</h4>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure to delete this data ?</p>
+                    <p>Da li ste sigurni?</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-outline remove-seat" data-entity-id="">Delete</button>
+                    <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Odustani</button>
+                    <button type="button" class="btn btn-outline remove-seat" data-entity-id="">Brisanje</button>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -196,14 +197,36 @@
     </div>
     <!-- /.modal -->
 
-    <div class="modal modal-info fade" id="modal-info">
+    <div class="modal modal-success fade" id="modal-info">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Loading&hellip;</h4>
+                    <h4 class="modal-title">Učitavanje podataka</h4>
                 </div>
                 <div class="modal-body">
                     <p>Učitavanje podataka&hellip;</p>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <div class="modal modal-danger fade" id="modal-close-reservation">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Zatvaranje rezervacije</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Da li ste sigurni?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Odustani</button>
+                    <button type="button" id="close_reservation_button" class="btn btn-outline" data-entity-id="">Zatvaranje</button>
                 </div>
             </div>
             <!-- /.modal-content -->

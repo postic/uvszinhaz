@@ -40,8 +40,11 @@ ul.seatCharts-legendList li.seatCharts-legendItem {
     margin-right: 15px;
 }
 
-button.checkout-button {
+#checkout-button {
     margin: 10px 0;
+    width: 100%;
+}
+#close-reservation-button {
     width: 100%;
 }
 

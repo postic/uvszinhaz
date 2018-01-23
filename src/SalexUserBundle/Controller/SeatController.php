@@ -30,14 +30,10 @@ class SeatController extends Controller
         $seats = $a_resp->seats;
         $num = sizeof($seats);
 
-
-
         // lorem
         $retval = $this->getDoctrine()
             ->getRepository(Seat::class)
             ->findBy(array('reservation'=>$reservation->getId(),'type'=>$tip_karte));
-
-
 
         switch ($tip_karte) {
             case 1:
@@ -67,7 +63,7 @@ class SeatController extends Controller
         else {
 
             foreach ($seats as $item) {
-                $reservation->setStatusId(2);
+                // $reservation->setStatusId(2);
                 $seat = new Seat();
                 $seat->setReservation($reservation);
                 $seat->setSeat($item);

@@ -11,6 +11,7 @@
                     <tr>
                         {# sorting of properties based on query components #}
                         <th>Predstava</th>
+                        <th>Scena</th>
                         <th>Broj karata</th>
                         <th>Ukupna cena</th>
                         <th>Status zahteva</th>
@@ -23,6 +24,14 @@
                     <tr>
                         <td>
                             {{ item.title }}
+                        </td>
+                        <td>
+                            {% if item.scena == 0 %}
+                                Mala scena
+                            {% endif %}
+                            {% if item.scena == 1 %}
+                                Velika scena
+                            {% endif %}
                         </td>
                         <td>
                             {% if item.brojPojedinacne %}

@@ -140,6 +140,13 @@ class Reservation
      */
     protected $brojPenzionerske;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="scena", type="integer", options={"default": 0}, nullable=true)
+     */
+    protected $scena;
+
 
     /**
      * Get id
@@ -572,7 +579,7 @@ class Reservation
     {
         $a_types = array();
         if( $this->getBrojPojedinacne() ) {
-            $a_types[1] = 'Pojedinacne';
+            $a_types[1] = 'Pojedinačne';
         }
         if( $this->getBrojGrupne() ) {
             $a_types[2] = 'Grupne';
@@ -584,5 +591,29 @@ class Reservation
             $a_types[4] = 'Penzionerske';
         }
         return $a_types;
+    }
+
+    /**
+     * Set scena
+     *
+     * @param integer $scena
+     *
+     * @return Reservation
+     */
+    public function setScena($scena)
+    {
+        $this->scena = $scena;
+
+        return $this;
+    }
+
+    /**
+     * Get scena
+     *
+     * @return integer
+     */
+    public function getScena()
+    {
+        return $this->scena;
     }
 }

@@ -5,6 +5,7 @@ namespace SalexUserBundle\Form;
 use SalexUserBundle\Utility\Services;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -50,6 +51,11 @@ class ReservationFormType extends AbstractType
                         'placeholder' => 'Izaberite predstavu',
                         'required' => true
                     )
+                );
+
+                $form->add(
+                    'scena',
+                    HiddenType::class
                 );
 
                 $form->add(
@@ -159,7 +165,7 @@ class ReservationFormType extends AbstractType
 
                 $form->add(
                     'performanceId',
-                    TextType::class,
+                    ChoiceType::class,
                     array(
                         'choices' => $choices,
                         'label' => false,
@@ -167,6 +173,12 @@ class ReservationFormType extends AbstractType
                         'required' => true
                     )
                 );
+
+                $form->add(
+                    'scena',
+                    HiddenType::class
+                );
+
                 $form->add(
                     'brojPojedinacne',
                     IntegerType::class,

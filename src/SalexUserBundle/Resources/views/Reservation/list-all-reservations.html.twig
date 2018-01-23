@@ -4,7 +4,7 @@
 
 {% block page_content %}
 
-    <div class="box box-success">
+    <div class="box">
         <div class="box-header with-border">
             <div class="box-tools pull-right">
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -21,7 +21,7 @@
         </div>
     </div>
 
-    <div class="box box-info">
+    <div class="box">
         <div class="box-body">
             <table id="items" class="table table-bordered table-striped">
                 <thead>
@@ -30,7 +30,9 @@
                     <th>Prezime</th>
                     <th>Telefon</th>
                     <th>Predstava</th>
+                    <th>Scena</th>
                     <th>Broj karata</th>
+                    <th>Ukupna cena</th>
                     <th>Status rezervacije</th>
                     <th>{{ knp_pagination_sortable(pagination, 'Datum kreiranja zahteva', 'r.createdAt') }}</th>
                     <th>&nbsp;</th>
@@ -52,21 +54,32 @@
                             {{ item.title }}
                         </td>
                         <td>
+                            {% if item.scena == 0 %}
+                                Mala scena
+                            {% endif %}
+                            {% if item.scena == 1 %}
+                                Velika scena
+                            {% endif %}
+                        </td>
+                        <td>
                             {% if item.brojPojedinacne %}
-                                <div>Pojedinačne: {{ item.brojPojedinacne }}</div>
+                                <div>Pojedinačne: {{ item.brojPojedinacne }} x {{ item.price[1]|number_format(2, ',', '.') }}</div>
                             {% endif %}
 
                             {% if item.brojGrupne %}
-                                <div>Grupne: {{ item.brojGrupne }}</div>
+                                <div>Grupne: {{ item.brojGrupne }} x {{ item.price[2]|number_format(2, ',', '.') }}</div>
                             {% endif %}
 
                             {% if item.brojStudentske %}
-                                <div>Studentske: {{ item.brojStudentske }}</div>
+                                <div>Studentske: {{ item.brojStudentske }} x {{ item.price[3]|number_format(2, ',', '.') }}</div>
                             {% endif %}
 
                             {% if item.brojPenzionerske %}
-                                <div>Penzionerske: {{ item.brojPenzionerske }}</div>
+                                <div>Penzionerske: {{ item.brojPenzionerske }} x {{ item.price[4]|number_format(2, ',', '.') }}</div>
                             {% endif %}
+                        </td>
+                        <td>
+                            {{ item.sum|number_format(2, ',', '.') }}
                         </td>
                         <td>
                             {% if item.statusId == 1 %}

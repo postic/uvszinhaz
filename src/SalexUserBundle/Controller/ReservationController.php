@@ -44,6 +44,7 @@ class ReservationController extends Controller
                 $form->submit($request->query->get($form->getName()));
                 $this->get('lexik_form_filter.query_builder_updater')->addFilterConditions($form, $filterBuilder);
             }
+            $filterBuilder->orderBy('r.createdAt', 'desc');
             $query = $filterBuilder->getQuery();
             $paginator  = $this->get('knp_paginator');
             $pagination = $paginator->paginate(
@@ -62,6 +63,7 @@ class ReservationController extends Controller
                 ->getRepository(Reservation::class)
                 ->createQueryBuilder('r');
             $filterBuilder->andWhere('r.user='.$id);
+            $filterBuilder->orderBy('r.createdAt', 'desc');
             $form = $this->get('form.factory')->create('SalexUserBundle\Filter\ItemFilterType');
             if ($request->query->has($form->getName())) {
                 $form->submit($request->query->get($form->getName()));
@@ -203,6 +205,20 @@ class ReservationController extends Controller
         $em = $this->getDoctrine()->getManager();
         $item = $em->getRepository(Reservation::class)->findOneBy(array('id' => $id));
         $item->setStatusId(3);
+        $em->persist($item);
+        $em->flush();
+        return new RedirectResponse($this->generateUrl('list_reservations'));
+    }
+
+    /**
+     * @Route("/close/reservation/{id}", name="close_reservation", options={"expose"=true}, requirements={"id": "\d+"})
+     * @return RedirectResponse
+     */
+    public function closeAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $item = $em->getRepository(Reservation::class)->findOneBy(array('id' => $id));
+        $item->setStatusId(2);
         $em->persist($item);
         $em->flush();
         return new RedirectResponse($this->generateUrl('list_reservations'));

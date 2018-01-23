@@ -16,7 +16,7 @@ class HomeController extends Controller
     {
         $is_admin = $this->container->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN');
         if($is_admin) {
-            return new RedirectResponse($this->generateUrl('list_users'));
+            return new RedirectResponse($this->generateUrl('list_reservations'));
         }
         else {
             return new RedirectResponse($this->generateUrl('add_reservation'));

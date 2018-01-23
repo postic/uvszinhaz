@@ -3,41 +3,63 @@ var firstSeatLabel = 1;
 $(document).ready(function() {
 
     if($('#seat-map').length > 0){
+
+        var $map = [
+            'fffffffffffffffff',
+            'fffffffffffffffff',
+            'fffffffffffffffff',
+            'fffffffffffffffff',
+            'fffffffffffffffff',
+            'fffffffffffffffff',
+            'fffffffffffffffff',
+            'fffffffffffffffff',
+            'fffffffffffffffff',
+            'bbbbbbbbbbbbbbbbb',
+            'bbbbbbbbbbbbbbbbb',
+            'bbbbbbbbbbbbbbbbb',
+        ];
+
+        if($('#scena').val() == '0'){
+            $map = [
+                'ffffffffffffff',
+                'ffffffffffffff',
+                'ffffffffffffff',
+                'ffffffffffffff',
+                'ffffffffffffff'
+            ];
+        }
+
+
         var $cart = $('#selected-seats'),
             $counter = $('#counter'),
             $total = $('#total'),
             sc = $('#seat-map').seatCharts({
-                map: [
-                    'fffffffffffffffff',
-                    'fffffffffffffffff',
-                    'fffffffffffffffff',
-                    'fffffffffffffffff',
-                    'fffffffffffffffff',
-                    'fffffffffffffffff',
-                    'fffffffffffffffff',
-                    'fffffffffffffffff',
-                    'fffffffffffffffff',
-                ],
+                map: $map,
                 seats: {
                     f: {
-                        price   : 100,
+                        price   : null,
                         classes : 'first-class', //your custom CSS class
+                        category: 'Available'
+                    },
+                    b: {
+                        price   : null,
+                        classes : 'balcony-class', //your custom CSS class
                         category: 'Available'
                     }
 
                 },
                 naming : {
-                    top : false,
+                    top : true,
+                    left   : true,
                     getLabel : function (character, row, column) {
-                        return firstSeatLabel++;
+                        return null; // firstSeatLabel++;
                     },
                 },
                 legend : {
                     node : $('#legend'),
                     items : [
-                        [ 'f', 'available',   'Available' ],
-                        //[ 'e', 'available',   'Economy Class'],
-                        [ 'f', 'unavailable', 'Already Booked']
+                        [ 'f', 'available',   'Slobodna sedišta' ],
+                        [ 'f', 'unavailable', 'Zauzeta sedišta']
                     ]
                 },
                 click: function () {
@@ -69,24 +91,10 @@ $(document).ready(function() {
                 }
             });
 
-        //this will handle "[cancel]" link clicks
-        $('#selected-seats').on('click', '.cancel-cart-item', function () {
-            //let's just trigger Click event on the appropriate seat, so we don't have to repeat the logic here
-            sc.get($(this).parents('li:first').data('seatId')).click();
-        });
-
-        //let's pretend some seats have already been booked
-        //var data = load_seats();
-        //alert(data);
-        //sc.get(data).status('unavailable');
         load_seats(sc);
-
-        $('.checkout-button').on('click', function () {
-            get_seats(sc);
-        });
     }
 
-    // delete reservation
+    // brisanje rezervacije
     $('.delete-btn').on('click', function () {
         var entityId = $(this).attr('data-entity-id');
         $('.remove_item').attr('data-entity-id', entityId);
@@ -98,7 +106,7 @@ $(document).ready(function() {
         window.location.href = url;
     });
 
-    // cancel reservation
+    // otkazivanje rezervacije
     $('.cancel-reservation-btn').on('click', function () {
         var entityId = $(this).attr('data-entity-id');
         $('.cancel_reservation').attr('data-entity-id', entityId);
@@ -110,8 +118,7 @@ $(document).ready(function() {
         window.location.href = url;
     });
 
-
-    // delete seat
+    // brisanje sedišta
     $('.delete-btn-seat').on('click', function () {
         var entityId = $(this).attr('data-entity-id');
         $('.remove-seat').attr('data-entity-id', entityId);
@@ -123,10 +130,8 @@ $(document).ready(function() {
         window.location.href = url;
     });
 
-
-
     // snimanje sedista u bazu
-    $('.checkout-button').click(function () {
+    $('#checkout-button').click(function () {
         var url = Routing.generate('add_seat');
         var $seats = get_seats(sc);
         var $tip_karte = $('#tip_karte').val();
@@ -144,6 +149,18 @@ $(document).ready(function() {
                 window.location.href = url;
             }
         })
+    });
+
+    // zatvaranje rezervacije
+    $('#close-reservation-button').on('click', function () {
+        var reservationId = $(this).attr('data-entity-id');
+        $('#close_reservation_button').attr('data-entity-id', reservationId);
+    });
+
+    $('#close_reservation_button').click(function () {
+        var reservationId = $(this).attr('data-entity-id');
+        var url = Routing.generate('close_reservation', {'id': reservationId});
+        window.location.href = url;
     });
 
 });
@@ -206,6 +223,8 @@ $(document).ready(function() {
             url: url,
             success: function (data) {
                 var $cene = data[0].cena;
+                var $scena = data[0].scena;
+                $('#salexuserbundle_reservation_scena').val($scena);
                 for( var $i in $cene ) {
                     switch($i) {
                         case '1':
