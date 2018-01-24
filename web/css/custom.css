@@ -9,19 +9,23 @@ li.dropdown.dropdown-language ul.dropdown-menu {
 
 /* Seats
 ------------------------------------------------- */
+div.seatCharts-container {
+    margin-bottom: 25px;
+    overflow: hidden;
+}
 div.seatCharts-row {
     height: 30px;
 }
-div.seatCharts-cell {
+div.seatCharts-container div.seatCharts-cell {
     color: #182c4e;
-    height: 21px;
-    line-height: 21px;
-    width: 21px;
+    height: 25px;
+    line-height: 25px;
+    margin: 0.35% !important;
+    width: 3.8% !important;
 }
 div.seatCharts-seat {
-    border-radius: 2px;
-    color: #ffffff;
-    font-size: 10px;
+    color: #ffffff !important;
+    font-size: 12px;
 }
 div.seatCharts-seat.available.first-class {
     background-color: #b9dea0;

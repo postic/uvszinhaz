@@ -122,7 +122,7 @@ class ReservationController extends Controller
      * @Route("/add/reservation", name="add_reservation")
      * @return RedirectResponse
      */
-    public function addAction(Request $request)
+    public function addAction(Request $request, \Swift_Mailer $mailer)
     {
         $current_user = $this->get('security.token_storage')->getToken()->getUser();
 
@@ -156,11 +156,43 @@ class ReservationController extends Controller
                 'Vaš zahtev je uspešno snimljen.'
             );
 
+
+
+
+
+            $name = 'Steva';
+            $message = (new \Swift_Message('Hello Email'))
+                ->setFrom('postic.stevan@gmail.com')
+                ->setTo('postic.stevan@gmail.com')
+                ->setBody(
+                    $this->renderView(
+                    // app/Resources/views/Emails/registration.html.twig
+                        '@SalexUser/Emails/registration.html.twig',
+                        array('name' => $name)
+                    ),
+                    'text/html'
+                )
+                /*
+                 * If you also want to include a plaintext version of the message
+                ->addPart(
+                    $this->renderView(
+                        'Emails/registration.txt.twig',
+                        array('name' => $name)
+                    ),
+                    'text/plain'
+                )
+                */
+            ;
+
+            $mailer->send($message);
+
+
             if($reservation->getByPhone()) {
                 return $this->redirectToRoute('list_reservations');
             } else {
                 return $this->redirectToRoute('list_my_reservations');
             }
+
         }
 
         return $this->render('SalexUserBundle:Reservation:add-reservation.html.twig', array(

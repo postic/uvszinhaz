@@ -420,7 +420,16 @@
 					$('<div></div>').addClass('seatCharts-cell seatCharts-space')	
 				);
 			});
-			
+
+
+            if (settings.naming.left) {
+                $row.append(
+                    $('<div></div>')
+                        .addClass('seatCharts-cell seatCharts-space')
+                        .text(settings.naming.rows[row])
+                );
+            }
+
 			fn.append($row);
 		});
 	

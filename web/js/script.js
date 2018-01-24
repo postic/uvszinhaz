@@ -4,28 +4,31 @@ $(document).ready(function() {
 
     if($('#seat-map').length > 0){
 
+        // mreza za veliku scenu
         var $map = [
-            'fffffffffffffffff',
-            'fffffffffffffffff',
-            'fffffffffffffffff',
-            'fffffffffffffffff',
-            'fffffffffffffffff',
-            'fffffffffffffffff',
-            'fffffffffffffffff',
-            'fffffffffffffffff',
-            'fffffffffffffffff',
-            'bbbbbbbbbbbbbbbbb',
-            'bbbbbbbbbbbbbbbbb',
-            'bbbbbbbbbbbbbbbbb',
+            '_fffffffffffffffff__',
+            '_fffffffffffffffff__',
+            '_fffffffffffffffff__',
+            '_fffffffffffffffff__',
+            '_fffffffffffffffff__',
+            '_fffffffffffffffff__',
+            '_fffffffffffffffff__',
+            '_fffffffffffffffff__',
+            '_fffffffffffffffff__',
+            '_fffffffffffffffff__',
+            'ffffffffffffffffffff',
+            '_bbbbbbbbbbbbbbbbbb_',
+            '_bbbbbbbbbbbbbbbbbb_'
         ];
 
+        // mreza za malu scenu
         if($('#scena').val() == '0'){
             $map = [
-                'ffffffffffffff',
-                'ffffffffffffff',
-                'ffffffffffffff',
-                'ffffffffffffff',
-                'ffffffffffffff'
+                '_ffffffffffffffffff_',
+                '_ffffffffffffffffff_',
+                '_ffffffffffffffffff_',
+                '_ffffffffffffffffff_',
+                '_ffffffffffffffffff_'
             ];
         }
 
@@ -37,23 +40,37 @@ $(document).ready(function() {
                 map: $map,
                 seats: {
                     f: {
-                        price   : null,
-                        classes : 'first-class', //your custom CSS class
-                        category: 'Available'
+                        classes : 'first-class' //your custom CSS class
                     },
                     b: {
-                        price   : null,
-                        classes : 'balcony-class', //your custom CSS class
-                        category: 'Available'
+                        classes : 'balcony-class' //your custom CSS class
                     }
 
                 },
                 naming : {
-                    top : true,
-                    left   : true,
+                    top : false,
+                    left : true,
+                    right : true,
+                    getId  : function(character, row, column) {
+                        if(row != 11 ) {
+                            column = parseInt(column)-1;
+                            return row + '_' + column.toString();
+                        }
+                        else return row + '_' + column;
+
+                    },
+                    getLabel : function (character, row, column) {
+                        if(row != 11 ) {
+                            column = parseInt(column)-1;
+                            return column.toString();
+                        }
+                        else return column;
+                    }
+                    /*
                     getLabel : function (character, row, column) {
                         return null; // firstSeatLabel++;
                     },
+                    */
                 },
                 legend : {
                     node : $('#legend'),
