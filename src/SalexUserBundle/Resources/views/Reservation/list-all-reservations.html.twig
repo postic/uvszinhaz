@@ -100,6 +100,7 @@
                             {% if item.statusId == 2 %}
                                 <a href="{{ path('print_reservation', { 'id': item.id }) }}"><i class="fa fa-print"></i></a>&nbsp;
                             {% endif %}
+                            <a href data-toggle="modal" data-target="#modal-danger" data-entity-id="{{ item.id }}" class="cancel-reservation-btn"><i class="fa fa-ban"></i></a>
                             <a href data-toggle="modal" data-target="#modal-danger" data-entity-id="{{ item.id }}" class="cancel-reservation-btn"><i class="fa fa-trash"></i></a>&nbsp;
                         </td>
                     </tr>

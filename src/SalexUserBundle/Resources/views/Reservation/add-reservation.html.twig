@@ -10,26 +10,11 @@
             {{ form_end(form) }}
         </div>
     </div>
-
-    <div class="modal modal-success fade" id="modal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Učitavanje podataka</h4>
-                </div>
-                <div class="modal-body">
-                    <p>Učitavanje podataka...</p>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
-    <!-- /.modal -->
 {% endblock %}
 
 {% block javascripts_inline %}
     <script type="text/javascript" src="{{ asset('js/jquery.seat-charts.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/loader.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/script.js') }}"></script>
 {% endblock %}
 

@@ -6,16 +6,16 @@ $(document).ready(function() {
 
         // mreza za veliku scenu
         var $map = [
-            '_fffffffffffffffff__',
-            '_fffffffffffffffff__',
-            '_fffffffffffffffff__',
-            '_fffffffffffffffff__',
-            '_fffffffffffffffff__',
-            '_fffffffffffffffff__',
-            '_fffffffffffffffff__',
-            '_fffffffffffffffff__',
-            '_fffffffffffffffff__',
-            '_fffffffffffffffff__',
+            '_ffffffffffffffffff_',
+            '_ffffffffffffffffff_',
+            '_ffffffffffffffffff_',
+            '_ffffffffffffffffff_',
+            '_ffffffffffffffffff_',
+            '_ffffffffffffffffff_',
+            '_ffffffffffffffffff_',
+            '_ffffffffffffffffff_',
+            '_ffffffffffffffffff_',
+            '_ffffffffffffffffff_',
             'ffffffffffffffffffff',
             '_bbbbbbbbbbbbbbbbbb_',
             '_bbbbbbbbbbbbbbbbbb_'
@@ -200,8 +200,7 @@ function get_seats(sc) {
 }
 
 function load_seats(sc) {
-
-    $('#modal-info').modal('show');
+    var $loader = new ajaxLoader($('.wrapper'));
     var entityId = $('#performance_id').val(); // $('#reservation_id').val();
     var url = Routing.generate('list_seats', {'id': entityId});
     $.ajax({
@@ -210,11 +209,10 @@ function load_seats(sc) {
         url: url,
         success: function (data) {
             sc.get(data).status('unavailable');
-            $('#modal-info').modal('hide');
+            $loader.remove();
         }
     })
 }
-
 
 
 // Reservation form
@@ -230,7 +228,7 @@ $(document).ready(function() {
         $('#salexuserbundle_reservation_brojPenzionerske').hide();
         $('#salexuserbundle_reservation_brojPojedinacne').hide();
 
-        $('#modal').modal('show');
+        var $loader = new ajaxLoader($('.wrapper'));
 
         var $performanceId = $performance.val();
         var url = Routing.generate('get_performance', {'id': $performanceId});
@@ -262,9 +260,8 @@ $(document).ready(function() {
                             break;
                     }
                 }
-                $('#modal').modal('hide');
+                $loader.remove();
             }
         })
     });
-
 });

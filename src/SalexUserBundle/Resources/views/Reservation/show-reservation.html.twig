@@ -157,15 +157,6 @@
                     <div id="seat-map">
                         <div class="front-indicator"></div>
                     </div>
-                    <div>
-                        <select id="tip_karte" class="form-control" required="required">
-                            {% for key,value in item.reservationTypes %}
-                                <option value="{{ key }}">{{ value }}</option>
-                            {% endfor %}
-                        </select>
-                        <button id="checkout-button" class="btn btn-success"><i class="fa fa-fw fa-save"></i>&nbsp;Snimi odabrana sedišta</button>
-                        <button id="close-reservation-button" class="btn btn-danger" data-toggle="modal" data-target="#modal-close-reservation" data-entity-id="{{ app.request.attributes.get("id") }}"><i class="fa fa-fw fa-lock"></i>&nbsp;Zatvori rezervaciju</button>
-                    </div>
                 </div>
 
 
@@ -186,11 +177,19 @@
                     </div>
                 </div>
                 -->
-                <!--
                 <div class="box-footer">
-                    <div id="legend"></div>
+                    <div class="col-md-6">
+                        <select id="tip_karte" class="form-control" required="required">
+                            {% for key,value in item.reservationTypes %}
+                                <option value="{{ key }}">{{ value }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <button id="checkout-button" class="btn btn-success"><i class="fa fa-fw fa-save"></i>&nbsp;Snimi odabrana sedišta</button>
+                        <button id="close-reservation-button" class="btn btn-danger" data-toggle="modal" data-target="#modal-close-reservation" data-entity-id="{{ app.request.attributes.get("id") }}"><i class="fa fa-fw fa-lock"></i>&nbsp;Zatvori rezervaciju</button>
+                    </div>
                 </div>
-                -->
             </div>
         </div>
     </div>
@@ -209,22 +208,6 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Odustani</button>
                     <button type="button" class="btn btn-outline remove-seat" data-entity-id="">Brisanje</button>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
-    <!-- /.modal -->
-
-    <div class="modal modal-success fade" id="modal-info">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Učitavanje podataka</h4>
-                </div>
-                <div class="modal-body">
-                    <p>Učitavanje podataka&hellip;</p>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -260,6 +243,7 @@
 
 {% block javascripts_inline %}
     <script type="text/javascript" src="{{ asset('js/jquery.seat-charts.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/loader.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/script.js') }}"></script>
 {% endblock %}
 
