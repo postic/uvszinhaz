@@ -14,9 +14,11 @@ class HomeController extends Controller
      */
     public function indexAction()
     {
-        $is_admin = $this->container->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN');
-        if($is_admin) {
+        if($this->container->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
             return new RedirectResponse($this->generateUrl('list_reservations'));
+        }
+        elseif($this->container->get('security.authorization_checker')->isGranted('ROLE_SALE')) {
+            return new RedirectResponse($this->generateUrl('list_upcoming_performances'));
         }
         else {
             return new RedirectResponse($this->generateUrl('add_reservation'));
