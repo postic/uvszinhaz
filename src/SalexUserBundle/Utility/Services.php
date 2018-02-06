@@ -33,13 +33,10 @@ class Services
             $browser->getClient()->setTimeout(100);
             $response = $browser->get($url.'/'.$locale_param.'/all')->getContent();
             $items = json_decode($response, true);
-            foreach($items as $item){
-                $retval[$item['title']] = $item['ID'];
-            }
         } catch (\Exception $e) {
             error_log($e->getMessage());
         }
-        return $retval;
+        return $items;
     }
 
 

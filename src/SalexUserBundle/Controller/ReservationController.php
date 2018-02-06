@@ -50,7 +50,7 @@ class ReservationController extends Controller
             $pagination = $paginator->paginate(
                 $query,
                 $request->query->getInt('page', 1),
-                10
+                5
             );
             $pagination->setTemplate('KnpPaginatorBundle:Pagination:foundation_v5_pagination.html.twig');
             return $this->render("SalexUserBundle:Reservation:list-all-reservations.html.twig", array(
@@ -155,37 +155,22 @@ class ReservationController extends Controller
                 'success',
                 'Vaš zahtev je uspešno snimljen.'
             );
-
-
-
-
-
-            $name = 'Steva';
-            $message = (new \Swift_Message('Hello Email'))
-                ->setFrom('postic.stevan@gmail.com')
-                ->setTo('postic.stevan@gmail.com')
+/*
+            // Slanje mail-a
+            $email = $current_user->getEmail();
+            $message = (new \Swift_Message('Uspešna rezervacija'))
+                ->setFrom('no-reply@uvszinhaz.com')
+                ->setTo($email)
                 ->setBody(
                     $this->renderView(
-                    // app/Resources/views/Emails/registration.html.twig
-                        '@SalexUser/Emails/registration.html.twig',
-                        array('name' => $name)
+                        '@SalexUser/Emails/request.html.twig',
+                        array('item' => $reservation)
                     ),
                     'text/html'
-                )
-                /*
-                 * If you also want to include a plaintext version of the message
-                ->addPart(
-                    $this->renderView(
-                        'Emails/registration.txt.twig',
-                        array('name' => $name)
-                    ),
-                    'text/plain'
-                )
-                */
-            ;
+                );
 
             $mailer->send($message);
-
+*/
 
             if($reservation->getByPhone()) {
                 return $this->redirectToRoute('list_reservations');
@@ -221,6 +206,7 @@ class ReservationController extends Controller
      */
     public function deleteAction($id)
     {
+        // brisanje zahteva (rezervacije)
         $em = $this->getDoctrine()->getManager();
         $item = $em->getRepository(Reservation::class)->findOneBy(array('id' => $id));
         $em->remove($item);

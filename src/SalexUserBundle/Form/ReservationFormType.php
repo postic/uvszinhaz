@@ -31,7 +31,11 @@ class ReservationFormType extends AbstractType
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
 
-            $choices = $this->service->getPerformances();
+            $choices = array();
+            $items = $this->service->getPerformances();
+            foreach ($items as $item){
+                $choices[$item['title'] . ' - ' . $item['datum']] = $item['ID'];
+            }
 
             $data = $event->getData();
             $byPhone = $data->getByPhone();

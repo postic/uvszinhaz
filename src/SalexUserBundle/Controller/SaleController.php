@@ -25,4 +25,19 @@ class SaleController extends Controller
         ));
     }
 
+    /**
+     * @Route("/show/sale/{id}", name="show_sale", options={"expose"=true}, requirements={"id": "\d+"})
+     * @return RedirectResponse
+     */
+    public function showAction($id)
+    {
+        // get reservation
+        $em = $this->getDoctrine()->getManager();
+        $items = $em->getRepository(Reservation::class)->findBy(array('performanceId' => $id, 'statusId' => 2));
+
+        return $this->render('SalexUserBundle:Sale:show-sale.html.twig', array(
+            'items' => $items,
+        ));
+    }
+
 }

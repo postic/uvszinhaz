@@ -25,7 +25,12 @@ class ItemFilterType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $choices = $this->service->getPerformances();
+        $choices = array();
+        $items = $this->service->getPerformances();
+        foreach ($items as $item){
+            $choices[$item['title'] . ' - ' . $item['datum']] = $item['ID'];
+        }
+
         $builder->add(
             'performanceId',
             Filters\ChoiceFilterType::class,

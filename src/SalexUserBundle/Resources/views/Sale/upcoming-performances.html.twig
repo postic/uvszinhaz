@@ -10,6 +10,7 @@
                 <thead>
                 <tr>
                     <th>Predstava</th>
+                    <th>Scena</th>
                     <th>Datum</th>
                     <th>&nbsp;</th>
                 </tr>
@@ -18,21 +19,21 @@
                 {% for item in items %}
                     <tr>
                         <td>
-                            {{ item }}
+                            {{ item.title }}
                         </td>
                         <td>
-                            {{ item }}
-                        </td>
-                        <td>
-                            {% if item == 0 %}
+                            {% if item.scena == 0 %}
                                 Mala scena
                             {% endif %}
-                            {% if item == 1 %}
+                            {% if item.scena == 1 %}
                                 Velika scena
                             {% endif %}
                         </td>
+                        <td>
+                            {{ item.datum }}
+                        </td>
                         <td class="pull-right">
-                            <a href="{{ path('show_reservation', { 'id': item }) }}"><i class="fa fa-pencil"></i></a>
+                            <a href="{{ path('show_sale', { 'id': item.ID }) }}"><i class="fa fa-pencil"></i></a>
                         </td>
                     </tr>
                 {% endfor %}

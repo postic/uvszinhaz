@@ -1,0 +1,183 @@
+{% extends 'AvanzuAdminThemeBundle:layout:base-layout.html.twig' %}
+{% block page_title %}Prodaja karata{% endblock %}
+{% block page_subtitle %}{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <link href="{{ asset('css/jquery.seat-charts.css') }}" type="text/css" rel="stylesheet" />
+    <link href="{{ asset('css/custom.css') }}" type="text/css" rel="stylesheet" />
+    {% stylesheets
+    '@admin_lte_css'
+    filter='cssrewrite'
+    %}
+    <link href="{{ asset_url }}" rel="stylesheet" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block page_content %}
+
+    <div class="row">
+        <div class="col-md-6">
+
+            <input id="performance_id" type="hidden" value="{{ app.request.get('id') }}" />
+
+            <!-- Lista rezervacija za predstavu -->
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Rezervacije</h3>
+                </div>
+                <div class="box-body">
+                    <table id="reservations" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>Ime
+                            <th>Prezime</th>
+                            <th>Predstava</th>
+                            <th>Sedišta</th>
+                            <th>Cena</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in items %}
+                            <tr>
+                                <td>
+                                    {{ item.firstName }}
+                                </td>
+                                <td>
+                                    {{ item.lastName }}
+                                </td>
+                                <td>
+                                    {{ item.performance.title }}
+                                </td>
+                                <td>
+                                {% for seat in item.seats %}
+                                <div>
+                                    Red: {{ seat.seatRow }} / Sedište: {{ seat.seatNumber }}
+                                </div>
+                                {% endfor %}
+                                </td>
+                                <td>
+                                    {{ item.sum|number_format(2, ',', '.') }}
+                                </td>
+                                <td class="pull-right">
+                                    <a href="{{ path('show_reservation', { 'id': item.id }) }}"><i class="fa fa-pencil"></i></a>
+                                    <a href="{{ path('print_reservation', { 'id': item.id }) }}"><i class="fa fa-print"></i></a>
+                                </td>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mapa sedista -->
+        <div class="col-md-6">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Sedišta</h3>
+                    <!--
+                    <div class="pull-right">
+                        Broj sedišta (<span id="counter">0</span>), Total: <b><span id="total">0</span> RSD</b>
+                    </div>
+                    -->
+                </div>
+
+
+                <div class="box-body">
+                    <div id="seat-map">
+                        <div class="front-indicator"></div>
+                    </div>
+                </div>
+
+                <div class="box-footer">
+                    <div class="col-md-6">
+                        <select id="tip_karte" class="form-control" required="required">
+
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <button id="checkout-button" class="btn btn-success"><i class="fa fa-fw fa-save"></i>&nbsp;Prodaja</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal modal-danger fade" id="modal-danger">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">?</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Da li ste sigurni?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Odustani</button>
+                    <button type="button" class="btn btn-outline remove-seat" data-entity-id="">Brisanje</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <div class="modal modal-danger fade" id="modal-close-reservation">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Zatvaranje rezervacije</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Da li ste sigurni?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Odustani</button>
+                    <button type="button" id="close_reservation_button" class="btn btn-outline" data-entity-id="">Zatvaranje</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+{% endblock %}
+
+
+
+{% block javascripts %}
+    {% javascripts
+        '@admin_lte_all'
+    %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script type="text/javascript">
+        $(function () {
+            $('#reservations').DataTable({
+                'paging'      : true,
+                'lengthChange': true,
+                'searching'   : true,
+                'ordering'    : false,
+                'info'        : true,
+                'autoWidth'   : true,
+            })
+        })
+    </script>
+{% endblock %}
+
+{% block javascripts_inline %}
+    <script type="text/javascript" src="{{ asset('js/jquery.seat-charts.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/loader.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/script.js') }}"></script>
+{% endblock %}
+
+{% block avanzu_admin_footer %}
+{% endblock %}

@@ -25,7 +25,7 @@ class Reservation
     }
 
     /**
-     * @ORM\OneToMany(targetEntity="Seat", mappedBy="reservation")
+     * @ORM\OneToMany(targetEntity="Seat", mappedBy="reservation", orphanRemoval=true)
      */
     private $seats;
 
@@ -276,48 +276,6 @@ class Reservation
     public function getStatusId()
     {
         return $this->statusId;
-    }
-
-    /**
-     * Get performance title
-     *
-     * @return string
-     */
-    public function getTitle(){
-        $performance_id = $this->getPerformanceId();
-        $title = $this->getService()->getPerformance($performance_id);
-        return $title[0]['title'];
-    }
-
-    /**
-     * Get performance price
-     *
-     * @return string
-     */
-    public function getPrice(){
-        $performance_id = $this->getPerformanceId();
-        $price = $this->getService()->getPerformance($performance_id);
-        return $price[0]['cena'];
-    }
-
-    /**
-     * Get reservation sum
-     *
-     * @return string
-     */
-    public function getSum(){
-        $performance_id = $this->getPerformanceId();
-        $price = $this->getService()->getPerformance($performance_id);
-        $sum = 0;
-        if($this->getBrojPojedinacne())
-            $sum = $sum + $price[0]['cena'][1] * $this->getBrojPojedinacne();
-        if($this->getBrojGrupne())
-            $sum = $sum + $price[0]['cena'][2] * $this->getBrojGrupne();
-        if($this->getBrojStudentske())
-            $sum = $sum + $price[0]['cena'][3] * $this->getBrojStudentske();
-        if($this->getBrojPenzionerske())
-            $sum = $sum + $price[0]['cena'][4] * $this->getBrojPenzionerske();
-        return $sum;
     }
 
     /**
@@ -616,4 +574,46 @@ class Reservation
     {
         return $this->scena;
     }
+
+    /**
+     * Get performance
+     */
+    public function getPerformance(){
+        $performance_id = $this->getPerformanceId();
+        $performance = $this->getService()->getPerformance($performance_id);
+        return $performance[0];
+    }
+
+
+    /**
+     * Get performance price
+     *
+     * @return string
+     */
+    public function getPrice(){
+        $performance_id = $this->getPerformanceId();
+        $price = $this->getService()->getPerformance($performance_id);
+        return $price[0]['cena'];
+    }
+
+    /**
+     * Get reservation sum
+     *
+     * @return string
+     */
+    public function getSum(){
+        $performance_id = $this->getPerformanceId();
+        $price = $this->getService()->getPerformance($performance_id);
+        $sum = 0;
+        if($this->getBrojPojedinacne())
+            $sum = $sum + $price[0]['cena'][1] * $this->getBrojPojedinacne();
+        if($this->getBrojGrupne())
+            $sum = $sum + $price[0]['cena'][2] * $this->getBrojGrupne();
+        if($this->getBrojStudentske())
+            $sum = $sum + $price[0]['cena'][3] * $this->getBrojStudentske();
+        if($this->getBrojPenzionerske())
+            $sum = $sum + $price[0]['cena'][4] * $this->getBrojPenzionerske();
+        return $sum;
+    }
+
 }
