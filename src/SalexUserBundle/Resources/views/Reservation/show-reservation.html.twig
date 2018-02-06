@@ -38,7 +38,13 @@
                         <div class="form-group">
                             <label for="inputName" class="col-sm-3 control-label">Predstava</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" placeholder="{{ item.title }}" readonly>
+                                <input type="text" class="form-control" placeholder="{{ item.performance.title }}" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputName" class="col-sm-3 control-label">Datum predstave</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" placeholder="{{ item.performance.datum }}" readonly>
                             </div>
                         </div>
                         {% if item.brojPojedinacne %}

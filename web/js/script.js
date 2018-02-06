@@ -112,12 +112,12 @@ $(document).ready(function() {
     }
 
     // brisanje rezervacije
-    $('.delete-btn').on('click', function () {
+    $('.delete-reservation-btn').on('click', function () {
         var entityId = $(this).attr('data-entity-id');
-        $('.remove_item').attr('data-entity-id', entityId);
+        $('.delete-reservation').attr('data-entity-id', entityId);
     });
 
-    $('.remove_item').click(function () {
+    $('.delete-reservation').click(function () {
         var entityId = $(this).attr('data-entity-id');
         var url = Routing.generate('delete_reservation', {'id': entityId});
         window.location.href = url;
@@ -126,10 +126,10 @@ $(document).ready(function() {
     // otkazivanje rezervacije
     $('.cancel-reservation-btn').on('click', function () {
         var entityId = $(this).attr('data-entity-id');
-        $('.cancel_reservation').attr('data-entity-id', entityId);
+        $('.cancel-reservation').attr('data-entity-id', entityId);
     });
 
-    $('.cancel_reservation').click(function () {
+    $('.cancel-reservation').click(function () {
         var entityId = $(this).attr('data-entity-id');
         var url = Routing.generate('cancel_reservation', {'id': entityId});
         window.location.href = url;
