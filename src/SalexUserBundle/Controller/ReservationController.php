@@ -2,6 +2,7 @@
 
 namespace SalexUserBundle\Controller;
 
+use JMS\Serializer\Serializer;
 use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use SalexUserBundle\Entity\Reservation;
 use SalexUserBundle\Entity\Seat;
@@ -13,6 +14,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 class ReservationController extends Controller
 {
@@ -198,6 +203,23 @@ class ReservationController extends Controller
         return $this->render('SalexUserBundle:Reservation:show-reservation.html.twig', array(
             'item' => $item,
         ));
+    }
+
+    /**
+     * @Route("/get/reservation/{id}", name="get_reservation", options={"expose"=true}, requirements={"id": "\d+"})
+     * @return RedirectResponse
+     */
+    public function getAction($id)
+    {
+        // get reservation
+        $em = $this->getDoctrine()->getManager();
+        $item = $em->getRepository(Reservation::class)->findOneBy(array('id' => $id));
+
+        $serializer = $this->get('serializer');
+        $data = $serializer->serialize(array($item), 'json');
+        $response = new JsonResponse();
+
+        return new Response($response);
     }
 
     /**

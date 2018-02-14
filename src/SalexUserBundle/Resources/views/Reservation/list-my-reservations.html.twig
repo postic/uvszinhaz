@@ -24,7 +24,7 @@
                 {% for item in pagination %}
                     <tr>
                         <td>
-                            {{ item.performance.title }}
+                            <a href="#" data-entity-id="{{ item.id }}" class="display-reservation-btn">{{ item.performance.title }}</a>
                         </td>
                         <td>
                             {{ item.performance.datum }}
@@ -111,6 +111,25 @@
     </div>
     <!-- /.modal -->
 
+    <div class="modal modal-success fade" id="display-reservation-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Podaci o rezervaciji</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Podaci...</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
 {% endblock %}
 
 {% block javascripts %}
@@ -137,6 +156,7 @@
 
 {% block javascripts_inline %}
     <script type="text/javascript" src="{{ asset('js/jquery.seat-charts.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/loader.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/script.js') }}"></script>
 {% endblock %}
 

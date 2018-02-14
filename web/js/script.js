@@ -180,6 +180,23 @@ $(document).ready(function() {
         window.location.href = url;
     });
 
+    // prikazivanje rezervacije
+    $('.display-reservation-btn').click(function (e) {
+        e.preventDefault();
+        var $loader = new ajaxLoader($('.wrapper'));
+        var $reservationId = $(this).attr('data-entity-id');
+        var url = Routing.generate('get_reservation', {'id': $reservationId});
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: url,
+            success: function (data) {
+                console.info(data);
+                $loader.remove();
+            }
+        });
+    });
+
 });
 
 function recalculateTotal(sc) {
