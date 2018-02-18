@@ -27,4 +27,12 @@ class ReservationListener
         }
     }
 
+    public function postPersist(LifecycleEventArgs $args)
+    {
+        $entity = $args->getEntity();
+        if(method_exists($entity, 'setService')) {
+            $entity->setService($this->service);
+        }
+    }
+
 }

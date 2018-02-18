@@ -160,7 +160,7 @@ class ReservationController extends Controller
                 'success',
                 'Vaš zahtev je uspešno snimljen.'
             );
-/*
+
             // Slanje mail-a
             $email = $current_user->getEmail();
             $message = (new \Swift_Message('Uspešna rezervacija'))
@@ -169,13 +169,25 @@ class ReservationController extends Controller
                 ->setBody(
                     $this->renderView(
                         '@SalexUser/Emails/request.html.twig',
-                        array('item' => $reservation)
+                        array(
+                            'p_ime' => $reservation->getFirstName(),
+                            'p_prezime' => $reservation->getLastName(),
+                            'p_title' => $reservation->getPerformance()['title'],
+                            'p_datum_predstave' => $reservation->getPerformance()['datum'],
+                            'p_datum_rezervacije' => $reservation->getCreatedAt()->format('d.m.Y. H:i'),
+                            'p_brojPojedinacne' => $reservation->getBrojPojedinacne(),
+                            'p_brojGrupne' => $reservation->getBrojGrupne(),
+                            'p_brojPenzionerske' => $reservation->getBrojPenzionerske(),
+                            'p_brojStudentske' => $reservation->getBrojStudentske(),
+                            'p_sum' => number_format($reservation->getSum(),2,',','.').' RSD',
+                            'p_scena' => $reservation->getScena()?'Velika scena':'Mala scena',
+                        )
+
                     ),
                     'text/html'
                 );
 
             $mailer->send($message);
-*/
 
             if($reservation->getByPhone()) {
                 return $this->redirectToRoute('list_reservations');
@@ -215,11 +227,47 @@ class ReservationController extends Controller
         $em = $this->getDoctrine()->getManager();
         $item = $em->getRepository(Reservation::class)->findOneBy(array('id' => $id));
 
-        $serializer = $this->get('serializer');
-        $data = $serializer->serialize(array($item), 'json');
-        $response = new JsonResponse();
+        $p_status = '';
+        switch($item->getStatusId()){
+            case 1:
+                $p_status = 'Zahtev';
+                break;
+            case 2:
+                $p_status = 'Rezervisano';
+                break;
+            case 3:
+                $p_status = 'Otkazano';
+                break;
+        }
 
-        return new Response($response);
+        $p_seats = null;
+        $a_seats = $item->getSeats()->toArray();
+        foreach($a_seats as $key=>$seat){
+            $p_seats[] = str_replace('_', '/', $seat->getSeat());
+        }
+
+        $serializer = $this->get('serializer');
+        $data = $serializer->serialize(
+            array(
+                'p_ime' => $item->getFirstName(),
+                'p_prezime' => $item->getLastName(),
+                'p_title' => $item->getPerformance()['title'],
+                'p_datum_predstave' => $item->getPerformance()['datum'],
+                'p_datum_rezervacije' => $item->getCreatedAt()->format('d.m.Y. H:i'),
+                'p_brojPojedinacne' => $item->getBrojPojedinacne(),
+                'p_brojGrupne' => $item->getBrojGrupne(),
+                'p_brojPenzionerske' => $item->getBrojPenzionerske(),
+                'p_brojStudentske' => $item->getBrojStudentske(),
+                'p_sum' => number_format($item->getSum(),2,',','.').' RSD',
+                'p_status_id' => $item->getStatusId(),
+                'p_status' => $p_status,
+                'p_scena' => $item->getScena()?'Velika scena':'Mala scena',
+                'p_sedista' => $p_seats,
+            ),
+            'json'
+        );
+
+        return new Response($data);
     }
 
     /**
@@ -277,9 +325,7 @@ class ReservationController extends Controller
             'images' => true,
             'orientation' => 'portrait',
             'encoding' => 'utf-8',
-            #'header-right'=> 'Novosadsko pozorište, 2017',
             'header-left'=> 'Novosadsko pozorište, 2017',
-            #'footer-right'=> 'Novosadsko pozorište, 2017',
             'footer-left'=> 'Novosadsko pozorište, 2017'
         );
 

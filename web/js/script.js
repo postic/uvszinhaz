@@ -193,6 +193,25 @@ $(document).ready(function() {
             success: function (data) {
                 console.info(data);
                 $loader.remove();
+                var $modal = '';
+                switch (data.p_status_id) {
+                    case 1:
+                        $modal = 'modal modal-info fade';
+                        break;
+                    case 2:
+                        $modal = 'modal modal-success fade';
+                        break;
+                    case 3:
+                        $modal = 'modal modal-danger fade';
+                        break;
+                }
+                $('#display-reservation-modal').removeClass().addClass($modal);
+                $('.form-group').hide();
+                $.each(data, function(key,  value) {
+                    $('#'+key).show();
+                    $('#'+key+' .data').text(value);
+                })
+                $('#display-reservation-modal').modal('show');
             }
         });
     });

@@ -72,6 +72,18 @@ h1.pdf {
     color: #00a7d0;
 }
 
+/* modal window
+-------------------------------------------------*/
+#display-reservation-modal .form-group {
+    display: none;
+    margin-bottom: 5px;
+    overflow: hidden;
+}
+#display-reservation-modal .form-group label {
+    float: left;
+    margin: 0 5px 0 0;
+}
+
 /* modal
 -------------------------------------------------*/
 .modal-backdrop {
