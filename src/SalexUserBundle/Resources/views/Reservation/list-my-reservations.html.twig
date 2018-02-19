@@ -13,7 +13,6 @@
                         <th>Predstava</th>
                         <th>Datum</th>
                         <th>Scena</th>
-                        {#<th>Broj karata</th>#}
                         <th>Cena</th>
                         <th>Status</th>
                         <th>{{ knp_pagination_sortable(pagination, 'Datum kreiranja', 'r.createdAt') }}</th>
@@ -24,7 +23,7 @@
                 {% for item in pagination %}
                     <tr>
                         <td>
-                            <a href="#" data-entity-id="{{ item.id }}" class="display-reservation-btn">{{ item.performance.title }}</a>
+                            {{ item.performance.title }}
                         </td>
                         <td>
                             {{ item.performance.datum }}
@@ -37,25 +36,6 @@
                                 Velika scena
                             {% endif %}
                         </td>
-                        {#
-                        <td>
-                            {% if item.brojPojedinacne is defined and item.brojPojedinacne is not null %}
-                                <div>Pojedinačne: {{ item.brojPojedinacne }} x {{ item.performance.cena[1]|number_format(2, ',', '.') }}</div>
-                            {% endif %}
-
-                            {% if item.brojGrupne %}
-                                <div>Grupne: {{ item.brojGrupne }} x {{ item.performance.cena[2]|number_format(2, ',', '.') }}</div>
-                            {% endif %}
-
-                            {% if item.brojStudentske %}
-                                <div>Studentske: {{ item.brojStudentske }} x {{ item.performance.cena[3]|number_format(2, ',', '.') }}</div>
-                            {% endif %}
-
-                            {% if item.brojPenzionerske %}
-                                <div>Penzionerske: {{ item.brojPenzionerske }} x {{ item.performance.cena[4]|number_format(2, ',', '.') }}</div>
-                            {% endif %}
-                        </td>
-                        #}
                         <td>
                             {{ item.sum|number_format(2, ',', '.') }}
                         </td>
@@ -71,9 +51,10 @@
                             {% endif %}
                         </td>
                         <td>
-                            {{ item.createdAt|date('d.m.Y. H:i:s') }}
+                            {{ item.createdAt|date('d.m.Y. H:i') }}
                         </td>
                         <td  class="pull-right">
+                            <a href="#" data-entity-id="{{ item.id }}" class="display-reservation-btn"><i class="fa fa-eye"></i></a>&nbsp;
                             {% if item.statusId == 1 %}
                             <a href data-toggle="modal" data-target="#delete-reservation-modal" data-entity-id="{{ item.id }}" class="delete-reservation-btn"><i class="fa fa-trash"></i></a>&nbsp;
                             {% endif %}
@@ -115,13 +96,64 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Podaci o rezervaciji</h4>
+                    <h4 class="modal-title">Rezervacija</h4>
                 </div>
                 <div class="modal-body">
-                    <p>Podaci...</p>
+                    <div id="p_ime" class="form-group">
+                        <label>Ime:</label>
+                        <div class="data"></div>
+                    </div>
+                    <div id="p_prezime" class="form-group">
+                        <label>Prezime:</label>
+                        <div class="data"></div>
+                    </div>
+                    <div id="p_title" class="form-group">
+                        <label>Predstava:</label>
+                        <div class="data"></div>
+                    </div>
+                    <div id="p_datum_predstave" class="form-group">
+                        <label>Datum predstave:</label>
+                        <div class="data"></div>
+                    </div>
+                    <div id="p_scena" class="form-group">
+                        <label>Scena:</label>
+                        <div class="data"></div>
+                    </div>
+                    <div id="p_status" class="form-group">
+                        <label>Status:</label>
+                        <div class="data"></div>
+                    </div>
+                    <div id="p_datum_rezervacije" class="form-group">
+                        <label>Datum rezervacije:</label>
+                        <div class="data"></div>
+                    </div>
+                    <div id="p_sedista" class="form-group">
+                        <label>Red/Sedište:</label>
+                        <div class="data"></div>
+                    </div>
+                    <div id="p_brojPojedinacne" class="form-group">
+                        <label>Pojedinačne karte:</label>
+                        <div class="data"></div>
+                    </div>
+                    <div id="p_brojGrupne" class="form-group">
+                        <label>Grupne karte:</label>
+                        <div class="data"></div>
+                    </div>
+                    <div id="p_brojPenzionerske" class="form-group">
+                        <label>Penzionerske karte:</label>
+                        <div class="data"></div>
+                    </div>
+                    <div id="p_brojStudentske" class="form-group">
+                        <label>Studentske karte:</label>
+                        <div class="data"></div>
+                    </div>
+                    <div id="p_sum" class="form-group">
+                        <label>Cena:</label>
+                        <div class="data"></div>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Zatvori</button>
                 </div>
             </div>
             <!-- /.modal-content -->
