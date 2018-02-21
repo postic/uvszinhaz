@@ -38,7 +38,7 @@
     {% endblock %}
 
 </head>
-<body class="{{ admin_skin|default('skin-blue')}}">
+<body id="{{ app.request.get('_route') }}" class="{{ admin_skin|default('skin-blue')}}">
     <div class="wrapper">
 
     {% block avanzu_admin_header %}

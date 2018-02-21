@@ -2,7 +2,7 @@ var firstSeatLabel = 1;
 
 $(document).ready(function() {
 
-    if($('#seat-map').length > 0){
+    if($('#seat-map').length > 0 && $('#scena').val() == 1){
 
         // mreza za veliku scenu
         var $map = [
@@ -20,18 +20,6 @@ $(document).ready(function() {
             '_bbbbbbbbbbbbbbbbbb_',
             '_bbbbbbbbbbbbbbbbbb_'
         ];
-
-        // mreza za malu scenu
-        if($('#scena').val() == '0'){
-            $map = [
-                '_ffffffffffffffffff_',
-                '_ffffffffffffffffff_',
-                '_ffffffffffffffffff_',
-                '_ffffffffffffffffff_',
-                '_ffffffffffffffffff_'
-            ];
-        }
-
 
         var $cart = $('#selected-seats'),
             $counter = $('#counter'),
@@ -81,9 +69,10 @@ $(document).ready(function() {
                 },
                 click: function () {
                     if (this.status() == 'available') {
+                        console.info(this);
                         //let's create a new <li> which we'll add to the cart items
                         // $('<li>'+this.data().category+' Seat # '+this.settings.label+': <b>$'+this.data().price+'</b> <a href="#" class="cancel-cart-item">[cancel]</a></li>')
-                        $('<li>'+this.data().category+': <b>'+this.data().price+'&nbsp;RSD</b> <a href="#" class="cancel-cart-item">[brisanje]</a></li>')
+                        $('<li>'+this.data().category+': <b>'+this.settings.id+'</b></li>')
                             .attr('id', 'cart-item-'+this.settings.id)
                             .data('seatId', this.settings.id)
                             .appendTo($cart);
@@ -263,6 +252,7 @@ $(document).ready(function() {
         $('#salexuserbundle_reservation_brojStudentske').hide();
         $('#salexuserbundle_reservation_brojPenzionerske').hide();
         $('#salexuserbundle_reservation_brojPojedinacne').hide();
+        $('#salexuserbundle_reservation_brojBesplatne').hide();
 
         var $loader = new ajaxLoader($('.wrapper'));
 
@@ -278,6 +268,10 @@ $(document).ready(function() {
                 $('#salexuserbundle_reservation_scena').val($scena);
                 for( var $i in $cene ) {
                     switch($i) {
+                        case '0':
+                            $('#salexuserbundle_reservation_brojBesplatne').show();
+                            $('#salexuserbundle_reservation_brojBesplatne').after( "<span class='help'>Besplatna karta</span>" );
+                            break;
                         case '1':
                             $('#salexuserbundle_reservation_brojPojedinacne').show();
                             $('#salexuserbundle_reservation_brojPojedinacne').after( "<span class='help'>Cena jedne karte: "+ parseFloat($cene[$i]).toFixed(2).replace(".", ",") +"</span>" );

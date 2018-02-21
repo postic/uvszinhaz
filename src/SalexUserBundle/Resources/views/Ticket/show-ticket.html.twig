@@ -1,0 +1,283 @@
+{% extends 'AvanzuAdminThemeBundle:layout:base-layout.html.twig' %}
+{% block page_title %}Prodaja karata{% endblock %}
+{% block page_subtitle %}{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <link href="{{ asset('css/jquery.seat-charts.css') }}" type="text/css" rel="stylesheet" />
+    <link href="{{ asset('css/select.dataTables.min.css') }}" type="text/css" rel="stylesheet" />
+    <link href="{{ asset('css/custom.css') }}" type="text/css" rel="stylesheet" />
+    {% stylesheets
+    '@admin_lte_css'
+    filter='cssrewrite'
+    %}
+    <link href="{{ asset_url }}" rel="stylesheet" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block page_content %}
+
+    <div class="row">
+        <div class="col-md-6">
+
+            <input id="performance_id" type="hidden" value="{{ app.request.get('id') }}" />
+            <input id="scena" type="hidden" value="{{ performance['scena'] }}" />
+
+            <!-- Lista rezervacija za predstavu -->
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">{{ performance['title'] }} - {{ performance['datum'] }}</h3>
+                </div>
+                <div class="box-body">
+                    <table id="reservations" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>Ime</th>
+                            <th>Prezime</th>
+                            <th>Datum rezervacije</th>
+                            <th>Red/Sedište</th>
+                            <th>Cena</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in reservations %}
+                            <tr>
+                                <td></td>
+                                <td>
+                                    {{ item.reservation.firstName }}
+                                </td>
+                                <td>
+                                    {{ item.reservation.lastName  }}
+                                </td>
+                                <td>
+                                    {{ item.reservation.createdAt|date('d.m.Y. H:i') }}
+                                </td>
+                                <td>
+                                    {{ item.seatRow }}/{{ item.seatNumber }}
+                                </td>
+                                <td>
+                                    {{ item.reservation.sum|number_format(2, ',', '.') }}
+                                </td>
+                                <td class="pull-right">
+                                    <a href="#" data-entity-id="{{ item.id }}" class="display-reservation-btn"><i class="fa fa-eye"></i></a>
+                                    <a href="{{ path('show_reservation', { 'id': item.id }) }}"><i class="fa fa-trash"></i></a>
+                                    <a href="{{ path('print_reservation', { 'id': item.id }) }}"><i class="fa fa-print"></i></a>
+                                </td>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Odabrana sedista -->
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Karte za prodaju</h3>
+                </div>
+                <div class="box-body">
+                    <table id="tickets" class="table table-bordered table-striped dataTable no-footer">
+                        <thead>
+                            <tr>
+                                <th>Red/Sedište</th>
+                                <th>Cena</th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <ul id="selected-seats" class="list-unstyled"></ul>
+                </div>
+                <div class="box-footer">
+                    <div class="form-group">
+                        <button id="checkout-button" class="btn btn-success"><i class="fa fa-fw fa-save"></i>&nbsp;Prodaj</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mapa sedista -->
+        <div class="col-md-6">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Red/Sedište</h3>
+                    <!--
+                    <div class="pull-right">
+                        Broj sedišta (<span id="counter">0</span>), Total: <b><span id="total">0</span> RSD</b>
+                    </div>
+                    -->
+                </div>
+
+
+                <div class="box-body">
+                    <div id="seat-map">
+                        <div class="front-indicator"></div>
+                    </div>
+                    <div class="form-group">
+                        <div>
+                            <input type="number" max="10" min="1" class="form-control" placeholder="Broj dodatnih stolica">
+                            <span class="help">
+                                Molim Vas unesite broj dodatnih stolica
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="box-footer">
+                    <div class="form-group">
+                        <select id="tip_karte" class="form-control" required="required">
+                            {% for key,value in types %}
+                                <option value="{{ key }}">{{ value }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <button id="checkout-button" class="btn btn-success"><i class="fa fa-fw fa-save"></i>&nbsp;Prodaja</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal modal-danger fade" id="modal-danger">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">?</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Da li ste sigurni?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Odustani</button>
+                    <button type="button" class="btn btn-outline remove-seat" data-entity-id="">Brisanje</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <div class="modal modal-danger fade" id="modal-close-reservation">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Zatvaranje rezervacije</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Da li ste sigurni?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Odustani</button>
+                    <button type="button" id="close_reservation_button" class="btn btn-outline" data-entity-id="">Zatvaranje</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <div class="modal modal-success fade" id="display-reservation-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Rezervacija</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="p_ime" class="form-group">
+                        <label>Ime:</label>
+                        <div class="data"></div>
+                    </div>
+                    <div id="p_prezime" class="form-group">
+                        <label>Prezime:</label>
+                        <div class="data"></div>
+                    </div>
+                    <div id="p_title" class="form-group">
+                        <label>Predstava:</label>
+                        <div class="data"></div>
+                    </div>
+                    <div id="p_datum_predstave" class="form-group">
+                        <label>Datum predstave:</label>
+                        <div class="data"></div>
+                    </div>
+                    <div id="p_scena" class="form-group">
+                        <label>Scena:</label>
+                        <div class="data"></div>
+                    </div>
+                    <div id="p_datum_rezervacije" class="form-group">
+                        <label>Datum rezervacije:</label>
+                        <div class="data"></div>
+                    </div>
+                    <div id="p_sedista" class="form-group">
+                        <label>Red/Sedište:</label>
+                        <div class="data"></div>
+                    </div>
+                    <div id="p_sum" class="form-group">
+                        <label>Cena:</label>
+                        <div class="data"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Zatvori</button>
+                    <button type="button" class="btn btn-outline pull-right" data-dismiss="modal">Prodaja</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+{% endblock %}
+
+
+
+{% block javascripts %}
+    {% javascripts
+        '@admin_lte_all'
+    %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+{% endblock %}
+
+{% block javascripts_inline %}
+    <script type="text/javascript" src="{{ asset('js/jquery.seat-charts.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/dataTables.select.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/loader.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/script.js') }}"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $('#reservations').DataTable({
+
+                columnDefs: [ {
+                    orderable: false,
+                    className: 'select-checkbox',
+                    targets:   0
+                } ],
+                select: {
+                    style:    'multi',
+                    selector: 'td:first-child'
+                },
+
+                'paging'      : true,
+                'lengthChange': false,
+                'searching'   : true,
+                'ordering'    : false,
+                'info'        : true,
+                'autoWidth'   : true,
+            })
+        })
+    </script>
+
+{% endblock %}
+
+{% block avanzu_admin_footer %}
+{% endblock %}

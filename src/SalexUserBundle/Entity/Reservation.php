@@ -143,6 +143,13 @@ class Reservation
     /**
      * @var int
      *
+     * @ORM\Column(name="broj_besplatne", type="integer", options={"default": 0}, nullable=true)
+     */
+    protected $brojBesplatne;
+
+    /**
+     * @var int
+     *
      * @ORM\Column(name="scena", type="integer", options={"default": 0}, nullable=true)
      */
     protected $scena;
@@ -536,6 +543,9 @@ class Reservation
     public function getReservationTypes()
     {
         $a_types = array();
+        if( $this->getBrojBesplatne() ) {
+            $a_types[0] = 'Besplatne';
+        }
         if( $this->getBrojPojedinacne() ) {
             $a_types[1] = 'Pojedinačne';
         }
@@ -616,4 +626,28 @@ class Reservation
         return $sum;
     }
 
+
+    /**
+     * Set brojBesplatne
+     *
+     * @param integer $brojBesplatne
+     *
+     * @return Reservation
+     */
+    public function setBrojBesplatne($brojBesplatne)
+    {
+        $this->brojBesplatne = $brojBesplatne;
+
+        return $this;
+    }
+
+    /**
+     * Get brojBesplatne
+     *
+     * @return integer
+     */
+    public function getBrojBesplatne()
+    {
+        return $this->brojBesplatne;
+    }
 }

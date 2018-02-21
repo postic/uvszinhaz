@@ -7,6 +7,12 @@ li.dropdown.dropdown-language ul.dropdown-menu {
     min-width: 60px !important;
 }
 
+/* Show reservation
+------------------------------------------------- */
+body#show_reservation label {
+    margin-right: 5px;
+}
+
 /* Seats
 ------------------------------------------------- */
 div.seatCharts-container {
@@ -56,6 +62,7 @@ ul.seatCharts-legendList li.seatCharts-legendItem {
 
 /* Add reservation form
 ------------------------------------------------- */
+#salexuserbundle_reservation_brojBesplatne,
 #salexuserbundle_reservation_brojPojedinacne,
 #salexuserbundle_reservation_brojGrupne,
 #salexuserbundle_reservation_brojStudentske,
@@ -114,4 +121,20 @@ h1.pdf {
     background: url(../images/loader.gif) no-repeat center center transparent;
     width: 100%;
     height: 100%;
+}
+
+/* datatable
+------------------------------------------------ */
+table.dataTable tbody td.select-checkbox:before,
+table.dataTable tbody th.select-checkbox:before {
+    content: ' ';
+    margin-top: -6px;
+    margin-left: -6px;
+    border: 1px solid #D2D6DE;
+    border-radius: 0px;
+}
+
+table.dataTable tbody > tr.selected,
+table.dataTable tbody > tr > .selected {
+    background-color: #ECF0F5;
 }

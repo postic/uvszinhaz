@@ -184,6 +184,20 @@ class ReservationFormType extends AbstractType
                 );
 
                 $form->add(
+                    'brojBesplatne',
+                    IntegerType::class,
+                    array(
+                        'label' => false,
+                        'attr' => array(
+                            'placeholder' => 'Broj besplatnih karata',
+                            'min' => 1,
+                            'max' => 10
+                        ),
+                        'required' => false
+                    )
+                );
+
+                $form->add(
                     'brojPojedinacne',
                     IntegerType::class,
                     array(

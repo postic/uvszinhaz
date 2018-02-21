@@ -20,82 +20,54 @@
         <div class="col-md-6">
             <div class="box">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Podaci</h3>
+                    <h3 class="box-title">Podaci o zahtevu/rezervaciji</h3>
+                    {% if item.statusId == 1 %}
+                        <span class="badge bg-light-blue pull-right">Zahtev</span>
+                    {% endif %}
+                    {% if item.statusId == 2 %}
+                        <span class="badge bg-green pull-right">Rezervisano</span>
+                    {% endif %}
                 </div>
                 <div class="box-body">
-                    <div class="form-horizontal">
-
-                        <input id="reservation_id" type="hidden" value="{{ item.id }}" />
-                        <input id="performance_id" type="hidden" value="{{ item.performanceId }}" />
-                        <input id="scena" type="hidden" value="{{ item.scena }}" />
-
-                        <div class="form-group">
-                            <label for="inputName" class="col-sm-3 control-label">Korisnik</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" placeholder="{{ item.firstName }} {{ item.lastName }}" readonly>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputName" class="col-sm-3 control-label">Predstava</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" placeholder="{{ item.performance.title }}" readonly>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputName" class="col-sm-3 control-label">Datum predstave</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" placeholder="{{ item.performance.datum }}" readonly>
-                            </div>
-                        </div>
-                        {% if item.brojPojedinacne %}
-                        <div class="form-group">
-                            <label for="inputName" class="col-sm-3 control-label">Pojedinačne</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" placeholder="{{ item.brojPojedinacne }}" readonly>
-                            </div>
-                        </div>
-                        {% endif %}
-                        {% if item.brojGrupne %}
-                        <div class="form-group">
-                            <label for="inputName" class="col-sm-3 control-label">Grupne</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" placeholder="{{ item.brojGrupne }}" readonly>
-                            </div>
-                        </div>
-                        {% endif %}
-                        {% if item.brojStudentske %}
-                        <div class="form-group">
-                            <label for="inputName" class="col-sm-3 control-label">Studentske</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" placeholder="{{ item.brojStudentske }}" readonly>
-                            </div>
-                        </div>
-                        {% endif %}
-                        {% if item.brojPenzionerske %}
-                        <div class="form-group">
-                            <label for="inputName" class="col-sm-3 control-label">Penzionerske</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" placeholder="{{ item.brojPenzionerske }}" readonly>
-                            </div>
-                        </div>
-                        {% endif %}
-                        <div class="form-group">
-                            <label for="inputName" class="col-sm-3 control-label">Status</label>
-                            <div class="col-sm-9">
-                                {% if item.statusId == 1 %}
-                                    <span class="badge bg-light-blue">Zahtev</span>
-                                {% endif %}
-                                {% if item.statusId == 2 %}
-                                    <span class="badge bg-green">Rezervisano</span>
-                                {% endif %}
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputName" class="col-sm-3 control-label">Datum  kreiranja</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" placeholder="{{ item.createdAt|date('d.m.Y. H:i:s') }}" readonly>
-                            </div>
-                        </div>
+                    <input id="reservation_id" type="hidden" value="{{ item.id }}" />
+                    <input id="performance_id" type="hidden" value="{{ item.performanceId }}" />
+                    <input id="scena" type="hidden" value="{{ item.scena }}" />
+                    <div class="form-group">
+                        <label>Korisnik:</label>{{ item.firstName }} {{ item.lastName }}
+                    </div>
+                    <div class="form-group">
+                        <label>Naziv predstave:</label>{{ item.performance.title }}
+                    </div>
+                    <div class="form-group">
+                        <label>Datum predstave:</label>{{ item.performance.datum }}
+                    </div>
+                    {% if item.brojBesplatne %}
+                    <div class="form-group">
+                        <label>Besplatne karte:</label>{{ item.brojBesplatne }}
+                    </div>
+                    {% endif %}
+                    {% if item.brojPojedinacne %}
+                    <div class="form-group">
+                        <label>Pojedinačne karte:</label>{{ item.brojPojedinacne }}
+                    </div>
+                    {% endif %}
+                    {% if item.brojGrupne %}
+                    <div class="form-group">
+                        <label>Grupne karte:</label>{{ item.brojGrupne }}
+                    </div>
+                    {% endif %}
+                    {% if item.brojStudentske %}
+                    <div class="form-group">
+                        <label>Studentske karte:</label>{{ item.brojStudentske }}
+                    </div>
+                    {% endif %}
+                    {% if item.brojPenzionerske %}
+                    <div class="form-group">
+                        <label>Penzionerske karte:</label>{{ item.brojPenzionerske }}
+                    </div>
+                    {% endif %}
+                    <div class="form-group">
+                        <label>Datum  kreiranja:</label>{{ item.createdAt|date('d.m.Y. H:i:s') }}
                     </div>
                 </div>
             </div>
@@ -121,6 +93,9 @@
                                     Red: {{ seat.seatRow }} / Sedište: {{ seat.seatNumber }}
                                 </td>
                                 <td>
+                                    {% if seat.type == 0 %}
+                                        <span class="badge bg-light-blue">Besplatna</span>
+                                    {% endif %}
                                     {% if seat.type == 1 %}
                                         <span class="badge bg-light-blue">Pojedinačna</span>
                                     {% endif %}
@@ -163,8 +138,15 @@
                     <div id="seat-map">
                         <div class="front-indicator"></div>
                     </div>
+                    <div class="form-group">
+                        <div>
+                            <input type="number" max="10" min="1" class="form-control" placeholder="Broj dodatnih stolica">
+                            <span class="help">
+                                Molim Vas unesite broj dodatnih stolica
+                            </span>
+                        </div>
+                    </div>
                 </div>
-
 
                 <!--
                 <div class="box-body row">
@@ -184,14 +166,14 @@
                 </div>
                 -->
                 <div class="box-footer">
-                    <div class="col-md-6">
+                    <div class="form-group">
                         <select id="tip_karte" class="form-control" required="required">
                             {% for key,value in item.reservationTypes %}
                                 <option value="{{ key }}">{{ value }}</option>
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="col-md-6">
+                    <div class="form-group">
                         <button id="checkout-button" class="btn btn-success"><i class="fa fa-fw fa-save"></i>&nbsp;Snimi</button>
                         <button id="close-reservation-button" class="btn btn-danger" data-toggle="modal" data-target="#modal-close-reservation" data-entity-id="{{ app.request.attributes.get("id") }}"><i class="fa fa-fw fa-lock"></i>&nbsp;Zatvori</button>
                     </div>
