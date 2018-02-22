@@ -37,10 +37,17 @@ class TicketController extends Controller
         // get reservation
         $em = $this->getDoctrine()->getManager();
 //        $reservations = $em->getRepository(Reservation::class)->findBy(array('performanceId' => $id, 'statusId' => 2));
-        $reservations = $em->getRepository(Seat::class)->findAll();
+//        $seats = $em->getRepository(Seat::class)->findAll();
+
+        $seats = $em->getRepository(Seat::class)
+            ->createQueryBuilder('seat')
+            ->join('seat.reservation', 'reservation')
+            ->where('reservation.performanceId = '.$id)
+            ->getQuery()
+            ->getResult();
 
         return $this->render('SalexUserBundle:Ticket:show-ticket.html.twig', array(
-            'reservations' => $reservations,
+            'reservations' => $seats,
             'performance' => $performance[0],
             'types' => $types,
         ));
