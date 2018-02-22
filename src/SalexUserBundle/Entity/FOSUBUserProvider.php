@@ -79,7 +79,7 @@ class FOSUBUserProvider extends BaseClass {
             $user->setEmail($email);
             $user->setPassword($username);
             $user->setEnabled(true);
-            $user->setRoles(['USER_ROLE']);
+            $user->setRoles(['ROLE_USER']);
 
             $user->$setter_first_name($response->getFirstName());
             $user->$setter_last_name($response->getLastName());
