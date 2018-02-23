@@ -64,9 +64,6 @@
                                     {{ item.type }}
                                 </td>
                                 <td>
-                                    {% if item.type == 0 %}
-                                        Besplatna
-                                    {% endif %}
                                     {% if item.type == 1 %}
                                         Pojedinačna
                                     {% endif %}
@@ -78,6 +75,12 @@
                                     {% endif %}
                                     {% if item.type == 4 %}
                                         Penzionerska
+                                    {% endif %}
+                                    {% if item.type == 5 %}
+                                        Besplatna
+                                    {% endif %}
+                                    {% if item.type == 6 %}
+                                        Stručna
                                     {% endif %}
                                 </td>
                                 <td>
