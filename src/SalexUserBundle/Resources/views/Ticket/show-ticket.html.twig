@@ -20,8 +20,9 @@
     <div class="row">
         <div class="col-md-6">
 
-            <input id="performance_id" type="hidden" value="{{ app.request.get('id') }}" />
-            <input id="scena" type="hidden" value="{{ performance['scena'] }}" />
+            <script type="text/javascript">
+                var $performance = {{ performance|json_encode()|raw }};
+            </script>
 
             <!-- Lista rezervacija za predstavu -->
             <div class="box">
@@ -37,6 +38,7 @@
                             <th>Prezime</th>
                             <th>Datum rezervacije</th>
                             <th>Red/Sedište</th>
+                            <th>Tip karte</th>
                             <th>Tip karte</th>
                             <th>Cena</th>
                             <th>&nbsp;</th>
@@ -59,9 +61,9 @@
                                     {{ item.seatRow }}/{{ item.seatNumber }}
                                 </td>
                                 <td>
-                                    {% if item.type == 0 %}
-                                        Besplatna
-                                    {% endif %}
+                                    {{ item.type }}
+                                </td>
+                                <td>
                                     {% if item.type == 1 %}
                                         Pojedinačna
                                     {% endif %}
@@ -74,12 +76,18 @@
                                     {% if item.type == 4 %}
                                         Penzionerska
                                     {% endif %}
+                                    {% if item.type == 5 %}
+                                        Besplatna
+                                    {% endif %}
+                                    {% if item.type == 6 %}
+                                        Stručna
+                                    {% endif %}
                                 </td>
                                 <td>
                                     {{ performance.cena[item.type]|number_format(2, ',', '.') }}
                                 </td>
                                 <td class="pull-right">
-                                    <a data-entity-id="{{ item.id }}" class="display-reservation-btn" data-toggle="modal" data-target="#modal-danger" href="#"><i class="fa fa-trash"></i></a>
+                                    <a data-entity-id="{{ item.id }}" class="delete-button-seat" data-toggle="modal" data-target="#modal-danger" href="#"><i class="fa fa-trash"></i></a>
                                 </td>
                         {% endfor %}
                         </tbody>
@@ -167,8 +175,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
                     <h4 class="modal-title">Brisanje?</h4>
                 </div>
                 <div class="modal-body">
@@ -176,7 +183,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Odustani</button>
-                    <button type="button" class="btn btn-outline remove-seat" data-entity-id="">Brisanje</button>
+                    <button type="button" class="btn btn-outline delete-seat" data-entity-id="">Brisanje</button>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -206,11 +213,17 @@
         $(function () {
             var $table = $('#reservations').DataTable({
 
-                columnDefs: [ {
-                    orderable: false,
-                    className: 'select-checkbox',
-                    targets:   0
-                } ],
+                columnDefs: [
+                    {
+                        targets:   0,
+                        orderable: false,
+                        className: 'select-checkbox'
+                    },
+                    {
+                        targets: 5,
+                        visible: false
+                    }
+                ],
                 select: {
                     style:    'multi',
                     selector: 'td:first-child'
@@ -235,12 +248,61 @@
                     $('#cart-item-'+$data[4].replace("/", "_")).remove();
                 }
                 else {
+                    console.info($performance.cena);
                     // add row
                     $data = $table.row( this ).data();
-                    $('<tr><td>'+$data[4]+'</td><td><select class="form-control"><option>Besplatna</option><option>Pojedinačna</option></select></td><td>'+$data[6]+'</td></tr>')
+                    /*
+                    $('<tr><td>'+$data[4]+'</td><td><select class="form-control"><option>Besplatna</option><option>Pojedinačna</option></select></td><td>'+$data[7]+'</td></tr>')
                         .attr('id', 'cart-item-'+$data[4].replace("/", "_"))
                         .data('seatId', $data[4].replace("/", "_"))
                         .appendTo($cart);
+                    */
+
+
+                    $cart
+                        .append($('<tr>')
+                            .attr('id', 'cart-item-'+$data[4].replace("/", "_"))
+                            .data('seatId', $data[4].replace("/", "_"))
+                            .append($('<td>')
+                                .append($data[4]))
+                            .append($('<td>')
+                                .append($('<select>')
+                                    .attr('id', 'cart-item-type-'+$data[4].replace("/", "_"))
+                                    .addClass('form-control')))
+                            .append($('<td>')
+                                .append($data[7])));
+
+                    $.each($performance.cena, function(key, value) {
+
+                        var $text;
+                        switch(key) {
+                            case '1':
+                                $text = 'Pojedinačna';
+                                break;
+                            case '2':
+                                $text = 'Grupna';
+                                break;
+                            case '3':
+                                $text = 'Studentska';
+                                break;
+                            case '4':
+                                $text = 'Penzionerska';
+                                break;
+                            case '5':
+                                $text = 'Besplatna';
+                                break;
+                            case '6':
+                                $text = 'Stručna';
+                                break;
+                        }
+
+                        $('#cart-item-type-'+$data[4].replace("/", "_"))
+                            .append($('<option></option>')
+                                .attr('value',key)
+                                .attr('data-entity-id',value)
+                                .text($text));
+                    });
+
                 }
 
                 // console.log( $table.row( this ).data() );

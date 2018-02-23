@@ -2,7 +2,7 @@ var firstSeatLabel = 1;
 
 $(document).ready(function() {
 
-    if($('#ticket-map').length > 0 && $('#scena').val() == 1){
+    if($('#ticket-map').length > 0 && $performance['scena'] == 1){
 
         // mreza za veliku scenu
         var $map = [
@@ -97,6 +97,18 @@ $(document).ready(function() {
         load_seats(sc);
     }
 
+    // brisanje sedišta
+    $('.delete-button-seat').on('click', function () {
+        var entityId = $(this).attr('data-entity-id');
+        $('.delete-seat').attr('data-entity-id', entityId);
+    });
+
+    $('.delete-seat').click(function () {
+        var entityId = $(this).attr('data-entity-id');
+        var url = Routing.generate('remove_seat', {'id': entityId});
+        window.location.href = url;
+    });
+
 });
 
 function recalculateTotal(sc) {
@@ -118,7 +130,7 @@ function get_seats(sc) {
 
 function load_seats(sc) {
     var $loader = new ajaxLoader($('.wrapper'));
-    var entityId = $('#performance_id').val(); // $('#reservation_id').val();
+    var entityId = $performance.ID; // $('#reservation_id').val();
     var url = Routing.generate('list_seats', {'id': entityId});
     $.ajax({
         type: 'POST',
