@@ -36,8 +36,6 @@ class TicketController extends Controller
 
         // get reservation
         $em = $this->getDoctrine()->getManager();
-//        $reservations = $em->getRepository(Reservation::class)->findBy(array('performanceId' => $id, 'statusId' => 2));
-//        $seats = $em->getRepository(Seat::class)->findAll();
 
         $seats = $em->getRepository(Seat::class)
             ->createQueryBuilder('seat')
@@ -58,9 +56,6 @@ class TicketController extends Controller
         $a_types = array();
         $a_cena = $this->get('salex_user.uvszinhaz_listener')->getPerformance($id)[0]['cena'];
         foreach ($a_cena as $key=>$value) {
-            if ($key == 5) {
-                $a_types[5] = 'Besplatne';
-            }
             if ($key == 1) {
                 $a_types[1] = 'Pojedinačne';
             }
@@ -73,8 +68,29 @@ class TicketController extends Controller
             if ($key == 4) {
                 $a_types[4] = 'Penzionerske';
             }
+            if ($key == 5) {
+                $a_types[5] = 'Besplatne';
+            }
+            if ($key == 6) {
+                $a_types[6] = 'Stručne';
+            }
         }
         return $a_types;
+    }
+
+    /**
+     * @Route("/remove/seat/{id}", name="remove_seat", options={"expose"=true}, requirements={"id": "\d+"})
+     * @return RedirectResponse
+     */
+    public function deleteAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $item = $em->getRepository(Seat::class)->findOneBy(array('id' => $id));
+        $reservation = $item->getReservation();
+        $performance_id = $reservation->getPerformanceId();
+        $em->remove($item);
+        $em->flush();
+        return new RedirectResponse($this->generateUrl('show_ticket', array('id' => $performance_id)));
     }
 
 }

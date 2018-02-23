@@ -558,6 +558,9 @@ class Reservation
         if( $this->getBrojPenzionerske() ) {
             $a_types[4] = 'Penzionerske';
         }
+        if( $this->getBrojPenzionerske() ) {
+            $a_types[5] = 'Stručne';
+        }
         return $a_types;
     }
 
