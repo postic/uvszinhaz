@@ -113,7 +113,7 @@
                         <tfoot>
                             <tr>
                                 <td colspan="2">Ukupno:</td>
-                                <td>0,00 RSD</td>
+                                <td><span id="sum">0,00</span> RSD</td>
                             </tr>
                         </tfoot>
                     </table>
@@ -244,21 +244,12 @@
 
                 if ( $(this).parent('tr').hasClass('selected') ) {
                     // remove row
-                    $data = $table.row( this ).data();
+                    var $data = $table.row( this ).data();
                     $('#cart-item-'+$data[4].replace("/", "_")).remove();
                 }
                 else {
-                    console.info($performance.cena);
                     // add row
-                    $data = $table.row( this ).data();
-                    /*
-                    $('<tr><td>'+$data[4]+'</td><td><select class="form-control"><option>Besplatna</option><option>Pojedinačna</option></select></td><td>'+$data[7]+'</td></tr>')
-                        .attr('id', 'cart-item-'+$data[4].replace("/", "_"))
-                        .data('seatId', $data[4].replace("/", "_"))
-                        .appendTo($cart);
-                    */
-
-
+                    var $data = $table.row( this ).data();
                     $cart
                         .append($('<tr>')
                             .attr('id', 'cart-item-'+$data[4].replace("/", "_"))
@@ -270,7 +261,10 @@
                                     .attr('id', 'cart-item-type-'+$data[4].replace("/", "_"))
                                     .addClass('form-control')))
                             .append($('<td>')
-                                .append($data[7])));
+                                .append($('<span>')
+                                    .attr('id', 'cart-item-price-'+$data[4].replace("/", "_"))
+                                    .addClass('cart-item-price')
+                                    .append($data[7]))));
 
                     $.each($performance.cena, function(key, value) {
 
@@ -302,11 +296,25 @@
                                 .attr('data-entity-id',value)
                                 .text($text));
                     });
+                    $('#cart-item-type-'+$data[4].replace("/", "_")).val($data[5]);
 
+                    $('#cart-item-type-'+$data[4].replace("/", "_")).change(function() {
+                        var $sum = 0;
+                        // console.info($(this).val());
+                        var $price = $('option:selected', this).attr('data-entity-id');
+                        $('#cart-item-price-'+$data[4].replace("/", "_")).text($price);
+
+
+                        $('.cart-item-price').each(function() {
+                            $sum = $sum + parseInt($(this).text());
+                        });
+
+                        $('#sum').text($sum);
+
+
+                    });
                 }
-
-                // console.log( $table.row( this ).data() );
-            } );
+            });
         })
     </script>
 

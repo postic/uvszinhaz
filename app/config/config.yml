@@ -183,3 +183,18 @@ knp_snappy:
         enabled:    true
         binary:     '%kernel.root_dir%/../vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64'
         options:    []
+
+easy_admin:
+    site_name: 'Novosadsko pozoriste'
+    design:
+        form_theme: 'vertical'
+    entities:
+        User:
+            class: SalexUserBundle\Entity\User
+            list:
+                fields: ['firstName', 'lastName', 'email', 'enabled']
+
+            form:  # <-- 'form' is applied to both 'new' and 'edit' views
+                            fields:
+                                - 'id'
+                                - { property: 'email', type: 'email', label: 'Contact' }

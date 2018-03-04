@@ -180,7 +180,6 @@ $(document).ready(function() {
             dataType: 'json',
             url: url,
             success: function (data) {
-                console.info(data);
                 $loader.remove();
                 var $modal = '';
                 switch (data.p_status_id) {
@@ -268,10 +267,6 @@ $(document).ready(function() {
                 $('#salexuserbundle_reservation_scena').val($scena);
                 for( var $i in $cene ) {
                     switch($i) {
-                        case '0':
-                            $('#salexuserbundle_reservation_brojBesplatne').show();
-                            $('#salexuserbundle_reservation_brojBesplatne').after( "<span class='help'>Besplatna karta</span>" );
-                            break;
                         case '1':
                             $('#salexuserbundle_reservation_brojPojedinacne').show();
                             $('#salexuserbundle_reservation_brojPojedinacne').after( "<span class='help'>Cena jedne karte: "+ parseFloat($cene[$i]).toFixed(2).replace(".", ",") +"</span>" );
@@ -287,6 +282,10 @@ $(document).ready(function() {
                         case '4':
                             $('#salexuserbundle_reservation_brojPenzionerske').show();
                             $('#salexuserbundle_reservation_brojPenzionerske').after( "<span class='help'>Cena jedne karte: "+ parseFloat($cene[$i]).toFixed(2).replace(".", ",") +"</span>" );
+                            break;
+                        case '5':
+                            $('#salexuserbundle_reservation_brojBesplatne').show();
+                            $('#salexuserbundle_reservation_brojBesplatne').after( "<span class='help'>Besplatna karta</span>" );
                             break;
                     }
                 }
