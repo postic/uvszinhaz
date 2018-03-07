@@ -248,6 +248,7 @@
                     $('#cart-item-'+$data[4].replace("/", "_")).remove();
                 }
                 else {
+
                     // add row
                     var $data = $table.row( this ).data();
                     $cart
@@ -298,22 +299,23 @@
                     });
                     $('#cart-item-type-'+$data[4].replace("/", "_")).val($data[5]);
 
+                    // Izracunavanje sume
                     $('#cart-item-type-'+$data[4].replace("/", "_")).change(function() {
-                        var $sum = 0;
-                        // console.info($(this).val());
+                        $sum = 0;
                         var $price = $('option:selected', this).attr('data-entity-id');
                         $('#cart-item-price-'+$data[4].replace("/", "_")).text($price);
-
-
                         $('.cart-item-price').each(function() {
                             $sum = $sum + parseInt($(this).text());
                         });
-
                         $('#sum').text($sum);
-
-
                     });
                 }
+                // Izracunavanje sume
+                var $sum = 0;
+                $('.cart-item-price').each(function() {
+                    $sum = $sum + parseInt($(this).text());
+                });
+                $('#sum').text($sum);
             });
         })
     </script>
