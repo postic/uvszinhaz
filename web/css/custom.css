@@ -29,6 +29,7 @@ div.seatCharts-container div.seatCharts-cell {
     margin: 0.35% !important;
     width: 3.8% !important;
 }
+
 div.seatCharts-seat {
     color: #ffffff !important;
     font-size: 12px;
@@ -38,6 +39,9 @@ div.seatCharts-seat.available.first-class {
 }
 div.seatCharts-seat.available {
     background-color: #3a78c3;
+}
+div.seatCharts-seat.unavailable.reserve {
+    background-color: #FFC400;
 }
 div.seatCharts-seat.selected {
     background-color: #e6cac4;

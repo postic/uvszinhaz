@@ -23,7 +23,7 @@ class Seat
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Reservation", inversedBy="seats")
+     * @ORM\ManyToOne(targetEntity="SalexUserBundle\Entity\Reservation", inversedBy="seats")
      * @ORM\JoinColumn(name="reservation_id", referencedColumnName="id")
      */
     private $reservation;
@@ -41,6 +41,20 @@ class Seat
      * @ORM\Column(name="type", type="integer", options={"default": 0}, nullable=true)
      */
     private $type;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="status_id", type="integer", options={"default": 0}, nullable=true)
+     */
+    private $statusId;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="performance_id", type="integer")
+     */
+    private $performanceId;
 
     /**
      * Get id
@@ -144,5 +158,77 @@ class Seat
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * Set statusId
+     *
+     * @param integer $statusId
+     *
+     * @return Seat
+     */
+    public function setStatusId($statusId)
+    {
+        $this->statusId = $statusId;
+
+        return $this;
+    }
+
+    /**
+     * Get statusId
+     *
+     * @return integer
+     */
+    public function getStatusId()
+    {
+        return $this->statusId;
+    }
+
+    /**
+     * Set performanceId
+     *
+     * @param integer $performanceId
+     *
+     * @return Seat
+     */
+    public function setPerformanceId($performanceId)
+    {
+        $this->performanceId = $performanceId;
+
+        return $this;
+    }
+
+    /**
+     * Get performanceId
+     *
+     * @return integer
+     */
+    public function getPerformanceId()
+    {
+        return $this->performanceId;
+    }
+
+    /**
+     * Set ticket
+     *
+     * @param \SalexUserBundle\Entity\Ticket $ticket
+     *
+     * @return Seat
+     */
+    public function setTicket(\SalexUserBundle\Entity\Ticket $ticket = null)
+    {
+        $this->ticket = $ticket;
+
+        return $this;
+    }
+
+    /**
+     * Get ticket
+     *
+     * @return \SalexUserBundle\Entity\Ticket
+     */
+    public function getTicket()
+    {
+        return $this->ticket;
     }
 }

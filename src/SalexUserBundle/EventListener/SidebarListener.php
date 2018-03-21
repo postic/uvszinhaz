@@ -50,6 +50,7 @@ class SidebarListener
         elseif($this->container->get('security.authorization_checker')->isGranted('ROLE_SALE')) {
             $rootItems = array (
                 $upcoming_performances = new MenuItemModel('upcoming-performances', 'Lista predstava', 'list_upcoming_performances', $earg, 'fa fa-circle-o'),
+                $box_office = new MenuItemModel('box-office', 'Blagajna', 'list_tickets', $earg, 'fa fa-circle-o'),
             );
         }
         else {

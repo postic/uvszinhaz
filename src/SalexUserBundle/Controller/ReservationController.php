@@ -113,7 +113,7 @@ class ReservationController extends Controller
         $pagination = $paginator->paginate(
             $query,
             $request->query->getInt('page', 1),
-            5
+            10
         );
         $pagination->setTemplate('KnpPaginatorBundle:Pagination:foundation_v5_pagination.html.twig');
         return $this->render("SalexUserBundle:Reservation:list-my-reservations.html.twig", array(

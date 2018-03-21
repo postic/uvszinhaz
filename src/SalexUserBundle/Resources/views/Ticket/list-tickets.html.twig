@@ -1,0 +1,119 @@
+{% extends 'AvanzuAdminThemeBundle:layout:base-layout.html.twig' %}
+{% block page_title %}Blagajna{% endblock %}
+{% block page_subtitle %}{% endblock %}
+
+{% block page_content %}
+
+    <div class="box">
+        <div class="box-header with-border">
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="box-body">
+            <form method="get" action="{{ path('list_tickets') }}">
+                {{ form_rest(form) }}
+                <button class="btn-default btn" type="submit" name="submit-filter">
+                    <i class="fa fa-search"></i>&nbsp;Find
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="box">
+        <div class="box-body">
+            <table id="items" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th>Predstava</th>
+                    <th>Datum</th>
+                    <th>Sedište</th>
+                    <th>Cena</th>
+                    <th>Tip karte</th>
+                    <th>{{ knp_pagination_sortable(pagination, 'Datum prodaje', 'r.createdAt') }}</th>
+                    <th>&nbsp;</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in pagination %}
+                    <tr>
+                        <td>
+                            {{ item.performance.title }}
+                        </td>
+                        <td>
+                            {{ item.performance.datum }}
+                        </td>
+                        <td>
+                            {{ item.seat.seatRow }}/{{ item.seat.seatNumber }}
+                        </td>
+                        <td>
+                            {{ item.cena|number_format(2, ',', '.') }}
+                        </td>
+                        <td>
+                            {% if item.seat.type == 1 %}
+                                Pojedinačna
+                            {% endif %}
+                            {% if item.seat.type == 2 %}
+                                Grupna
+                            {% endif %}
+                            {% if item.seat.type == 3 %}
+                                Studentska
+                            {% endif %}
+                            {% if item.seat.type == 4 %}
+                                Penzionerska
+                            {% endif %}
+                            {% if item.seat.type == 5 %}
+                                Besplatna
+                            {% endif %}
+                            {% if item.seat.type == 6 %}
+                                Stručna
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ item.createdAt|date('d.m.Y. H:i:s') }}
+                        </td>
+                        <td class="pull-right">
+                            <a href data-toggle="modal" data-target="#storno-ticket-modal" data-entity-id="{{ item.id }}" class="storno-ticket-btn"><i class="fa fa-trash"></i></a>&nbsp;
+                            <a href="{{ path('print_reservation', { 'id': item.id }) }}" target="_blank"><i class="fa fa-print"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {# display navigation #}
+            <div class="navigation">
+                {{ knp_pagination_render(pagination) }}
+            </div>
+        </div>
+    </div>
+
+    <div class="modal modal-danger fade" id="storno-ticket-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Storniranje prodate karte</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Da li ste sigurni da želite da stornirate kartu?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Odustani</button>
+                    <button type="button" class="btn btn-outline delete-ticket" data-entity-id="">Storniranje</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+{% endblock %}
+
+{% block javascripts_inline %}
+    <script type="text/javascript" src="{{ asset('js/jquery.seat-charts.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/script.js') }}"></script>
+{% endblock %}
+
+{% block avanzu_admin_footer %}
+{% endblock %}

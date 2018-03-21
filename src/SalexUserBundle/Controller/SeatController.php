@@ -27,6 +27,7 @@ class SeatController extends Controller
         // get reservation
         $em = $this->getDoctrine()->getManager();
         $reservation = $em->getRepository(Reservation::class)->findOneBy(array('id' => $id));
+        $performance_id = $reservation->getPerformanceId();
         $seats = $a_resp->seats;
         $num = sizeof($seats);
 
@@ -63,11 +64,12 @@ class SeatController extends Controller
         else {
 
             foreach ($seats as $item) {
-                // $reservation->setStatusId(2);
                 $seat = new Seat();
                 $seat->setReservation($reservation);
                 $seat->setSeat($item);
                 $seat->setType($tip_karte);
+                $seat->setPerformanceId($performance_id);
+                $seat->setStatusId(0);
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($seat);
                 $em->flush();
@@ -77,12 +79,12 @@ class SeatController extends Controller
     }
 
     /**
-     * @Route("/list/seats/{id}", name="list_seats", options={"expose"=true}, requirements={"id": "\d+"})
+     * @Route("/list/reservation/seats/{id}", name="list_reservation_seats", options={"expose"=true}, requirements={"id": "\d+"})
      * @return RedirectResponse
      */
-    public function listAction(Request $request, $id = 0)
+    public function listReservationSeatsAction(Request $request, $id = 0)
     {
-       $seats = $this->getDoctrine()
+        $seats = $this->getDoctrine()
             ->getEntityManager()
             ->createQueryBuilder()
             ->select('s')
@@ -95,7 +97,26 @@ class SeatController extends Controller
 
         $a_resp = array();
         foreach($seats as $seat){
-            $a_resp[] = $seat->getSeat();
+            $a_resp[] = array('seat'=>$seat->getSeat(),'type'=>$seat->getType(),'status'=>$seat->getStatusId());
+        }
+        $resp = json_encode($a_resp);
+
+        return new Response($resp);
+    }
+
+    /**
+     * @Route("/list/seats/{id}", name="list_seats", options={"expose"=true}, requirements={"id": "\d+"})
+     * @return RedirectResponse
+     */
+    public function listAction(Request $request, $id = 0)
+    {
+        // get reservation
+        $em = $this->getDoctrine()->getManager();
+        $seats = $em->getRepository(Seat::class)->findBy(array('performanceId' => $id));
+
+        $a_resp = array();
+        foreach($seats as $seat){
+            $a_resp[] = array('seat'=>$seat->getSeat(),'type'=>$seat->getType(),'status'=>$seat->getStatusId());
         }
         $resp = json_encode($a_resp);
 

@@ -3,6 +3,7 @@
 namespace SalexUserBundle\Controller;
 
 use SalexUserBundle\Entity\Reservation;
+use SalexUserBundle\Entity\Ticket;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -12,6 +13,39 @@ use SalexUserBundle\Entity\Seat;
 
 class TicketController extends Controller
 {
+
+
+    /**
+     * @Route("/list/tickets", name="list_tickets")
+     * @return RedirectResponse
+     */
+    public function listTicketsAction(Request $request)
+    {
+        $user = $this->getUser();
+        $user_id = $user->getId();
+        $filterBuilder = $this->get('doctrine.orm.entity_manager')
+            ->getRepository(Ticket::class)
+            ->createQueryBuilder('r');
+        $filterBuilder->orderBy('r.createdAt', 'desc');
+
+        $form = $this->get('form.factory')->create('SalexUserBundle\Filter\TicketFilterType');
+        if ($request->query->has($form->getName())) {
+            $form->submit($request->query->get($form->getName()));
+            $this->get('lexik_form_filter.query_builder_updater')->addFilterConditions($form, $filterBuilder);
+        }
+        $query = $filterBuilder->getQuery();
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            10
+        );
+        $pagination->setTemplate('KnpPaginatorBundle:Pagination:foundation_v5_pagination.html.twig');
+        return $this->render("SalexUserBundle:Ticket:list-tickets.html.twig", array(
+            'pagination' => $pagination,
+            'form' => $form->createView(),
+        ));
+    }
 
     /**
      * @Route("/upcoming-performances", name="list_upcoming_performances")
@@ -36,13 +70,7 @@ class TicketController extends Controller
 
         // get reservation
         $em = $this->getDoctrine()->getManager();
-
-        $seats = $em->getRepository(Seat::class)
-            ->createQueryBuilder('seat')
-            ->join('seat.reservation', 'reservation')
-            ->where('reservation.performanceId = '.$id)
-            ->getQuery()
-            ->getResult();
+        $seats = $em->getRepository(Seat::class)->findBy(array('performanceId' => $id, 'statusId' => 0));
 
         return $this->render('SalexUserBundle:Ticket:show-ticket.html.twig', array(
             'reservations' => $seats,
@@ -91,6 +119,72 @@ class TicketController extends Controller
         $em->remove($item);
         $em->flush();
         return new RedirectResponse($this->generateUrl('show_ticket', array('id' => $performance_id)));
+    }
+
+    /**
+     * @Route("/add/ticket", name="add_ticket", options={"expose"=true})
+     * @return RedirectResponse
+     */
+    public function addAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $resp = $request->getContent();
+        $a_resp = json_decode($resp);
+        $performance_id = $a_resp->performance_id;
+        $seats = $a_resp->seats;
+
+        foreach ($seats as $item) {
+
+            if ($item->seat_id == null) { // Kreiranje sedista u tabeli Seat ukoliko ne postoji
+
+                $new_seat = new Seat();
+                $new_seat->setPerformanceId(intval($item->performance_id));
+                $new_seat->setType(intval($item->type));
+                $new_seat->setSeat($item->seat_number); // TODO !!!!!
+                $new_seat->setStatusId(1);
+                $new_seat->setReservation(null);
+                $em->persist($new_seat);
+                $em->flush();
+
+                $ticket = new Ticket();
+                $ticket->setCena(intval($item->price));
+                $ticket->setCreatedAt(new \DateTime());
+                $ticket->setPerformanceId(intval($item->performance_id));
+                $ticket->setSeat($new_seat);
+                $em->persist($ticket);
+                $em->flush();
+
+            } else { // Update record
+
+                $seat = $em->getRepository(Seat::class)->findOneBy(array('id' => $item->seat_id));
+                $seat->setStatusId(1);
+                $em->flush();
+
+                $ticket = new Ticket();
+                $ticket->setCena(intval($item->price));
+                $ticket->setCreatedAt(new \DateTime());
+                $ticket->setPerformanceId(intval($item->performance_id));
+                $ticket->setSeat($seat);
+                $em->persist($ticket);
+                $em->flush();
+            }
+
+        }
+
+        return new Response($performance_id);
+    }
+
+    /**
+     * @Route("/delete/ticket/{id}", name="delete_ticket", options={"expose"=true}, requirements={"id": "\d+"})
+     * @return RedirectResponse
+     */
+    public function deleteTicketAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $item = $em->getRepository(Ticket::class)->findOneBy(array('id' => $id));
+        $em->remove($item);
+        $em->flush();
+        return new RedirectResponse($this->generateUrl('list_tickets' ));
     }
 
 }

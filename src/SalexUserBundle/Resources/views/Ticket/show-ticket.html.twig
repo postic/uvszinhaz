@@ -41,6 +41,7 @@
                             <th>Tip karte</th>
                             <th>Tip karte</th>
                             <th>Cena</th>
+                            <th>Seat ID</th>
                             <th>&nbsp;</th>
                         </tr>
                         </thead>
@@ -52,7 +53,7 @@
                                     {{ item.reservation.firstName }}
                                 </td>
                                 <td>
-                                    {{ item.reservation.lastName  }}
+                                    {{ item.reservation.lastName }}
                                 </td>
                                 <td>
                                     {{ item.reservation.createdAt|date('d.m.Y. H:i') }}
@@ -86,9 +87,13 @@
                                 <td>
                                     {{ performance.cena[item.type]|number_format(2, ',', '.') }}
                                 </td>
+                                <td>
+                                    {{ item.id }}
+                                </td>
                                 <td class="pull-right">
                                     <a data-entity-id="{{ item.id }}" class="delete-button-seat" data-toggle="modal" data-target="#modal-danger" href="#"><i class="fa fa-trash"></i></a>
                                 </td>
+
                         {% endfor %}
                         </tbody>
                     </table>
@@ -121,7 +126,7 @@
                 </div>
                 <div class="box-footer">
                     <div class="form-group">
-                        <button id="checkout-button" class="btn btn-success"><i class="fa fa-fw fa-save"></i>&nbsp;Prodaj</button>
+                        <button id="checkout-button" class="btn btn-success" data-toggle="modal" data-target="#modal-print"><i class="fa fa-fw fa-save"></i>&nbsp;Prodaj</button>
                     </div>
                 </div>
             </div>
@@ -132,11 +137,6 @@
             <div class="box">
                 <div class="box-header with-border">
                     <h3 class="box-title">Red/Sedište</h3>
-                    <!--
-                    <div class="pull-right">
-                        Broj sedišta (<span id="counter">0</span>), Total: <b><span id="total">0</span> RSD</b>
-                    </div>
-                    -->
                 </div>
                 <div class="box-body">
                     <div id="ticket-map">
@@ -191,6 +191,26 @@
         <!-- /.modal-dialog -->
     </div>
     <!-- /.modal -->
+    <div class="modal modal-danger fade" id="modal-print">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                    <h4 class="modal-title">Prodaja karata?</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Da li ste sigurni da želite da prodate karte?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Odustani</button>
+                    <button type="button" id="sell-tickets" class="btn btn-outline" data-entity-id="">Prodaj</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
 
 {% endblock %}
 
@@ -210,7 +230,12 @@
     <script type="text/javascript" src="{{ asset('js/ticket.js') }}"></script>
 
     <script type="text/javascript">
+
         $(function () {
+
+            // Kreiranje objekta koji ce se upisivati u bazu !!!!!!!!!!
+            var $db = new Object();
+
             var $table = $('#reservations').DataTable({
 
                 columnDefs: [
@@ -221,6 +246,10 @@
                     },
                     {
                         targets: 5,
+                        visible: false
+                    },
+                    {
+                        targets: 8,
                         visible: false
                     }
                 ],
@@ -237,19 +266,22 @@
                 'autoWidth'   : true,
             });
 
-
             $('#reservations tbody').on( 'click', 'tr td.select-checkbox', function () {
 
                 var $cart = $('#tickets tbody');
 
                 if ( $(this).parent('tr').hasClass('selected') ) {
-                    // remove row
+
+                    // brisanje reda
                     var $data = $table.row( this ).data();
                     $('#cart-item-'+$data[4].replace("/", "_")).remove();
+                    delete $db[$data[4].replace("/", "_")];
+                    // console.info($db);
+
                 }
                 else {
 
-                    // add row
+                    // kreiranje reda
                     var $data = $table.row( this ).data();
                     $cart
                         .append($('<tr>')
@@ -297,9 +329,23 @@
                                 .attr('data-entity-id',value)
                                 .text($text));
                     });
+
                     $('#cart-item-type-'+$data[4].replace("/", "_")).val($data[5]);
 
-                    // Izracunavanje sume
+                    // Kreiranje item-a koji se upisuje u bazu
+                    var $object = new Object();
+                    $object.seat_id = $data[8];
+                    $object.seat_number = $data[4].replace("/", "_");
+                    $object.type = $data[5];
+                    $object.price = $data[7];
+                    $object.performance_id = $performance.ID;
+                    $object.title = $performance.title;
+
+                    // Dodavanje record-a u objekat koji se kasnije upisuje u bazu
+                    $db[$object.seat_number] = $object;
+                    // console.info($db);
+
+                    // Izracunavanje sume na akciju promene tipa karte
                     $('#cart-item-type-'+$data[4].replace("/", "_")).change(function() {
                         $sum = 0;
                         var $price = $('option:selected', this).attr('data-entity-id');
@@ -310,13 +356,225 @@
                         $('#sum').text($sum);
                     });
                 }
+
+                // Izracunavanje sume na akciju dodavanja item-a
+                var $sum = 0;
+                $('.cart-item-price').each(function() {
+                    $sum = $sum + parseInt($(this).text());
+                });
+                $('#sum').text($sum);
+
+            });
+
+            $('#sell-tickets').click( function (e) {
+                var $url = Routing.generate('add_ticket');
+                var $retval = new Object();
+                $retval['seats'] = $db;
+                $retval['performance_id'] = $performance.ID;
+                var $data = JSON.stringify($retval);
+                $.ajax({
+                    type: 'POST',
+                    data: $data,
+                    dataType: 'json',
+                    url: $url,
+                    success: function (data) {
+                        var $retval = Routing.generate('show_ticket', {'id': data});
+                        window.location.href = $retval;
+                    }
+                })
+            });
+
+
+            if ( $('#ticket-map').length > 0 ){
+
+                // mreza za veliku scenu
+                var $map = [
+                    '_ffffffffffffffffff_',
+                    '_ffffffffffffffffff_',
+                    '_ffffffffffffffffff_',
+                    '_ffffffffffffffffff_',
+                    '_ffffffffffffffffff_',
+                    '_ffffffffffffffffff_',
+                    '_ffffffffffffffffff_',
+                    '_ffffffffffffffffff_',
+                    '_ffffffffffffffffff_',
+                    '_ffffffffffffffffff_',
+                    'ffffffffffffffffffff',
+                    '_bbbbbbbbbbbbbbbbbb_',
+                    '_bbbbbbbbbbbbbbbbbb_'
+                ];
+
+                var sc = $('#ticket-map').seatCharts({
+                    map: $map,
+                    seats: {
+                        f: {
+                            classes : 'first-class' //your custom CSS class
+                        },
+                        b: {
+                            classes : 'balcony-class' //your custom CSS class
+                        }
+                    },
+                    naming : {
+                        top : false,
+                        left : true,
+                        right : true,
+                        getId  : function(character, row, column) {
+                            if(row != 11 ) {
+                                column = parseInt(column)-1;
+                                return row + '_' + column.toString();
+                            }
+                            else return row + '_' + column;
+                        },
+                        getLabel : function (character, row, column) {
+                            if(row != 11 ) {
+                                column = parseInt(column)-1;
+                                return column.toString();
+                            }
+                            else return column;
+                        }
+                    },
+                    legend : {
+                        node : $('#legend'),
+                        items : [
+                            [ 'f', 'available',   'Slobodna sedišta' ],
+                            [ 'f', 'unavailable', 'Zauzeta sedišta']
+                        ]
+                    },
+                    click: function () {
+                        if (this.status() == 'available') {
+
+                            create_row_ticket(this.settings.id);
+
+                            // Izracunavanje sume
+                            var $sum = 0;
+                            $('.cart-item-price').each(function() {
+                                $sum = $sum + parseInt($(this).text());
+                            });
+                            $('#sum').text($sum);
+
+                            return 'selected';
+
+                        } else if (this.status() == 'selected') {
+
+                            delete $db[this.settings.id];
+                            // console.info($db);
+
+                            //remove the item from our cart
+                            $('#cart-item-'+this.settings.id).remove();
+
+                            // Izracunavanje sume
+                            var $sum = 0;
+                            $('.cart-item-price').each(function() {
+                                $sum = $sum + parseInt($(this).text());
+                            });
+                            $('#sum').text($sum);
+
+                            return 'available';
+
+                        } else if (this.status() == 'unavailable') {
+
+                            //seat has been already booked
+                            return 'unavailable';
+
+                        } else {
+
+                            return this.style();
+
+                        }
+                    }
+                });
+                load_seats(sc);
+            }
+
+            var create_row_ticket = function($data){
+
+                var $cart = $('#tickets tbody');
+                // add row
+                $cart
+                    .append($('<tr>')
+                        .attr('id', 'cart-item-'+$data)
+                        .data('seatId', $data)
+                        .append($('<td>')
+                            .append($data.replace("_", "/")))
+                        .append($('<td>')
+                            .append($('<select>')
+                                .attr('id', 'cart-item-type-'+$data)
+                                .addClass('form-control')))
+                        .append($('<td>')
+                            .append($('<span>')
+                                .attr('id', 'cart-item-price-'+$data)
+                                .addClass('cart-item-price')
+                                .append($performance.cena[1]))));
+
+                $.each($performance.cena, function(key, value) {
+
+                    var $text;
+                    switch(key) {
+                        case '1':
+                            $text = 'Pojedinačna';
+                            break;
+                        case '2':
+                            $text = 'Grupna';
+                            break;
+                        case '3':
+                            $text = 'Studentska';
+                            break;
+                        case '4':
+                            $text = 'Penzionerska';
+                            break;
+                        case '5':
+                            $text = 'Besplatna';
+                            break;
+                        case '6':
+                            $text = 'Stručna';
+                            break;
+                    }
+
+                    $('#cart-item-type-'+$data)
+                        .append($('<option></option>')
+                            .attr('value',key)
+                            .attr('data-entity-id',value)
+                            .text($text));
+                });
+                $('#cart-item-type-'+$data).val(1);
+
+                // Izracunavanje sume
+                $('#cart-item-type-'+$data).change(function() {
+                    $sum = 0;
+                    var $price = $('option:selected', this).attr('data-entity-id');
+                    $('#cart-item-price-'+$data).text($price);
+                    $('.cart-item-price').each(function() {
+                        $sum = $sum + parseInt($(this).text());
+                    });
+                    $('#sum').text($sum);
+                    $db[$data].price = $price;
+                    $db[$data].type = $(this).val();
+                    // console.info($db);
+                });
+
                 // Izracunavanje sume
                 var $sum = 0;
                 $('.cart-item-price').each(function() {
                     $sum = $sum + parseInt($(this).text());
                 });
                 $('#sum').text($sum);
-            });
+
+
+                // Kreiranje item-a koji se upisuje u bazu !!!!!!!!!!
+                var $object = new Object();
+                $object.seat_id = null;
+                $object.type = 1;
+                $object.price = $performance.cena[1];
+                $object.seat_number = $data;
+                $object.performance_id = $performance.ID;
+                $object.performance_title = $performance.title;
+
+                // Dodavanje record-a u objekat !!!!!!!!!!
+                $db[$object.seat_number] = $object;
+                // console.info($db);
+
+            };
+
         })
     </script>
 

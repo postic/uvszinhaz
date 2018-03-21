@@ -29,11 +29,6 @@ class Reservation
      */
     private $seats;
 
-    public function __construct()
-    {
-        $this->seats = new ArrayCollection();
-    }
-
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="reservations")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")

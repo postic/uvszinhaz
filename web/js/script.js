@@ -54,11 +54,6 @@ $(document).ready(function() {
                         }
                         else return column;
                     }
-                    /*
-                    getLabel : function (character, row, column) {
-                        return null; // firstSeatLabel++;
-                    },
-                    */
                 },
                 legend : {
                     node : $('#legend'),
@@ -69,27 +64,17 @@ $(document).ready(function() {
                 },
                 click: function () {
                     if (this.status() == 'available') {
-                        console.info(this);
-                        //let's create a new <li> which we'll add to the cart items
-                        // $('<li>'+this.data().category+' Seat # '+this.settings.label+': <b>$'+this.data().price+'</b> <a href="#" class="cancel-cart-item">[cancel]</a></li>')
+                        // console.info(this);
                         $('<li>'+this.data().category+': <b>'+this.settings.id+'</b></li>')
                             .attr('id', 'cart-item-'+this.settings.id)
                             .data('seatId', this.settings.id)
                             .appendTo($cart);
-                        $counter.text(sc.find('selected').length+1);
-                        $total.text(recalculateTotal(sc)+this.data().price);
                         return 'selected';
                     } else if (this.status() == 'selected') {
-                        //update the counter
-                        $counter.text(sc.find('selected').length-1);
-                        //and total
-                        $total.text(recalculateTotal(sc)-this.data().price);
                         //remove the item from our cart
                         $('#cart-item-'+this.settings.id).remove();
-                        //seat has been vacated
                         return 'available';
                     } else if (this.status() == 'unavailable') {
-                        //seat has been already booked
                         return 'unavailable';
                     } else {
                         return this.style();
@@ -124,6 +109,18 @@ $(document).ready(function() {
         window.location.href = url;
     });
 
+    // zatvaranje rezervacije
+    $('#close-reservation-button').on('click', function () {
+        var reservationId = $(this).attr('data-entity-id');
+        $('#close_reservation_button').attr('data-entity-id', reservationId);
+    });
+
+    $('#close_reservation_button').click(function () {
+        var reservationId = $(this).attr('data-entity-id');
+        var url = Routing.generate('close_reservation', {'id': reservationId});
+        window.location.href = url;
+    });
+
     // brisanje sedišta
     $('.delete-btn-seat').on('click', function () {
         var entityId = $(this).attr('data-entity-id');
@@ -133,6 +130,30 @@ $(document).ready(function() {
     $('.remove-seat').click(function () {
         var entityId = $(this).attr('data-entity-id');
         var url = Routing.generate('delete_seat', {'id': entityId});
+        window.location.href = url;
+    });
+
+    // brisanje sedišta
+    $('.delete-button-seat').on('click', function () {
+        var entityId = $(this).attr('data-entity-id');
+        $('.delete-seat').attr('data-entity-id', entityId);
+    });
+
+    $('.delete-seat').click(function () {
+        var entityId = $(this).attr('data-entity-id');
+        var url = Routing.generate('remove_seat', {'id': entityId});
+        window.location.href = url;
+    });
+
+    // storniranje karte
+    $('.storno-ticket-btn').on('click', function () {
+        var entityId = $(this).attr('data-entity-id');
+        $('.delete-ticket').attr('data-entity-id', entityId);
+    });
+
+    $('.delete-ticket').click(function () {
+        var entityId = $(this).attr('data-entity-id');
+        var url = Routing.generate('delete_ticket', {'id': entityId});
         window.location.href = url;
     });
 
@@ -155,18 +176,6 @@ $(document).ready(function() {
                 window.location.href = url;
             }
         })
-    });
-
-    // zatvaranje rezervacije
-    $('#close-reservation-button').on('click', function () {
-        var reservationId = $(this).attr('data-entity-id');
-        $('#close_reservation_button').attr('data-entity-id', reservationId);
-    });
-
-    $('#close_reservation_button').click(function () {
-        var reservationId = $(this).attr('data-entity-id');
-        var url = Routing.generate('close_reservation', {'id': reservationId});
-        window.location.href = url;
     });
 
     // prikazivanje rezervacije
@@ -204,15 +213,26 @@ $(document).ready(function() {
         });
     });
 
-});
-
-function recalculateTotal(sc) {
-    var total = 0;
-    sc.find('selected').each(function () {
-        total += this.data().price;
+    // Prodaja karata
+    $('#sell-tickets').click( function (e) {
+        var $url = Routing.generate('add_ticket');
+        var $retval = new Object();
+        $retval['seats'] = $db;
+        $retval['performance_id'] = $performance.ID;
+        var $data = JSON.stringify($retval);
+        $.ajax({
+            type: 'POST',
+            data: $data,
+            dataType: 'json',
+            url: $url,
+            success: function (data) {
+                var $retval = Routing.generate('show_ticket', {'id': data});
+                window.location.href = $retval;
+            }
+        })
     });
-    return total;
-}
+
+});
 
 function get_seats(sc) {
     var retval = [];
@@ -223,6 +243,7 @@ function get_seats(sc) {
     return retval;
 }
 
+// Iscrtavanje sedista
 function load_seats(sc) {
     var $loader = new ajaxLoader($('.wrapper'));
     var entityId = $('#performance_id').val(); // $('#reservation_id').val();
@@ -232,20 +253,26 @@ function load_seats(sc) {
         dataType: 'json',
         url: url,
         success: function (data) {
-            sc.get(data).status('unavailable');
+            var $reserve = [];
+            var $sold = [];
+            data.forEach(function(item) {
+                if(item.status){
+                    $sold.push(item.seat);
+                } else {
+                    $reserve.push(item.seat);
+                }
+            });
+            sc.get($reserve).status('unavailable reserve');
+            sc.get($sold).status('unavailable');
             $loader.remove();
         }
     })
 }
 
-
-// Reservation form
+// Forma za rezervaciju
 $(document).ready(function() {
-
     var $performance = $('#salexuserbundle_reservation_performanceId');
-
     $performance.change(function() {
-
         $('.help').hide();
         $('#salexuserbundle_reservation_brojGrupne').hide();
         $('#salexuserbundle_reservation_brojStudentske').hide();
