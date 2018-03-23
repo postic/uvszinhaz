@@ -211,7 +211,6 @@ class ReservationController extends Controller
         // get reservation
         $em = $this->getDoctrine()->getManager();
         $item = $em->getRepository(Reservation::class)->findOneBy(array('id' => $id));
-
         return $this->render('SalexUserBundle:Reservation:show-reservation.html.twig', array(
             'item' => $item,
         ));

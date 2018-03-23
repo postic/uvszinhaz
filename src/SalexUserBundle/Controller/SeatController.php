@@ -18,64 +18,26 @@ class SeatController extends Controller
      */
     public function addAction(Request $request)
     {
-        $resp = $request->getContent();
-        $a_resp = json_decode($resp);
-
-        $id = $a_resp->id;
-        $tip_karte = $a_resp->tip_karte;
-
-        // get reservation
         $em = $this->getDoctrine()->getManager();
+        $response = $request->getContent();
+        $resp = json_decode($response);
+
+        $id = $resp->id;
+        $seats = $resp->seats;
         $reservation = $em->getRepository(Reservation::class)->findOneBy(array('id' => $id));
-        $performance_id = $reservation->getPerformanceId();
-        $seats = $a_resp->seats;
-        $num = sizeof($seats);
 
-        // lorem
-        $retval = $this->getDoctrine()
-            ->getRepository(Seat::class)
-            ->findBy(array('reservation'=>$reservation->getId(),'type'=>$tip_karte));
-
-        switch ($tip_karte) {
-            case 1:
-                $broj = $reservation->getBrojPojedinacne();
-                break;
-            case 2:
-                $broj = $reservation->getBrojGrupne();
-                break;
-            case 3:
-                $broj = $reservation->getBrojStudentske();
-                break;
-            case 4:
-                $broj = $reservation->getBrojPenzionerske();
-                break;
+        foreach ($seats as $item) {
+            $seat = new Seat();
+            $seat->setReservation($reservation);
+            $seat->setSeat($item->seat_number);
+            $seat->setType($item->type);
+            $seat->setPerformanceId($item->performance_id);
+            $seat->setStatusId(0);
+            $em->persist($seat);
+            $em->flush();
         }
 
-        /**
-         * Ispisivanje poruke ako je broj izabranih sedista veci od dozvoljenog
-         */
-        if($num + sizeof($retval) > $broj) {
-            // Add message
-            $this->addFlash(
-                'error',
-                'Nije moguće rezervisati birani broj sedišta'
-            );
-        }
-        else {
-
-            foreach ($seats as $item) {
-                $seat = new Seat();
-                $seat->setReservation($reservation);
-                $seat->setSeat($item);
-                $seat->setType($tip_karte);
-                $seat->setPerformanceId($performance_id);
-                $seat->setStatusId(0);
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($seat);
-                $em->flush();
-            }
-        }
-        return new Response($a_resp->id);
+        return new Response($id);
     }
 
     /**
@@ -97,7 +59,7 @@ class SeatController extends Controller
 
         $a_resp = array();
         foreach($seats as $seat){
-            $a_resp[] = array('seat'=>$seat->getSeat(),'type'=>$seat->getType(),'status'=>$seat->getStatusId());
+            $a_resp[] = array('seat'=>$seat->getSeat(), 'type'=>$seat->getType(), 'status'=>$seat->getStatusId());
         }
         $resp = json_encode($a_resp);
 
@@ -113,13 +75,11 @@ class SeatController extends Controller
         // get reservation
         $em = $this->getDoctrine()->getManager();
         $seats = $em->getRepository(Seat::class)->findBy(array('performanceId' => $id));
-
         $a_resp = array();
         foreach($seats as $seat){
             $a_resp[] = array('seat'=>$seat->getSeat(),'type'=>$seat->getType(),'status'=>$seat->getStatusId());
         }
         $resp = json_encode($a_resp);
-
         return new Response($resp);
     }
 

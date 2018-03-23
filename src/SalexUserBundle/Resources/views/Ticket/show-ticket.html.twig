@@ -575,6 +575,18 @@
 
             };
 
+            // brisanje sedišta
+            $('.delete-button-seat').on('click', function () {
+                var entityId = $(this).attr('data-entity-id');
+                $('.delete-seat').attr('data-entity-id', entityId);
+            });
+
+            $('.delete-seat').click(function () {
+                var entityId = $(this).attr('data-entity-id');
+                var url = Routing.generate('remove_seat', {'id': entityId});
+                window.location.href = url;
+            });
+
         })
     </script>
 

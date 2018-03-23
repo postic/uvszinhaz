@@ -1,6 +1,6 @@
 {% extends 'AvanzuAdminThemeBundle:layout:base-layout.html.twig' %}
 {% block page_title %}Zahtev{% endblock %}
-{% block page_subtitle %}Lorem ipsum dolor sit amet{% endblock %}
+{% block page_subtitle %}{% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
@@ -16,6 +16,11 @@
 
 {% block page_content %}
 
+    <script type="text/javascript">
+        var $performance = {{ item.performance|json_encode()|raw }};
+        var $id = {{ item.id|json_encode()|raw }}
+    </script>
+
     <div class="row">
         <div class="col-md-6">
             <div class="box">
@@ -29,9 +34,6 @@
                     {% endif %}
                 </div>
                 <div class="box-body">
-                    <input id="reservation_id" type="hidden" value="{{ item.id }}" />
-                    <input id="performance_id" type="hidden" value="{{ item.performanceId }}" />
-                    <input id="scena" type="hidden" value="{{ item.scena }}" />
                     <div class="form-group">
                         <label>Korisnik:</label>{{ item.firstName }} {{ item.lastName }}
                     </div>
@@ -68,6 +70,30 @@
                     {% endif %}
                     <div class="form-group">
                         <label>Datum  kreiranja:</label>{{ item.createdAt|date('d.m.Y. H:i:s') }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Odabrana sedista -->
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Odabrana sedišta</h3>
+                </div>
+                <div class="box-body">
+                    <table id="tickets" class="table table-bordered table-striped dataTable no-footer">
+                        <thead>
+                        <tr>
+                            <th>Red/Sedište</th>
+                            <th>Tip karte</th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <ul id="selected-seats" class="list-unstyled"></ul>
+                </div>
+                <div class="box-footer">
+                    <div class="form-group">
+                        <button id="checkout-button" class="btn btn-success" data-toggle="modal" data-target="#modal-print"><i class="fa fa-fw fa-save"></i>&nbsp;Rezerviši</button>
                     </div>
                 </div>
             </div>
@@ -130,7 +156,6 @@
                 <div class="box-header with-border">
                     <h3 class="box-title">Sedišta</h3>
                 </div>
-
                 <div class="box-body">
                     <div id="seat-map">
                         <div class="front-indicator"></div>
@@ -144,34 +169,8 @@
                         </div>
                     </div>
                 </div>
-
-                <!--
-                <div class="box-body row">
-                    <div id="seat-map" class="col-md-9">
-                        <div class="front-indicator"></div>
-                    </div>
-                    <div class="col-md-3">
-                        <select id="tip_karte" class="form-control" required="required">
-                            {% for key,value in item.reservationTypes %}
-                            <option value="{{ key }}">{{ value }}</option>
-                            {% endfor %}
-                        </select>
-                        <button id="checkout-button" class="btn btn-success"><i class="fa fa-fw fa-save"></i>&nbsp;Snimi odabrana sedišta</button>
-                        <ul id="selected-seats" class="list-unstyled"></ul>
-                        <button id="close-reservation-button" class="btn btn-danger" data-toggle="modal" data-target="#modal-close-reservation" data-entity-id="{{ app.request.attributes.get("id") }}"><i class="fa fa-fw fa-lock"></i>&nbsp;Zatvori rezervaciju</button>
-                    </div>
-                </div>
-                -->
                 <div class="box-footer">
                     <div class="form-group">
-                        <select id="tip_karte" class="form-control" required="required">
-                            {% for key,value in item.reservationTypes %}
-                                <option value="{{ key }}">{{ value }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <button id="checkout-button" class="btn btn-success"><i class="fa fa-fw fa-save"></i>&nbsp;Snimi</button>
                         <button id="close-reservation-button" class="btn btn-danger" data-toggle="modal" data-target="#modal-close-reservation" data-entity-id="{{ app.request.attributes.get("id") }}"><i class="fa fa-fw fa-lock"></i>&nbsp;Zatvori</button>
                     </div>
                 </div>
@@ -183,9 +182,8 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">?</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                    <h4 class="modal-title">Brisanje sedišta</h4>
                 </div>
                 <div class="modal-body">
                     <p>Da li ste sigurni?</p>
