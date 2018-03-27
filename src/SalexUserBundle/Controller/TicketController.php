@@ -6,6 +6,7 @@ use SalexUserBundle\Entity\Reservation;
 use SalexUserBundle\Entity\Ticket;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,6 +18,7 @@ class TicketController extends Controller
 
     /**
      * @Route("/list/tickets", name="list_tickets")
+     * @Security("has_role('ROLE_SALE')")
      * @return RedirectResponse
      */
     public function listTicketsAction(Request $request)
@@ -49,6 +51,7 @@ class TicketController extends Controller
 
     /**
      * @Route("/upcoming-performances", name="list_upcoming_performances")
+     * @Security("has_role('ROLE_SALE')")
      * @return RedirectResponse
      */
     public function listAction()
@@ -61,6 +64,7 @@ class TicketController extends Controller
 
     /**
      * @Route("/show/ticket/{id}", name="show_ticket", options={"expose"=true}, requirements={"id": "\d+"})
+     * @Security("has_role('ROLE_SALE')")
      * @return RedirectResponse
      */
     public function showAction($id)
@@ -108,6 +112,7 @@ class TicketController extends Controller
 
     /**
      * @Route("/remove/seat/{id}", name="remove_seat", options={"expose"=true}, requirements={"id": "\d+"})
+     * @Security("has_role('ROLE_SALE')")
      * @return RedirectResponse
      */
     public function deleteAction($id)
@@ -123,6 +128,7 @@ class TicketController extends Controller
 
     /**
      * @Route("/add/ticket", name="add_ticket", options={"expose"=true})
+     * @Security("has_role('ROLE_SALE')")
      * @return RedirectResponse
      */
     public function addAction(Request $request)
@@ -176,6 +182,7 @@ class TicketController extends Controller
 
     /**
      * @Route("/delete/ticket/{id}", name="delete_ticket", options={"expose"=true}, requirements={"id": "\d+"})
+     * @Security("has_role('ROLE_SALE')")
      * @return RedirectResponse
      */
     public function deleteTicketAction($id)

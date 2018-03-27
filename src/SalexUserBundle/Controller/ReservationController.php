@@ -19,6 +19,9 @@ use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Routing\Annotation;
+
 class ReservationController extends Controller
 {
 
@@ -36,6 +39,7 @@ class ReservationController extends Controller
 
     /**
      * @Route("/list/reservations/{id}", name="list_reservations"), requirements={"id": "\d+"}
+     * @Security("has_role('ROLE_ADMIN')")
      * @return RedirectResponse
      */
     public function listAction(Request $request, $id = 0)
@@ -91,6 +95,7 @@ class ReservationController extends Controller
 
     /**
      * @Route("/list/my/reservations", name="list_my_reservations")
+     * @Security("has_role('ROLE_USER')")
      * @return RedirectResponse
      */
     public function listMyReservationsAction(Request $request)
@@ -125,6 +130,7 @@ class ReservationController extends Controller
 
     /**
      * @Route("/add/reservation", name="add_reservation")
+     * @Security("has_role('ROLE_ADMIN') or has_role('ROLE_USER')")
      * @return RedirectResponse
      */
     public function addAction(Request $request, \Swift_Mailer $mailer)
@@ -204,6 +210,7 @@ class ReservationController extends Controller
 
     /**
      * @Route("/show/reservation/{id}", name="show_reservation", options={"expose"=true}, requirements={"id": "\d+"})
+     * @Security("has_role('ROLE_ADMIN')")
      * @return RedirectResponse
      */
     public function showAction($id)
@@ -328,19 +335,21 @@ class ReservationController extends Controller
             'footer-left'=> 'Novosadsko pozorište, 2017'
         );
 
+        $filename = 'ccc';
         $em = $this->getDoctrine()->getManager();
-        $item = $em->getRepository(Reservation::class)->findOneBy(array('id' => $id));
+        //$item = $em->getRepository(Reservation::class)->findOneBy(array('id' => $id));
+        $item = array();
 
         $html = $this->renderView('SalexUserBundle:Reservation:print-reservation.html.twig', array(
             'item'  => $item
         ));
 
         return new Response(
-            $this->get('knp_snappy.pdf')->getOutputFromHtml($html, $options),
+            $this->get('knp_snappy.pdf')->getOutputFromHtml($html),
             200,
             array(
                 'Content-Type'          => 'application/pdf',
-                'Content-Disposition'   => 'inline; filename="reservation.pdf"'
+                'Content-Disposition'   => 'inline; filename="'.$filename.'.pdf"'
             )
         );
     }

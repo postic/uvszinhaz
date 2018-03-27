@@ -2,6 +2,8 @@
 # https://symfony.com/doc/current/security.html
 security:
 
+    access_denied_url:    ~
+
     encoders:
         FOS\UserBundle\Model\UserInterface: bcrypt
 
@@ -41,11 +43,10 @@ security:
                 oauth_user_provider:
                     service: app.fos_user.oauth_provider
 
-    access_control:
-        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/dashboard, role: ROLE_USER }
-        - { path: ^/list/users, role: ROLE_ADMIN }
-
-        - { path: ^/add/reservation, role: ROLE_USER }
+    #access_control:
+    #    - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+    #    - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+    #    - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+    #    - { path: ^/dashboard, role: ROLE_USER }
+    #    - { path: ^/list/users, role: ROLE_ADMIN }
+    #    - { path: ^/add/reservation, role: ROLE_USER }
