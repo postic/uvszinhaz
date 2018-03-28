@@ -58,9 +58,7 @@
                             {% if item.statusId == 1 %}
                             <a href data-toggle="modal" data-target="#delete-reservation-modal" data-entity-id="{{ item.id }}" class="delete-reservation-btn"><i class="fa fa-trash"></i></a>&nbsp;
                             {% endif %}
-                            {% if item.statusId == 2 %}
                             <a href="{{ path('print_reservation', { 'id': item.id }) }}" target="_blank"><i class="fa fa-print"></i></a>
-                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}

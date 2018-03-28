@@ -320,32 +320,29 @@ class ReservationController extends Controller
 
     /**
      * @Route("/print/reservation/{id}", name="print_reservation", options={"expose"=true}, requirements={"id": "\d+"})
+     * @Security("has_role('ROLE_USER')")
      * @return RedirectResponse
      */
     public function printAction($id)
     {
+        $snappy = $this->get('knp_snappy.pdf');
+
         $options = array(
-            'page-width' => '210mm',
-            'page-height' => '297mm',
-            'dpi' => 72,
             'images' => true,
-            'orientation' => 'portrait',
+            'orientation' => 'landscape',
             'encoding' => 'utf-8',
-            'header-left'=> 'Novosadsko pozorište, 2017',
-            'footer-left'=> 'Novosadsko pozorište, 2017'
+            'footer-right' => 'Jovana Subotića 3-5, Novi Sad 21000, tel: 021/66 22 592',
         );
 
-        $filename = 'ccc';
+        $filename = 'Rezervacija';
         $em = $this->getDoctrine()->getManager();
-        //$item = $em->getRepository(Reservation::class)->findOneBy(array('id' => $id));
-        $item = array();
-
+        $item = $em->getRepository(Reservation::class)->findOneBy(array('id' => $id));
         $html = $this->renderView('SalexUserBundle:Reservation:print-reservation.html.twig', array(
             'item'  => $item
         ));
 
         return new Response(
-            $this->get('knp_snappy.pdf')->getOutputFromHtml($html),
+            $snappy->getOutputFromHtml($html, $options),
             200,
             array(
                 'Content-Type'          => 'application/pdf',

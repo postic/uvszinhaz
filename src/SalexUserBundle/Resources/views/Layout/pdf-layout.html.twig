@@ -5,22 +5,15 @@
     <meta name="keywords" content="">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>{% block title %}Novosadsko pozorište{% endblock %}</title>
-
-    {# -------------------------------------------------------------------------------------------------- STYLESHEETS #}
-    {% block stylesheets %}
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-        <link href="{{ asset('css/custom.css') }}" type="text/css" rel="stylesheet" />
-    {% endblock %}
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 </head>
 <body>
 <div class="wrapper">
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <h1>
+            <h2>
                 {% block pdf_title %}Novosadsko pozorište{% endblock %}
-            </h1>
+            </h2>
         </section>
 
         <!-- Main content -->

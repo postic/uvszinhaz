@@ -4,59 +4,95 @@
 
 {% block pdf_content %}
 
-    <style></style>
-{#
-    <table style="width: 100%; padding-top: 30px;">
+    <style>
+        header {
+            border-bottom: 1px solid #CCC;
+            overflow: hidden;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+        }
+        img {
+            display: inline-block;
+            float: left;
+        }
+        h1 {
+            font-weight: normal;
+            font-size: 34px;
+            margin-left: 120px;
+            padding-top: 30px;
+        }
+        table.print {
+            font-size: 24px;
+            width: 100%;
+        }
+        table.print tr {
+            height: 40px;
+        }
+    </style>
+
+    <header>
+        <img src="{{ absolute_url(asset('images/osdlogo.jpg')) }}" height="100px" /></td>
+        <h1>Újvidéki Színház/Novosadsko pozorište</h1>
+    </header>
+
+    </table>
+
+    <table class="print">
         <tr>
-            <td style="width: 30%">
-                Ime i prezime
-            </td>
-            <td>
-                {{ item.user.username }}
-            </td>
+            <td style="width: 30%">Ime i prezime:</td>
+            <td>{{ item.firstName }} {{ item.lastName }}</td>
         </tr>
         <tr>
-            <td>
-                Naziv događaja
-            </td>
-            <td>
-                {{ item.performance['title'] }}
-            </td>
+            <td>Naziv predstave:</td>
+            <td>{{ item.performance['title'] }}</td>
         </tr>
         <tr>
-            <td>
-                Datum događaja
-            </td>
-            <td>
-                {{ item.createdAt|date('d.m.Y. H:i:s') }}
-            </td>
+            <td>Datum predstave:</td>
+            <td>{{ item.performance.datum|date('d.m.Y. H:i:s') }}</td>
         </tr>
         <tr>
-            <td>
-                Datum rezervacije
-            </td>
-            <td>
-                {{ item.createdAt|date('d.m.Y. H:i:s') }}
-            </td>
+            <td>Datum rezervacije:</td>
+            <td>{{ item.createdAt|date('d.m.Y. H:i:s') }}</td>
         </tr>
         <tr>
+            <td>Scena:</td>
             <td>
-                Rezervacija važi do
-            </td>
-            <td>
-                {{ item.createdAt|date('d.m.Y. H:i:s') }}
+                {% if item.scena == 0 %}
+                    Mala scena
+                {% endif %}
+                {% if item.scena == 1 %}
+                    Velika scena
+                {% endif %}
             </td>
         </tr>
+        {% if item.brojBesplatne %}
+            <tr>
+                <td>Besplatne karte:</td>
+                <td>{{ item.brojBesplatne }}</td>
+            </tr>
+        {% endif %}
+        {% if item.brojPojedinacne %}
+            <tr>
+                <td>Pojedinačne karte:</td>
+                <td>{{ item.brojPojedinacne }}</td>
+            </tr>
+        {% endif %}
+        {% if item.brojGrupne %}
+            <tr>
+                <td>Grupne karte:</td>
+                <td>{{ item.brojGrupne }}</td>
+            </tr>
+        {% endif %}
+        {% if item.brojPenzionerske %}
+            <tr>
+                <td>Penzionerske karte:</td>
+                <td>{{ item.brojPenzionerske }}</td>
+            </tr>
+        {% endif %}
         <tr>
-            <td>
-                Broj sedišta
-            </td>
-            <td>
-                {{ item.seatsNumber }}
-            </td>
+            <td>Cena:</td>
+            <td>{{ item.sum|number_format(2, ',', '.') }}</td>
         </tr>
     </table>
-#}
-    <div>xxxx</div>
 
 {% endblock %}
