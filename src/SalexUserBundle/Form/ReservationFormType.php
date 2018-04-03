@@ -2,9 +2,12 @@
 
 namespace SalexUserBundle\Form;
 
+use Doctrine\ORM\EntityManagerInterface;
+use SalexUserBundle\Entity\Performance;
 use SalexUserBundle\Utility\Services;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -17,10 +20,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class ReservationFormType extends AbstractType
 {
 
-    protected $service;
+    protected $em;
 
-    public function __construct(Services $service) {
-        $this->service = $service;
+    public function __construct(EntityManagerInterface $entityManager) {
+        $this->em = $entityManager;
     }
 
     /**
@@ -31,29 +34,41 @@ class ReservationFormType extends AbstractType
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
 
-            $choices = array();
-            $items = $this->service->getPerformances();
-            foreach ($items as $item){
-                $choices[$item['title'] . ' - ' . $item['datum']] = $item['ID'];
-            }
+            $now = new \DateTime();
+            $current_date = $now->format('Y-m-d');
 
+            $choices = array();
+            $qb = $this->em
+                ->getRepository(Performance::class)
+                ->createQueryBuilder('p');
+            $qb->where($qb->expr()->gte('p.date', ':current_date'));
+            $qb->setParameter('current_date', $current_date);
+
+            $items = $qb->getQuery()->getResult();
+            foreach ($items as $item){
+               $choices[$item->getTitle() . ' - ' . $item->getDate()->format('d.m.Y.')] = $item->getId();
+            }
             $data = $event->getData();
             $byPhone = $data->getByPhone();
             $form = $event->getForm();
-
             $user = $data->getUser();
-
             // Rezervacija preko sajta
             if($byPhone == 0) {
 
                 $form->add(
-                    'performanceId',
+                    'performance',
                     ChoiceType::class,
                     array(
-                        'choices' => $choices,
+                        'choices'  => $items,
                         'label' => false,
                         'placeholder' => 'Izaberite predstavu',
-                        'required' => true
+                        'choice_label' => function ($item) {
+                            return $item->getTitle() . ' - ' . $item->getDate()->format('d.m.Y.');
+                        },
+                        'choice_value' => function (Performance $item = null) {
+                            return $item ? $item->getId() : '';
+                        },
+
                     )
                 );
 
@@ -168,13 +183,19 @@ class ReservationFormType extends AbstractType
                 );
 
                 $form->add(
-                    'performanceId',
+                    'performance',
                     ChoiceType::class,
                     array(
-                        'choices' => $choices,
+                        'choices'  => $items,
                         'label' => false,
                         'placeholder' => 'Izaberite predstavu',
-                        'required' => true
+                        'choice_label' => function ($item) {
+                            return $item->getTitle() . ' - ' . $item->getDate()->format('d.m.Y.');
+                        },
+                        'choice_value' => function (Performance $item = null) {
+                            return $item ? $item->getId() : '';
+                        },
+
                     )
                 );
 

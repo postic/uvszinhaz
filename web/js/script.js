@@ -327,7 +327,7 @@ function load_seats(sc) {
 
 // Forma za rezervaciju
 $(document).ready(function() {
-    var $performance = $('#salexuserbundle_reservation_performanceId');
+    var $performance = $('#salexuserbundle_reservation_performance');
     $performance.change(function() {
         $('.help').hide();
         $('#salexuserbundle_reservation_brojGrupne').hide();
@@ -344,29 +344,27 @@ $(document).ready(function() {
             type: 'POST',
             dataType: 'json',
             url: url,
-            success: function (data) {
-                var $cene = data[0].cena;
-                var $scena = data[0].scena;
-                $('#salexuserbundle_reservation_scena').val($scena);
-                for( var $i in $cene ) {
-                    switch($i) {
-                        case '1':
+            success: function ($data) {
+                // $('#salexuserbundle_reservation_scena').val($scena);
+                for( var $i in $data ) {
+                    switch($data[$i].type) {
+                        case 1:
                             $('#salexuserbundle_reservation_brojPojedinacne').show();
-                            $('#salexuserbundle_reservation_brojPojedinacne').after( "<span class='help'>Cena jedne karte: "+ parseFloat($cene[$i]).toFixed(2).replace(".", ",") +"</span>" );
+                            $('#salexuserbundle_reservation_brojPojedinacne').after( "<span class='help'>Cena jedne karte: "+ parseFloat($data[$i].price).toFixed(2).replace(".", ",") +"</span>" );
                             break;
-                        case '2':
+                        case 2:
                             $('#salexuserbundle_reservation_brojGrupne').show();
-                            $('#salexuserbundle_reservation_brojGrupne').after( "<span class='help'>Cena jedne karte: "+ parseFloat($cene[$i]).toFixed(2).replace(".", ",") +"</span>" );
+                            $('#salexuserbundle_reservation_brojGrupne').after( "<span class='help'>Cena jedne karte: "+ parseFloat($data[$i].price).toFixed(2).replace(".", ",") +"</span>" );
                             break;
-                        case '3':
+                        case 3:
                             $('#salexuserbundle_reservation_brojStudentske').show();
-                            $('#salexuserbundle_reservation_brojStudentske').after( "<span class='help'>Cena jedne karte: "+ parseFloat($cene[$i]).toFixed(2).replace(".", ",") +"</span>" );
+                            $('#salexuserbundle_reservation_brojStudentske').after( "<span class='help'>Cena jedne karte: "+ parseFloat($data[$i].price).toFixed(2).replace(".", ",") +"</span>" );
                             break;
-                        case '4':
+                        case 4:
                             $('#salexuserbundle_reservation_brojPenzionerske').show();
-                            $('#salexuserbundle_reservation_brojPenzionerske').after( "<span class='help'>Cena jedne karte: "+ parseFloat($cene[$i]).toFixed(2).replace(".", ",") +"</span>" );
+                            $('#salexuserbundle_reservation_brojPenzionerske').after( "<span class='help'>Cena jedne karte: "+ parseFloat($data[$i].price).toFixed(2).replace(".", ",") +"</span>" );
                             break;
-                        case '5':
+                        case 5:
                             $('#salexuserbundle_reservation_brojBesplatne').show();
                             $('#salexuserbundle_reservation_brojBesplatne').after( "<span class='help'>Besplatna karta</span>" );
                             break;

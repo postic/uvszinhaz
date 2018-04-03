@@ -17,7 +17,7 @@ services:
     app.my.form.type:
         class: SalexUserBundle\Form\ReservationFormType # this is your form type class
         arguments:
-            - '@salex_user.uvszinhaz_listener' # this is the ID of the service you want to inject
+            - '@doctrine.orm.entity_manager' # this is the ID of the service you want to inject
         tags:
             - { name: form.type }
 

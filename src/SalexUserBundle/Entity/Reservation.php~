@@ -563,12 +563,9 @@ class Reservation
      * @return string
      */
     public function getPrice(){
-        /*
         $performance_id = $this->getPerformanceId();
         $price = $this->getService()->getPerformance($performance_id);
         return $price[0]['cena'];
-        */
-        return null;
     }
 
     /**
@@ -577,18 +574,17 @@ class Reservation
      * @return string
      */
     public function getSum(){
+        $performance_id = $this->getPerformanceId();
+        $price = $this->getService()->getPerformance($performance_id);
         $sum = 0;
-        $prices = $this->getPerformance()->getPrices()->toArray();
-        foreach ($prices as $item) {
-            if ($this->getBrojPojedinacne())
-                $sum = $sum + $item->getPrice() * $this->getBrojPojedinacne();
-            if ($this->getBrojGrupne())
-                $sum = $sum + $item->getPrice() * $this->getBrojGrupne();
-            if ($this->getBrojStudentske())
-                $sum = $sum + $item->getPrice() * $this->getBrojStudentske();
-            if ($this->getBrojPenzionerske())
-                $sum = $sum + $item->getPrice() * $this->getBrojPenzionerske();
-        }
+        if($this->getBrojPojedinacne())
+            $sum = $sum + $price[0]['cena'][1] * $this->getBrojPojedinacne();
+        if($this->getBrojGrupne())
+            $sum = $sum + $price[0]['cena'][2] * $this->getBrojGrupne();
+        if($this->getBrojStudentske())
+            $sum = $sum + $price[0]['cena'][3] * $this->getBrojStudentske();
+        if($this->getBrojPenzionerske())
+            $sum = $sum + $price[0]['cena'][4] * $this->getBrojPenzionerske();
         return $sum;
     }
 
@@ -616,36 +612,4 @@ class Reservation
     {
         return $this->brojBesplatne;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->seats = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Set performance
-     *
-     * @param \SalexUserBundle\Entity\Performance $performance
-     *
-     * @return Reservation
-     */
-    public function setPerformance(\SalexUserBundle\Entity\Performance $performance)
-    {
-        $this->performance = $performance;
-
-        return $this;
-    }
-
-    /**
-     * Get performance
-     *
-     * @return \SalexUserBundle\Entity\Performance
-     */
-    public function getPerformance()
-    {
-        return $this->performance;
-    }
-
 }

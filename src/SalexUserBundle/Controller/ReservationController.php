@@ -4,6 +4,7 @@ namespace SalexUserBundle\Controller;
 
 use JMS\Serializer\Serializer;
 use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
+use SalexUserBundle\Entity\Performance;
 use SalexUserBundle\Entity\Reservation;
 use SalexUserBundle\Entity\Seat;
 use SalexUserBundle\Filter\ItemFilterType;
@@ -31,8 +32,15 @@ class ReservationController extends Controller
      */
     public function getPerformanceAction(Request $request, $id = 0)
     {
-        $performance = $this->get('salex_user.uvszinhaz_listener')->getPerformance($id);
-        $resp = json_encode($performance);
+        $performance = $this->get('doctrine.orm.entity_manager')->getRepository(Performance::class)->findBy(array('id'=>$id));
+        $prices = array();
+        if ( sizeof($performance) !== 0 ) {
+            $items = $performance[0]->getPrices()->toArray();
+            foreach ($items as $item) {
+                $prices[] = array('type'=>$item->getType(), 'price'=>$item->getPrice());
+            }
+        }
+        $resp = json_encode($prices);
         return new Response($resp);
     }
 
@@ -100,20 +108,23 @@ class ReservationController extends Controller
      */
     public function listMyReservationsAction(Request $request)
     {
+        $now = new \DateTime();
+        $current_date = $now->format('Y-m-d');
         $user = $this->getUser();
         $user_id = $user->getId();
-        $filterBuilder = $this->get('doctrine.orm.entity_manager')
-            ->getRepository(Reservation::class)
-            ->createQueryBuilder('r');
-        $filterBuilder->andWhere('r.user='.$user_id);
-        $filterBuilder->orderBy('r.createdAt', 'desc');
 
-        $form = $this->get('form.factory')->create('SalexUserBundle\Filter\ItemFilterType');
-        if ($request->query->has($form->getName())) {
-            $form->submit($request->query->get($form->getName()));
-            $this->get('lexik_form_filter.query_builder_updater')->addFilterConditions($form, $filterBuilder);
-        }
-        $query = $filterBuilder->getQuery();
+        $query = $this->get('doctrine.orm.entity_manager')->createQuery(
+            'SELECT r
+            FROM SalexUserBundle:Reservation r
+            INNER JOIN SalexUserBundle:Performance p
+            WHERE r.performance = p.id
+            AND r.user = :user_id
+            AND p.date >= :current_date
+            ORDER BY r.createdAt desc'
+        )
+        ->setParameter('user_id', $user_id)
+        ->setParameter('current_date', $current_date);
+
         $paginator  = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
             $query,
@@ -123,7 +134,6 @@ class ReservationController extends Controller
         $pagination->setTemplate('KnpPaginatorBundle:Pagination:foundation_v5_pagination.html.twig');
         return $this->render("SalexUserBundle:Reservation:list-my-reservations.html.twig", array(
             'pagination' => $pagination,
-            'form' => $form->createView(),
         ));
     }
 
@@ -178,8 +188,8 @@ class ReservationController extends Controller
                         array(
                             'p_ime' => $reservation->getFirstName(),
                             'p_prezime' => $reservation->getLastName(),
-                            'p_title' => $reservation->getPerformance()['title'],
-                            'p_datum_predstave' => $reservation->getPerformance()['datum'],
+                            'p_title' => $reservation->getPerformance()->getTitle(),
+                            'p_datum_predstave' => $reservation->getPerformance()->getDate(),
                             'p_datum_rezervacije' => $reservation->getCreatedAt()->format('d.m.Y. H:i'),
                             'p_brojPojedinacne' => $reservation->getBrojPojedinacne(),
                             'p_brojGrupne' => $reservation->getBrojGrupne(),
@@ -188,7 +198,6 @@ class ReservationController extends Controller
                             'p_sum' => number_format($reservation->getSum(),2,',','.').' RSD',
                             'p_scena' => $reservation->getScena()?'Velika scena':'Mala scena',
                         )
-
                     ),
                     'text/html'
                 );
@@ -257,8 +266,8 @@ class ReservationController extends Controller
             array(
                 'p_ime' => $item->getFirstName(),
                 'p_prezime' => $item->getLastName(),
-                'p_title' => $item->getPerformance()['title'],
-                'p_datum_predstave' => $item->getPerformance()['datum'],
+                'p_title' => $item->getPerformance()->getTitle(),
+                'p_datum_predstave' => $item->getPerformance()->getDate()->format('d.m.Y. H:i'),
                 'p_datum_rezervacije' => $item->getCreatedAt()->format('d.m.Y. H:i'),
                 'p_brojPojedinacne' => $item->getBrojPojedinacne(),
                 'p_brojGrupne' => $item->getBrojGrupne(),

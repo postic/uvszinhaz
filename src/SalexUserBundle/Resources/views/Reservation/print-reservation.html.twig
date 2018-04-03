@@ -44,11 +44,11 @@
         </tr>
         <tr>
             <td>Naziv predstave:</td>
-            <td>{{ item.performance['title'] }}</td>
+            <td>{{ item.performance.title }}</td>
         </tr>
         <tr>
             <td>Datum predstave:</td>
-            <td>{{ item.performance.datum|date('d.m.Y. H:i:s') }}</td>
+            <td>{{ item.performance.date|date('d.m.Y. H:i:s') }}</td>
         </tr>
         <tr>
             <td>Datum rezervacije:</td>

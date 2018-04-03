@@ -2,7 +2,7 @@
 <h4>Hvala što ste poručili ulaznice za {{ p_title }}</h4>
 
 <h4>Vaša rezervacija:</h4>
-<p>Datum i vreme: {{ p_datum_predstave }}</p>
+<p>Datum i vreme: {{ p_datum_predstave|date('d.m.Y.') }}</p>
 <p>Sala: {{ p_scena }}</p>
 <p>Broj ulaznica: 2</p>
 <p>Ukupan iznos: {{ p_sum }}</p>
