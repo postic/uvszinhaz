@@ -48,6 +48,7 @@ class ReservationFormType extends AbstractType
             foreach ($items as $item){
                $choices[$item->getTitle() . ' - ' . $item->getDate()->format('d.m.Y.')] = $item->getId();
             }
+
             $data = $event->getData();
             $byPhone = $data->getByPhone();
             $form = $event->getForm();
@@ -282,9 +283,7 @@ class ReservationFormType extends AbstractType
                     )
                 );
             }
-
         });
-
     }
 
     /**

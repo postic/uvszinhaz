@@ -2,6 +2,7 @@
 
 namespace SalexUserBundle\Controller;
 
+use SalexUserBundle\Entity\Performance;
 use SalexUserBundle\Entity\Reservation;
 use SalexUserBundle\Entity\Ticket;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -56,7 +57,17 @@ class TicketController extends Controller
      */
     public function listAction()
     {
-        $items = $this->get('salex_user.uvszinhaz_listener')->getPerformances();
+        $now = new \DateTime();
+        $current_date = $now->format('Y-m-d');
+
+        $qb = $this->get('doctrine.orm.entity_manager')->createQueryBuilder();
+        $qb->select(array('p'))
+            ->from('SalexUserBundle:Performance', 'p')
+            ->where($qb->expr()->gte('p.date', ':current_date'))
+            ->orderBy('p.date', 'asc')
+            ->setParameter('current_date', $current_date);
+
+        $items = $qb->getQuery()->getResult();
         return $this->render("SalexUserBundle:Ticket:upcoming-performances.html.twig", array(
             'items' => $items,
         ));
@@ -69,7 +80,15 @@ class TicketController extends Controller
      */
     public function showAction($id)
     {
-        $performance = $this->get('salex_user.uvszinhaz_listener')->getPerformance($id);
+        $em = $this->getDoctrine()->getManager();
+        $performance = $em->getRepository(Performance::class)->find($id);
+
+        $prices = array();
+        $a_prices = $performance->getPrices()->toArray();
+        foreach ($a_prices as $price) {
+            $prices[$price->getType()] = $price->getPrice();
+        }
+
         $types = $this->getTicketTypes($id);
 
         // get reservation
@@ -78,15 +97,21 @@ class TicketController extends Controller
 
         return $this->render('SalexUserBundle:Ticket:show-ticket.html.twig', array(
             'reservations' => $seats,
-            'performance' => $performance[0],
+            'performance' => $performance,
             'types' => $types,
+            'prices' => $prices,
         ));
     }
 
     public function getTicketTypes($id)
     {
         $a_types = array();
-        $a_cena = $this->get('salex_user.uvszinhaz_listener')->getPerformance($id)[0]['cena'];
+
+        // get performance
+        $em = $this->getDoctrine()->getManager();
+        $performance = $em->getRepository(Performance::class)->find($id);
+
+        $a_cena = $performance->getPrices();
         foreach ($a_cena as $key=>$value) {
             if ($key == 1) {
                 $a_types[1] = 'Pojedinačne';

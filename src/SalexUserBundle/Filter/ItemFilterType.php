@@ -8,6 +8,8 @@
  */
 namespace SalexUserBundle\Filter;
 
+use Doctrine\ORM\EntityManagerInterface;
+use SalexUserBundle\Entity\Performance;
 use SalexUserBundle\Utility\Services;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -17,29 +19,47 @@ use Lexik\Bundle\FormFilterBundle\Filter\Form\Type as Filters;
 class ItemFilterType extends AbstractType
 {
 
-    protected $service;
+    protected $em;
 
-    public function __construct(Services $service) {
-        $this->service = $service;
+    public function __construct(EntityManagerInterface $entityManager) {
+        $this->em = $entityManager;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $now = new \DateTime();
+        $current_date = $now->format('Y-m-d');
+
         $choices = array();
-        $items = $this->service->getPerformances();
+        $qb = $this->em
+            ->getRepository(Performance::class)
+            ->createQueryBuilder('p');
+        $qb->where($qb->expr()->gte('p.date', ':current_date'));
+        $qb->setParameter('current_date', $current_date);
+
+        $items = $qb->getQuery()->getResult();
         foreach ($items as $item){
-            $choices[$item['title'] . ' - ' . $item['datum']] = $item['ID'];
+            $choices[$item->getTitle() . ' - ' . $item->getDate()->format('d.m.Y.')] = $item->getId();
         }
 
         $builder->add(
-            'performanceId',
+            'performance',
             Filters\ChoiceFilterType::class,
-            array('choices' => $choices, 'label' => false, 'placeholder' => 'Izaberite predstavu')
+            array(
+                'choices' => $choices,
+                'label' => false,
+                'placeholder' => 'Izaberite predstavu'
+            )
         );
+
         $builder->add(
             'statusId',
             Filters\ChoiceFilterType::class,
-            array('choices' => array('Zahtev' => 1, 'Rezervisano' => 2, 'Otkazano' => 3), 'label' => false, 'placeholder' => 'Izaberite status')
+            array(
+                'choices' => array('Zahtev' => 1, 'Rezervisano' => 2, 'Otkazano' => 3),
+                'label' => false,
+                'placeholder' => 'Izaberite status'
+            )
         );
     }
 
@@ -52,7 +72,7 @@ class ItemFilterType extends AbstractType
     {
         $resolver->setDefaults(array(
             'csrf_protection'   => false,
-            'validation_groups' => array('filtering') // avoid NotBlank() constraint-related message
+            'validation_groups' => array('filtering')
         ));
     }
 }

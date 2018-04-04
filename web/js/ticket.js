@@ -11,7 +11,7 @@ function get_seats(sc) {
 
 function load_seats(sc) {
     var $loader = new ajaxLoader($('.wrapper'));
-    var entityId = $performance.ID; // $('#reservation_id').val();
+    var entityId = $performance_id; // $('#reservation_id').val();
     var url = Routing.generate('list_seats', {'id': entityId});
     $.ajax({
         type: 'POST',

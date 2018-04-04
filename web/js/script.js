@@ -104,8 +104,7 @@ $(document).ready(function() {
                         .attr('id', 'cart-item-type-'+$data)
                         .addClass('form-control'))));
 
-        $.each($performance.cena, function(key, value) {
-
+        $.each($cene, function(key, value) {
             var $text;
             switch(key) {
                 case '1':
@@ -145,8 +144,8 @@ $(document).ready(function() {
         var $object = new Object();
         $object.type = 1;
         $object.seat_number = $data;
-        $object.reservation_id = $id;
-        $object.performance_id = $performance.ID;
+        $object.reservation_id = $reservation_id;
+        $object.performance_id = $performance_id;
         $object.status = 0;
 
         // Dodavanje record-a u objekat !!!!!!!!!!
@@ -219,7 +218,7 @@ $(document).ready(function() {
     $('#checkout-button').click( function (e) {
         var $url = Routing.generate('add_seat');
         var $retval = new Object();
-        $retval['id'] = $id;
+        $retval['id'] = $reservation_id;
         $retval['seats'] = $db;
         var $data = JSON.stringify($retval);
         $.ajax({
@@ -274,7 +273,7 @@ $(document).ready(function() {
         var $url = Routing.generate('add_ticket');
         var $retval = new Object();
         $retval['seats'] = $db;
-        $retval['performance_id'] = $performance.ID;
+        $retval['performance_id'] = $performance_id;
         var $data = JSON.stringify($retval);
         $.ajax({
             type: 'POST',
@@ -302,7 +301,7 @@ function get_seats(sc) {
 // Iscrtavanje sedista
 function load_seats(sc) {
     var $loader = new ajaxLoader($('.wrapper'));
-    var entityId = $performance.ID;
+    var entityId = $performance_id;
     var url = Routing.generate('list_seats', {'id': entityId});
     $.ajax({
         type: 'POST',

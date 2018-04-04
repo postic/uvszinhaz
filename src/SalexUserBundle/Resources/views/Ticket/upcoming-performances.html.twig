@@ -22,15 +22,15 @@
                             {{ item.title }}
                         </td>
                         <td>
-                            {% if item.scena == 0 %}
+                            {% if item.hall == 0 %}
                                 Mala scena
                             {% endif %}
-                            {% if item.scena == 1 %}
+                            {% if item.hall == 1 %}
                                 Velika scena
                             {% endif %}
                         </td>
                         <td>
-                            {{ item.datum }}
+                            {{ item.date|date('d.m.Y. H:i:s') }}
                         </td>
                         <td class="pull-right">
                             <a href="{{ path('show_ticket', { 'id': item.ID }) }}"><i class="fa fa-pencil"></i></a>

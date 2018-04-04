@@ -7,18 +7,19 @@
     <link href="{{ asset('css/jquery.seat-charts.css') }}" type="text/css" rel="stylesheet" />
     <link href="{{ asset('css/custom.css') }}" type="text/css" rel="stylesheet" />
     {% stylesheets
-    '@admin_lte_css'
-    filter='cssrewrite'
+        '@admin_lte_css'
+        filter='cssrewrite'
     %}
-    <link href="{{ asset_url }}" rel="stylesheet" />
+        <link href="{{ asset_url }}" rel="stylesheet" />
     {% endstylesheets %}
 {% endblock %}
 
 {% block page_content %}
 
     <script type="text/javascript">
-        var $performance = {{ item.performance|json_encode()|raw }};
-        var $id = {{ item.id|json_encode()|raw }}
+        var $reservation_id = {{ reservation.id|json_encode()|raw }};
+        var $performance_id = {{ reservation.performance.id }};
+        var $cene = {{ prices|json_encode()|raw }};
     </script>
 
     <div class="row">
@@ -26,50 +27,50 @@
             <div class="box">
                 <div class="box-header with-border">
                     <h3 class="box-title">Podaci o zahtevu/rezervaciji</h3>
-                    {% if item.statusId == 1 %}
+                    {% if reservation.statusId == 1 %}
                         <span class="badge bg-light-blue pull-right">Zahtev</span>
                     {% endif %}
-                    {% if item.statusId == 2 %}
+                    {% if reservation.statusId == 2 %}
                         <span class="badge bg-green pull-right">Rezervisano</span>
                     {% endif %}
                 </div>
                 <div class="box-body">
                     <div class="form-group">
-                        <label>Korisnik:</label>{{ item.firstName }} {{ item.lastName }}
+                        <label>Korisnik:</label>{{ reservation.firstName }} {{ reservation.lastName }}
                     </div>
                     <div class="form-group">
-                        <label>Naziv predstave:</label>{{ item.performance.title }}
+                        <label>Naziv predstave:</label>{{ reservation.performance.title }}
                     </div>
                     <div class="form-group">
-                        <label>Datum predstave:</label>{{ item.performance.datum }}
+                        <label>Datum predstave:</label>{{ reservation.performance.date|date('d.m.Y. H:i:s') }}
                     </div>
-                    {% if item.brojBesplatne %}
-                    <div class="form-group">
-                        <label>Besplatne karte:</label>{{ item.brojBesplatne }}
-                    </div>
+                    {% if reservation.brojBesplatne %}
+                        <div class="form-group">
+                            <label>Besplatne karte:</label>{{ reservation.brojBesplatne }}
+                        </div>
                     {% endif %}
-                    {% if item.brojPojedinacne %}
-                    <div class="form-group">
-                        <label>Pojedinačne karte:</label>{{ item.brojPojedinacne }}
-                    </div>
+                    {% if reservation.brojPojedinacne %}
+                        <div class="form-group">
+                            <label>Pojedinačne karte:</label>{{ reservation.brojPojedinacne }}
+                        </div>
                     {% endif %}
-                    {% if item.brojGrupne %}
-                    <div class="form-group">
-                        <label>Grupne karte:</label>{{ item.brojGrupne }}
-                    </div>
+                    {% if reservation.brojGrupne %}
+                        <div class="form-group">
+                            <label>Grupne karte:</label>{{ reservation.brojGrupne }}
+                        </div>
                     {% endif %}
-                    {% if item.brojStudentske %}
-                    <div class="form-group">
-                        <label>Studentske karte:</label>{{ item.brojStudentske }}
-                    </div>
+                    {% if reservation.brojStudentske %}
+                        <div class="form-group">
+                            <label>Studentske karte:</label>{{ reservation.brojStudentske }}
+                        </div>
                     {% endif %}
-                    {% if item.brojPenzionerske %}
-                    <div class="form-group">
-                        <label>Penzionerske karte:</label>{{ item.brojPenzionerske }}
-                    </div>
+                    {% if reservation.brojPenzionerske %}
+                        <div class="form-group">
+                            <label>Penzionerske karte:</label>{{ reservation.brojPenzionerske }}
+                        </div>
                     {% endif %}
                     <div class="form-group">
-                        <label>Datum  kreiranja:</label>{{ item.createdAt|date('d.m.Y. H:i:s') }}
+                        <label>Datum  kreiranja:</label>{{ reservation.createdAt|date('d.m.Y. H:i:s') }}
                     </div>
                 </div>
             </div>
@@ -113,7 +114,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        {% for seat in item.seats %}
+                        {% for seat in reservation.seats %}
                             <tr>
                                 <td>
                                     Red: {{ seat.seatRow }} / Sedište: {{ seat.seatNumber }}
@@ -140,7 +141,6 @@
                                 </td>
                                 <td class="pull-right">
                                     <a href data-toggle="modal" data-target="#modal-danger" data-entity-id="{{ seat.id }}" class="delete-btn-seat"><i class="fa fa-trash"></i></a>&nbsp;
-                                    <a href="{{ path('show_reservation', { 'id': item.id }) }}"><i class="fa fa-print"></i></a>
                                 </td>
                             </tr>
                         {% endfor %}

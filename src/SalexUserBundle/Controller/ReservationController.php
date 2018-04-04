@@ -2,8 +2,10 @@
 
 namespace SalexUserBundle\Controller;
 
+use Doctrine\ORM\Query\Expr\Join;
 use JMS\Serializer\Serializer;
 use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
+use function MongoDB\BSON\toJSON;
 use SalexUserBundle\Entity\Performance;
 use SalexUserBundle\Entity\Reservation;
 use SalexUserBundle\Entity\Seat;
@@ -52,22 +54,31 @@ class ReservationController extends Controller
      */
     public function listAction(Request $request, $id = 0)
     {
+        $now = new \DateTime();
+        $current_date = $now->format('Y-m-d');
+
         if($id === 0) {
-            $filterBuilder = $this->get('doctrine.orm.entity_manager')
-                ->getRepository(Reservation::class)
-                ->createQueryBuilder('r');
+
+            $fb = $this->get('doctrine.orm.entity_manager')->createQueryBuilder();
+            $fb->select(array('r','p'))
+                ->from('SalexUserBundle:Reservation', 'r')
+                ->innerJoin('r.performance', 'p', Join::WITH, 'p.id = r.performance')
+                ->where($fb->expr()->gte('p.date', ':current_date'))
+                ->orderBy('r.createdAt', 'desc')
+                ->setParameter('current_date', $current_date);
+
             $form = $this->get('form.factory')->create('SalexUserBundle\Filter\ItemFilterType');
             if ($request->query->has($form->getName())) {
                 $form->submit($request->query->get($form->getName()));
-                $this->get('lexik_form_filter.query_builder_updater')->addFilterConditions($form, $filterBuilder);
+                $this->get('lexik_form_filter.query_builder_updater')->addFilterConditions($form, $fb);
             }
-            $filterBuilder->orderBy('r.createdAt', 'desc');
-            $query = $filterBuilder->getQuery();
+
+            $query = $fb->getQuery();
             $paginator  = $this->get('knp_paginator');
             $pagination = $paginator->paginate(
                 $query,
                 $request->query->getInt('page', 1),
-                5
+                10
             );
             $pagination->setTemplate('KnpPaginatorBundle:Pagination:foundation_v5_pagination.html.twig');
             return $this->render("SalexUserBundle:Reservation:list-all-reservations.html.twig", array(
@@ -76,22 +87,28 @@ class ReservationController extends Controller
             ));
         }
         else {
-            $filterBuilder = $this->get('doctrine.orm.entity_manager')
-                ->getRepository(Reservation::class)
-                ->createQueryBuilder('r');
-            $filterBuilder->andWhere('r.user='.$id);
-            $filterBuilder->orderBy('r.createdAt', 'desc');
+
+            $fb = $this->get('doctrine.orm.entity_manager')->createQueryBuilder();
+            $fb->select(array('r','p'))
+                ->from('SalexUserBundle:Reservation', 'r')
+                ->innerJoin('r.performance', 'p', Join::WITH, 'p.id = r.performance')
+                ->where($fb->expr()->gte('p.date', ':current_date'))
+                ->andWhere('r.user=:user_id')
+                ->orderBy('r.createdAt', 'desc')
+                ->setParameter('current_date', $current_date)
+                ->setParameter('user_id', $id);
+
             $form = $this->get('form.factory')->create('SalexUserBundle\Filter\ItemFilterType');
             if ($request->query->has($form->getName())) {
                 $form->submit($request->query->get($form->getName()));
-                $this->get('lexik_form_filter.query_builder_updater')->addFilterConditions($form, $filterBuilder);
+                $this->get('lexik_form_filter.query_builder_updater')->addFilterConditions($form, $fb);
             }
-            $query = $filterBuilder->getQuery();
+            $query = $fb->getQuery();
             $paginator  = $this->get('knp_paginator');
             $pagination = $paginator->paginate(
                 $query,
                 $request->query->getInt('page', 1),
-                5
+                10
             );
             $pagination->setTemplate('KnpPaginatorBundle:Pagination:foundation_v5_pagination.html.twig');
             return $this->render("SalexUserBundle:Reservation:list-user-reservations.html.twig", array(
@@ -113,18 +130,17 @@ class ReservationController extends Controller
         $user = $this->getUser();
         $user_id = $user->getId();
 
-        $query = $this->get('doctrine.orm.entity_manager')->createQuery(
-            'SELECT r
-            FROM SalexUserBundle:Reservation r
-            INNER JOIN SalexUserBundle:Performance p
-            WHERE r.performance = p.id
-            AND r.user = :user_id
-            AND p.date >= :current_date
-            ORDER BY r.createdAt desc'
-        )
-        ->setParameter('user_id', $user_id)
-        ->setParameter('current_date', $current_date);
+        $qb = $this->get('doctrine.orm.entity_manager')->createQueryBuilder();
+        $qb->select(array('r','p'))
+            ->from('SalexUserBundle:Reservation', 'r')
+            ->innerJoin('r.performance', 'p', Join::WITH, 'p.id = r.performance')
+            ->where($qb->expr()->gte('p.date', ':current_date'))
+            ->andWhere('r.user = :user_id')
+            ->orderBy('r.createdAt', 'desc')
+            ->setParameter('current_date', $current_date)
+            ->setParameter('user_id', $user_id);
 
+        $query = $qb->getQuery();
         $paginator  = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
             $query,
@@ -226,9 +242,16 @@ class ReservationController extends Controller
     {
         // get reservation
         $em = $this->getDoctrine()->getManager();
-        $item = $em->getRepository(Reservation::class)->findOneBy(array('id' => $id));
+        $reservation = $em->getRepository(Reservation::class)->findOneBy(array('id' => $id));
+        $prices = array();
+        $a_prices = $reservation->getPerformance()->getPrices()->toArray();
+        foreach ($a_prices as $price) {
+            $prices[$price->getType()] = $price->getPrice();
+        }
+
         return $this->render('SalexUserBundle:Reservation:show-reservation.html.twig', array(
-            'item' => $item,
+            'reservation' => $reservation,
+            'prices' => $prices,
         ));
     }
 

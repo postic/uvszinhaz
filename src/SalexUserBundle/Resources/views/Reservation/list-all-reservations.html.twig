@@ -57,8 +57,8 @@
                             {% endif %}
                         </td>
                         <td>
-                            {% if item.performance.datum is defined and item.performance.datum is not null %}
-                            {{ item.performance.datum }}
+                            {% if item.performance.date is defined and item.performance.date is not null %}
+                            {{ item.performance.date|date('d.m.Y. H:i:s') }}
                             {% endif %}
                         </td>
                         <td>
@@ -107,9 +107,6 @@
                         </td>
                         <td class="pull-right">
                             <a href="{{ path('show_reservation', { 'id': item.id }) }}"><i class="fa fa-pencil"></i></a>
-                            {% if item.statusId == 2 %}
-                                <a href="{{ path('print_reservation', { 'id': item.id }) }}"><i class="fa fa-print"></i></a>&nbsp;
-                            {% endif %}
                             <a href data-toggle="modal" data-target="#cancel-reservation-modal" data-entity-id="{{ item.id }}" class="cancel-reservation-btn"><i class="fa fa-ban"></i></a>
                             <a href data-toggle="modal" data-target="#delete-reservation-modal" data-entity-id="{{ item.id }}" class="delete-reservation-btn"><i class="fa fa-trash"></i></a>&nbsp;
                         </td>
