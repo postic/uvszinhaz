@@ -336,14 +336,14 @@
                     // Kreiranje item-a koji se upisuje u bazu
                     var $object = new Object();
                     $object.seat_id = $data[8];
-                    $object.seat_number = $data[4].replace("/", "_");
+                    //$object.seat_number = $data[4].replace("/", "_");
                     $object.type = $data[5];
                     $object.price = $data[7];
                     $object.performance_id = $performance_id;
                     $object.title = $performance.title;
 
                     // Dodavanje record-a u objekat koji se kasnije upisuje u bazu
-                    $db[$object.seat_number] = $object;
+                    $db[$data[4].replace("/", "_")] = $object;
                     // console.info($db);
 
                     // Izracunavanje sume na akciju promene tipa karte
@@ -368,11 +368,14 @@
             });
 
             $('#sell-tickets').click( function (e) {
+                var $data = null;
                 var $url = Routing.generate('add_ticket');
                 var $retval = new Object();
                 $retval['seats'] = $db;
                 $retval['performance_id'] = $performance_id;
                 var $data = JSON.stringify($retval);
+                //console.info($data);
+                //console.info($db);
                 $.ajax({
                     type: 'POST',
                     data: $data,
@@ -566,12 +569,12 @@
                 $object.seat_id = null;
                 $object.type = 1;
                 $object.price = $cene[1];
-                $object.seat_number = $data;
+                //$object.seat_number = $data;
                 $object.performance_id = $performance_id;
                 $object.performance_title = $performance.title;
 
                 // Dodavanje record-a u objekat !!!!!!!!!!
-                $db[$object.seat_number] = $object;
+                $db[$data] = $object;
                 // console.info($db);
 
             };

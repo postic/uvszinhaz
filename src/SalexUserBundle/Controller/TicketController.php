@@ -2,6 +2,7 @@
 
 namespace SalexUserBundle\Controller;
 
+use Doctrine\ORM\Query\Expr\Join;
 use SalexUserBundle\Entity\Performance;
 use SalexUserBundle\Entity\Reservation;
 use SalexUserBundle\Entity\Ticket;
@@ -26,17 +27,19 @@ class TicketController extends Controller
     {
         $user = $this->getUser();
         $user_id = $user->getId();
-        $filterBuilder = $this->get('doctrine.orm.entity_manager')
-            ->getRepository(Ticket::class)
-            ->createQueryBuilder('r');
-        $filterBuilder->orderBy('r.createdAt', 'desc');
+
+        $fb = $this->get('doctrine.orm.entity_manager')->createQueryBuilder();
+        $fb->select(array('t','p'))
+            ->from('SalexUserBundle:Ticket', 't')
+            ->innerJoin('t.performance', 'p', Join::WITH, 'p.id = t.performance')
+            ->orderBy('t.createdAt', 'desc');
 
         $form = $this->get('form.factory')->create('SalexUserBundle\Filter\TicketFilterType');
         if ($request->query->has($form->getName())) {
             $form->submit($request->query->get($form->getName()));
-            $this->get('lexik_form_filter.query_builder_updater')->addFilterConditions($form, $filterBuilder);
+            $this->get('lexik_form_filter.query_builder_updater')->addFilterConditions($form, $fb);
         }
-        $query = $filterBuilder->getQuery();
+        $query = $fb->getQuery();
         $paginator  = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
             $query,
@@ -143,10 +146,9 @@ class TicketController extends Controller
     public function deleteAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $item = $em->getRepository(Seat::class)->findOneBy(array('id' => $id));
-        $reservation = $item->getReservation();
-        $performance_id = $reservation->getPerformanceId();
-        $em->remove($item);
+        $seat = $em->getRepository(Seat::class)->findOneBy(array('id' => $id));
+        $performance_id = $seat->getPerformanceId();
+        $em->remove($performance_id);
         $em->flush();
         return new RedirectResponse($this->generateUrl('show_ticket', array('id' => $performance_id)));
     }
@@ -156,22 +158,23 @@ class TicketController extends Controller
      * @Security("has_role('ROLE_SALE')")
      * @return RedirectResponse
      */
-    public function addAction(Request $request)
+    public function addTicketAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $resp = $request->getContent();
         $a_resp = json_decode($resp);
         $performance_id = $a_resp->performance_id;
-        $seats = $a_resp->seats;
+        $performance = $em->getRepository(Performance::class)->find($performance_id);
 
-        foreach ($seats as $item) {
+        $seats = $a_resp->seats;
+        foreach ($seats as $key=>$item) {
 
             if ($item->seat_id == null) { // Kreiranje sedista u tabeli Seat ukoliko ne postoji
 
                 $new_seat = new Seat();
                 $new_seat->setPerformanceId(intval($item->performance_id));
                 $new_seat->setType(intval($item->type));
-                $new_seat->setSeat($item->seat_number); // TODO !!!!!
+                $new_seat->setSeat($key);
                 $new_seat->setStatusId(1);
                 $new_seat->setReservation(null);
                 $em->persist($new_seat);
@@ -180,7 +183,7 @@ class TicketController extends Controller
                 $ticket = new Ticket();
                 $ticket->setCena(intval($item->price));
                 $ticket->setCreatedAt(new \DateTime());
-                $ticket->setPerformanceId(intval($item->performance_id));
+                $ticket->setPerformance($performance);
                 $ticket->setSeat($new_seat);
                 $em->persist($ticket);
                 $em->flush();
@@ -194,7 +197,7 @@ class TicketController extends Controller
                 $ticket = new Ticket();
                 $ticket->setCena(intval($item->price));
                 $ticket->setCreatedAt(new \DateTime());
-                $ticket->setPerformanceId(intval($item->performance_id));
+                $ticket->setPerformance($performance);
                 $ticket->setSeat($seat);
                 $em->persist($ticket);
                 $em->flush();

@@ -47,16 +47,13 @@ class Ticket
     private $createdAt;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="performance_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="SalexUserBundle\Entity\Performance", inversedBy="tickets")
+     * @ORM\JoinColumn(name="performance_id", referencedColumnName="id", nullable=false)
      */
-    private $performanceId;
-
-
+    private $performance;
 
     /**
-     * @ORM\OneToOne(targetEntity="SalexUserBundle\Entity\Seat", orphanRemoval=true)
+     * @ORM\OneToOne(targetEntity="SalexUserBundle\Entity\Seat", cascade={"remove"})
      * @ORM\JoinColumn(name="seat_id", referencedColumnName="id")
      */
     private $seat;
@@ -119,32 +116,7 @@ class Ticket
     {
         return $this->createdAt;
     }
-
-    /**
-     * Set performanceId
-     *
-     * @param integer $performanceId
-     *
-     * @return Ticket
-     */
-    public function setPerformanceId($performanceId)
-    {
-        $this->performanceId = $performanceId;
-
-        return $this;
-    }
-
-    /**
-     * Get performanceId
-     *
-     * @return int
-     */
-    public function getPerformanceId()
-    {
-        return $this->performanceId;
-    }
-
-
+    
     /**
      * Set seat
      *
@@ -169,12 +141,29 @@ class Ticket
         return $this->seat;
     }
 
+
+
+    /**
+     * Set performance
+     *
+     * @param \SalexUserBundle\Entity\Performance $performance
+     *
+     * @return Ticket
+     */
+    public function setPerformance(\SalexUserBundle\Entity\Performance $performance)
+    {
+        $this->performance = $performance;
+
+        return $this;
+    }
+
     /**
      * Get performance
+     *
+     * @return \SalexUserBundle\Entity\Performance
      */
-    public function getPerformance(){
-        $performance_id = $this->getPerformanceId();
-        $performance = $this->getService()->getPerformance($performance_id);
-        return $performance[0];
+    public function getPerformance()
+    {
+        return $this->performance;
     }
 }

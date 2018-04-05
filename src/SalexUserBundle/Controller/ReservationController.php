@@ -5,7 +5,6 @@ namespace SalexUserBundle\Controller;
 use Doctrine\ORM\Query\Expr\Join;
 use JMS\Serializer\Serializer;
 use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
-use function MongoDB\BSON\toJSON;
 use SalexUserBundle\Entity\Performance;
 use SalexUserBundle\Entity\Reservation;
 use SalexUserBundle\Entity\Seat;

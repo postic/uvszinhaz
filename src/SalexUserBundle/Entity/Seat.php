@@ -57,6 +57,11 @@ class Seat
     private $performanceId;
 
     /**
+     * @ORM\OneToOne(targetEntity="SalexUserBundle\Entity\Ticket", mappedBy="seat", cascade={"remove"})
+     */
+    private $ticket;
+
+    /**
      * Get id
      *
      * @return int

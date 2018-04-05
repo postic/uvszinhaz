@@ -60,6 +60,11 @@ class Performance
     private $prices;
 
     /**
+     * @ORM\OneToMany(targetEntity="Ticket", mappedBy="performance", orphanRemoval=true)
+     */
+    private $tickets;
+
+    /**
      * Get id
      *
      * @return int
@@ -239,5 +244,40 @@ class Performance
     public function getPrices()
     {
         return $this->prices;
+    }
+    
+
+    /**
+     * Add ticket
+     *
+     * @param \SalexUserBundle\Entity\Ticket $ticket
+     *
+     * @return Performance
+     */
+    public function addTicket(\SalexUserBundle\Entity\Ticket $ticket)
+    {
+        $this->tickets[] = $ticket;
+
+        return $this;
+    }
+
+    /**
+     * Remove ticket
+     *
+     * @param \SalexUserBundle\Entity\Ticket $ticket
+     */
+    public function removeTicket(\SalexUserBundle\Entity\Ticket $ticket)
+    {
+        $this->tickets->removeElement($ticket);
+    }
+
+    /**
+     * Get tickets
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTickets()
+    {
+        return $this->tickets;
     }
 }

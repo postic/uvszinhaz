@@ -60,6 +60,11 @@ class Performance
     private $prices;
 
     /**
+     * @ORM\OneToMany(targetEntity="Ticket", mappedBy="performance", orphanRemoval=true)
+     */
+    private $tickets;
+
+    /**
      * Get id
      *
      * @return int
@@ -240,4 +245,5 @@ class Performance
     {
         return $this->prices;
     }
+    
 }

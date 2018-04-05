@@ -42,7 +42,7 @@
                             {{ item.performance.title }}
                         </td>
                         <td>
-                            {{ item.performance.datum }}
+                            {{ item.performance.date|date('d.m.Y. H:i:s') }}
                         </td>
                         <td>
                             {{ item.seat.seatRow }}/{{ item.seat.seatNumber }}
