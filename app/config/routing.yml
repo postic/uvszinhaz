@@ -26,13 +26,11 @@ avanzu_admin:
 avanzu_admin_profile:
     path: /profile
 
-
 avanzu_admin_all_notifications:
     path: /notificationsss/
 
 avanzu_admin_show_notification:
     path: /notification/{notifyid}/
-
 
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
@@ -43,6 +41,6 @@ _liip_imagine:
     resource: "@LiipImagineBundle/Resources/config/routing.xml"
 
 easy_admin_bundle:
-    resource: "@EasyAdminBundle/Controller/AdminController.php"
-    type:     annotation
-    prefix:   /easyadmin
+   resource: "@EasyAdminBundle/Controller/AdminController.php"
+   type:     annotation
+   prefix:   /admin

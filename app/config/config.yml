@@ -195,7 +195,6 @@ easy_admin:
             class: SalexUserBundle\Entity\User
             list:
                 fields: ['firstName', 'lastName', 'email', 'enabled']
-
             form:  # <-- 'form' is applied to both 'new' and 'edit' views
                             fields:
                                 - 'id'
