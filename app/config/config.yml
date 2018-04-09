@@ -188,14 +188,53 @@ knp_snappy:
 
 easy_admin:
     site_name: 'Novosadsko pozoriste'
+    formats:
+        date:     'd.m.Y.'
+        time:     'H:i'
+        datetime: 'd.m.Y. H:i:s'
     design:
         form_theme: 'vertical'
     entities:
         User:
             class: SalexUserBundle\Entity\User
             list:
-                fields: ['firstName', 'lastName', 'email', 'enabled']
+                fields: ['firstName', 'lastName', 'email', 'phoneNumber', 'enabled']
             form:  # <-- 'form' is applied to both 'new' and 'edit' views
-                            fields:
-                                - 'id'
-                                - { property: 'email', type: 'email', label: 'Contact' }
+                fields:
+                    - { type: 'section', label: 'User details', icon: 'user' }
+                    - { property: 'username', type: 'text', label: 'Username' }
+                    - { property: 'password', type: 'password', label: 'Password' }
+                    - { property: 'firstName', type: 'text', label: 'First name' }
+                    - { property: 'lastName', type: 'text', label: 'Last name' }
+                    - { type: 'section', label: 'Contact information', icon: 'phone' }
+                    - { property: 'email', type: 'email', label: 'E-mail' }
+                    - { property: 'phoneNumber', type: 'text', label: 'Phone number' }
+                    - { property: 'roles', type: 'choice', type_options: { multiple: true, choices: { 'ROLE_SALE': 'ROLE_SALE', 'ROLE_USER': 'ROLE_USER', 'ROLE_ADMIN': 'ROLE_ADMIN' } } }
+        Performance:
+            class: SalexUserBundle\Entity\Performance
+        Price:
+            class: SalexUserBundle\Entity\Price
+
+# Nelmio CORS Configuration
+nelmio_cors:
+    defaults:
+        allow_credentials: false
+        allow_origin: ['*']
+        allow_headers: ['*']
+        allow_methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+        max_age: 3600
+        hosts: []
+        origin_regex: false
+
+# FOSRest Configuration
+fos_rest:
+    body_listener: true
+    format_listener:
+        rules:
+          - { path: '^/api', priorities: ['json'], fallback_format: json, prefer_extension: false }
+          - { path: '^/', stop: true }
+    param_fetcher_listener: true
+    view:
+        view_response_listener: 'force'
+        formats:
+            json: true
